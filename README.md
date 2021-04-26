@@ -1,60 +1,37 @@
-# spaceTraders
- Playing Space Traders
+# SpacePyTraders
 
-  ## Todo
-  ### Core
-  - Better Exception handling
-  - Create a constant filter method
-    - Can handle equals, not equals, etc - likely add a third element to the tuple. 
-  
-  ### General
-  - Track Total Credits - or at least equity so value of goods also containined on ships - and out of curiosity assests
-  - Track Ship Count
-  - Build out testing suite
+The Python SDK to interact with the [Space Traders API](https://spacetraders.io/). 
 
-  ### Traders
-  - Handle multiple ship trading
-  - Consider travel time when choosing location to fly
-  - Handle when a good has no available units
-  - Improve handle when user doesn't have enough credits
+Read the documentation here: https://spacetraders.readthedocs.io/en/latest/
 
-  ### Flight Paths
-  - Update Flight Path DB to hold type of flight: ie Trading, or Travel, Scouting, etc
-  - Update Flight Path DB to hold type of ship not manufacturer
+Space Traders is a great way to learn a practice coding. I highly recommend having a go at using the Requests library and interacting with the API yourself as practice but you can install this library to skip the boring work of coding for each API endpoint. 
 
-  ### Tracker
-  - Work out way to run constantly
-  
-  ### Analyis
-  - Build an analysis pipeline
+## Install
 
-  ### Logs
-  - Create database to track logs
+`pip install SpacePyTraders`
 
-## Changelog
-- Created DB Handler Module
-- Created Buy & Sell Order tables in DB
-- Created Flight path table in DB
-- Handle Grav III buying more than 300 units
-- Handledish when not enough credits available for trade 
+## Getting Started
+The first installment of this library only provides a nice way to use Python to interact with the API without needed to code all the request calls. 
 
+Using the `Api` class provided you can access all the currently possible endpoints of the API. The structure of the classes are organised the same as the Space Traders API. So if you're not sure what class to look under check the docs [here](https://spacetraders.readthedocs.io/en/latest/) or the Space Trader's API [here](https://api.spacetraders.io/).
 
-2021-04-22 16:27:12,337 - WARNING - Error: {'error': {'message': 'Ships can only place a sell order while docked.', 'code': 400}}
-2021-04-22 16:27:12,338 - ERROR - Something broke the script. Code: 400 Error Message: Ships can only place a sell order while docked. 
+```python
+from SpacePyTraders import client
 
-2021-04-22 20:27:56,265 - WARNING - Something went wrong when hitting: POST https://api.spacetraders.io/users/JimHawkins/purchase-orders?shipId=cknr0wynw51684015s6wvq7q1th&good=FUEL&quantity=39 with parameters: {'shipId': 'cknr0wynw51684015s6wvq7q1th', 'good': 'FUEL', 'quantity': 39}
-2021-04-22 20:27:56,265 - WARNING - Error: {'error': {'message': 'Failed to process request due to a conflict. You may be sending the same request multiple times. Please try again if necessary.', 'code': 409}}
-2021-04-22 20:27:56,267 - ERROR - Something broke the script. Code: 409 Error Message: Failed to process request due to a conflict. You may be sending the same request multiple times. Please try again if necessary. 
+USERNAME = "YOUR USERNAME"
+TOKEN = "YOUR TOKEN"
 
+api = client.Api(USERNAME,TOKEN)
 
-### When trying to scrap a ship
-Error 422: 
+print(api.users.get_your_info())
+
+>>> 
 {
-    "error": {
-        "message": "You can not sell your ship here. You need to sell somewhere that has a shipyard.",
-        "code": 42201
+    "user": {
+        "username": "JimHawkins",
+        "credits": 0,
+        "ships": [],
+        "loans": []
     }
 }
-
-### When claiming a user
-{'error': {'message': 'Username has already been claimed.', 'code': 40901}} 409 error
+```

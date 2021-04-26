@@ -1,0 +1,5 @@
+include *.txt
+recursive-include Docs *.bat
+recursive-include Docs *.py
+recursive-include Docs *.rst
+recursive-include Docs Makefile
