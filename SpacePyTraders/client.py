@@ -35,26 +35,6 @@ def make_request(method, url, headers, params):
 
     return methods[method]   
 
-def get_user_token(username):
-    """Trys to create a new user and return their token
-
-    Args:
-        username (str): Username to user
-
-    Returns:
-        str: Token if user valid else None
-    """
-    url = f"https://api.spacetraders.io/users/{username}/token"
-    try:
-        res = make_request("POST", url, None, None)
-        if res.ok:
-            return res.json()['token']
-        else:
-            logging.exception(f"Code: {res.json()['error']['code']}, Message: {res.json()['error']['message']}")
-            return None
-    except Exception as e:
-        return e
-
 class Client ():
     def __init__(self, username, token=None):
         """The Client class handles all user interaction with the Space Traders API. 
@@ -594,6 +574,36 @@ class Api ():
         self.structures = Structures(username, token)
         self.systems = Systems(username, token)
         self.users = Users(username, token)
+
+    def generate_token(self):
+        """Trys to create a new user and return their token
+
+        Args:
+            username (str): Username to user
+
+        Returns:
+            str: Token if user valid else None
+        """
+        url = f"https://api.spacetraders.io/users/{self.username}/token"
+        try:
+            res = make_request("POST", url, None, None)
+            if res.ok:
+                self.token = res.json()['token']
+                self.game.token = self.token
+                self.loans.token = self.token
+                self.locations.token = self.token
+                self.marketplace.token = self.token
+                self.purchaseOrders.token = self.token
+                self.sellOrders.token = self.token
+                self.ships.token = self.token
+                self.structures.token = self.token
+                self.systems.token = self.token
+                self.users.token = self.token
+            else:
+                logging.exception(f"Code: {res.json()['error']['code']}, Message: {res.json()['error']['message']}")
+                return None
+        except Exception as e:
+            return e
 
 
 if __name__ == "__main__":
