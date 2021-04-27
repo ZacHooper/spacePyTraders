@@ -11,7 +11,7 @@ Space Traders is a great way to learn a practice coding. I highly recommend havi
 `pip install SpacePyTraders`
 
 ## Getting Started
-The first installment of this library only provides a nice way to use Python to interact with the API without needed to code all the request calls. 
+The first installment of this library provides a nice way to use Python and interact with the API without needed to code all the request calls. 
 
 Using the `Api` class provided you can access all the currently possible endpoints of the API. The structure of the classes are organised the same as the Space Traders API. So if you're not sure what class to look under check the docs [here](https://spacetraders.readthedocs.io/en/latest/) or the Space Trader's API [here](https://api.spacetraders.io/).
 
