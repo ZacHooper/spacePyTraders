@@ -1,0 +1,73 @@
+{
+    "user": {
+        "username": "JimHawkins",
+        "credits": 315352,
+        "ships": [
+            {
+                "id": "cknzfidlj151388515s6fmbu71mq",
+                "location": "OE-PM",
+                "x": 20,
+                "y": -25,
+                "cargo": [
+                    {
+                        "good": "FUEL",
+                        "quantity": 15,
+                        "totalVolume": 15
+                    }
+                ],
+                "spaceAvailable": 485,
+                "type": "GR-MK-III",
+                "class": "MK-III",
+                "maxCargo": 500,
+                "speed": 1,
+                "manufacturer": "Gravager",
+                "plating": 10,
+                "weapons": 10
+            }
+        ],
+        "loans": [
+            {
+                "id": "cknxse4cd353061cs65sh2xjvy",
+                "due": "2021-04-27T23:12:27.516Z",
+                "repaymentAmount": 280000,
+                "status": "CURRENT",
+                "type": "STARTUP"
+            }
+        ]
+    },
+    "ship": {
+        "id": "cknzfidlj151388515s6fmbu71mq",
+        "location": "OE-PM",
+        "x": 20,
+        "y": -25,
+        "cargo": [
+            {
+                "good": "FUEL",
+                "quantity": 15,
+                "totalVolume": 15
+            }
+        ],
+        "spaceAvailable": 485,
+        "type": "GR-MK-III",
+        "class": "MK-III",
+        "maxCargo": 500,
+        "speed": 1,
+        "manufacturer": "Gravager",
+        "plating": 10,
+        "weapons": 10
+    },
+    "user_loan": {
+        "id": "cknxse4cd353061cs65sh2xjvy",
+        "due": "2021-04-27T23:12:27.516Z",
+        "repaymentAmount": 280000,
+        "status": "CURRENT",
+        "type": "STARTUP"
+    },
+    "location": {
+        "symbol": "OE-PM",
+        "type": "PLANET",
+        "name": "Prime",
+        "x": 4,
+        "y": 12
+    }
+}
