@@ -248,7 +248,7 @@ class Locations (Client):
         return res.json() if res else False    
 
     # Get System's Locations
-    def get_system_locations(self, symbol):
+    def get_system_locations(self, symbol, type=None):
         """Get locations in the defined system
 
         Args:
@@ -260,7 +260,8 @@ class Locations (Client):
         endpoint = f"game/systems/{symbol}/locations"
         warning_log = F"Unable to get the locations in the system: {symbol}"
         logging.info(f"Getting the locations in system: {symbol}")
-        res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
+        params = {"type": type} if type is not None else None
+        res = self.generic_api_call("GET", endpoint, params=params, token=self.token, warning_log=warning_log)
         return res.json() if res else False  
 
 class Marketplace (Client):
