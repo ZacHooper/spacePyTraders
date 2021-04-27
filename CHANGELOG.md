@@ -1,4 +1,7 @@
-# 0.0.3 (Insert Date)
+# 0.0.3 (27-Apr-21)
+
+## Models
+- Added the Ship, User, Location & Loan models. 
 
 ## Bug Fixes
 - Fixed when an Api is created without a token the auto-generated token doesn't get applied to all the other properties. This now happens
