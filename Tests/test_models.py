@@ -92,4 +92,6 @@ class TestLocationMethods(unittest.TestCase):
     def test_loan_updates(self):
         self.location.id = "Zac"
         self.assertEqual(self.location.id, "Zac", "ID did not correctly update")
+
+
       

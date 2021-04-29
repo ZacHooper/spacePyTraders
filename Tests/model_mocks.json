@@ -68,6 +68,8 @@
         "type": "PLANET",
         "name": "Prime",
         "x": 4,
-        "y": 12
+        "y": 12,
+        "allowsConstruction": false,
+        "structures": []
     }
 }

@@ -78,13 +78,15 @@ class Client ():
                     logging.info("Throttle limit was reached. Pausing to wait for throttle")
                     time.sleep(10)
                     # Recall this method to make the request again. 
-                    return generic_api_call(method, endpoint, params, token, warning_log)
+                    res =  generic_api_call(method, endpoint, params, token, warning_log)
+                    return res
                 # Retry if server error
                 if code == 500 or code == 409:
                     logging.info("Server errors. Pausing before trying again.")
                     time.sleep(10)
                     # Recall this method to make the request again. 
-                    return generic_api_call(method, endpoint, params, token, warning_log)
+                    res =  generic_api_call(method, endpoint, params, token, warning_log)
+                    return res
                 
                 # Unknown handling for error
                 logging.warning(warning_log)

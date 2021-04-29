@@ -62,8 +62,14 @@ class Ship ():
                 self.location = "IN TRANSIT"
                 self.x = None
                 self.y = None
+            else:
+                self.location = data['location']
+                self.x = data['x']
+                self.y = data['y']
             if 'flightPlanId' not in data:
                 self.flightPlanId = None
+            else:
+                self.flightPlanId = data['flightPlanId']
             self.id = data['id']
             self.manufacturer = data['manufacturer']
             self.kind = data['class']
@@ -145,35 +151,41 @@ class Loan ():
 
 class Location ():
     """The Ship is awesome!"""
-    def __init__(self, data=None, symbol=None, type=None, name=None, x=None, y=None):
+    def __init__(self, data=None, symbol=None, type=None, name=None, x=None, y=None, allowsConstruction=None, structures=None):
         # Regular Init
         self.symbol = symbol 
-        self.y = y
+        self.type = type
         self.name = name
         self.x = x
         self.y = y
+        self.allowsConstruction = allowsConstruction
+        self.structures = structures
         # Init with JSON
         if data is not None and isinstance(data, dict):
-            if 'user' in data:
-                data = data['user']
+            if 'location' in data:
+                data = data['location']
             self.symbol = data['symbol']
-            self.y = data['y']
+            self.type = data['type']
             self.name = data['name']
             self.x = data['x']
             self.y = data['y']
+            self.allowsConstruction = data['allowsConstruction']
+            self.structures = data['structures']
         # Init with User object
         if data is not None and isinstance(data, User):
             self.symbol = data.symbol
-            self.y = data.y
+            self.type = data.type
             self.name = data.name
             self.x = data.x
             self.y = data.y
+            self.allowsConstruction = data.allowsConstruction
+            self.structures = data.structures
         
     def asDict(self):
-        return {'symbol': self.symbol, 'type': self.type, 'name': self.name, 'x': self.x, 'y': self.y}
+        return {'symbol': self.symbol, 'type': self.type, 'name': self.name, 'x': self.x, 'y': self.y, 'allowsConstruction': self.allowsConstruction, 'structures': self.structures}
     
     def __repr__(self):
-        return f"symbol: {self.symbol}, type: {self.type}, name: {self.name}, x: {self.x}, y: {self.y}"
+        return f"symbol: {self.symbol}, type: {self.type}, name: {self.name}, x: {self.x}, y: {self.y}, allowsConstruction: {self.allowsConstruction}, structures: {self.structures}"
     
     def __str__(self):
-        return f"symbol: {self.symbol}, type: {self.type}, name: {self.name}, x: {self.x}, y: {self.y}"
+        return f"symbol: {self.symbol}, type: {self.type}, name: {self.name}, x: {self.x}, y: {self.y}, allowsConstruction: {self.allowsConstruction}, structures: {self.structures}"
