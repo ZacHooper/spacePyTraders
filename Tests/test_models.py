@@ -57,6 +57,9 @@ class TestShipMethods(unittest.TestCase):
         self.ship.id = "Zac"
         self.assertEqual(self.ship.id, "Zac", "ID did not correctly update") 
 
+    def test_cargo_are_cargo_objects(self):
+        self.assertTrue(all(isinstance(cargo, Cargo) for cargo in self.ship.cargo), "Not all of the cargo are a Cargo Object")
+
 class TestLoanInit(unittest.TestCase):
     def test_loan_init_manual(self):
         self.assertIsInstance(Loan(id="213456", due="2021-04-27T23:12:27.516Z", repaymentAmount=280000, 
@@ -89,6 +92,37 @@ class TestLocationMethods(unittest.TestCase):
     def test_loan_updates(self):
         self.location.id = "Zac"
         self.assertEqual(self.location.id, "Zac", "ID did not correctly update")
+
+class TestCargoInit(unittest.TestCase):
+    def test_cargo_init_manual(self):
+        self.assertIsInstance(Cargo(good="FUEL", quantity=50, totalVolume=50), 
+                              Cargo, "Cargo model did not initiate properly")
+
+    def test_cargo_init_json(self):
+        self.assertIsInstance(Cargo(**MOCKS['cargo']), Cargo, "Cargo model did not initiate properly")
+
+class TestCargoMethods(unittest.TestCase):
+    def setUp(self):
+        self.cargo = Cargo(**MOCKS['cargo'])
+
+    def test_cargo_updates(self):
+        self.cargo.good = "Zac"
+        self.assertEqual(self.cargo.good, "Zac", "Good did not correctly update")
+
+class TestSystemInit(unittest.TestCase):
+    def test_system_init(self):
+        self.assertIsInstance(System(**MOCKS['system']), System, "System model did not initiate properly")
+
+class TestSystemMethods(unittest.TestCase):
+    def setUp(self):
+        self.sys = System(**MOCKS['system'])
+
+    def test_system_get_location(self):
+        self.assertEqual(self.sys.get_location("OE-PM").symbol, "OE-PM", "Did not proprely return the OE-PM location object")
+
+    def test_locs_care_locations_objects(self):
+        self.assertTrue(all(isinstance(loc, Location) for loc in self.sys.locations), "Not all of the locations are a Location Object")
+
 
 
       

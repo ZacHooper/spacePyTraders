@@ -76,6 +76,23 @@
         "weapons": 5
         
     },
+    "cargo": {
+        "good": "FUEL",
+        "quantity": 47,
+        "totalVolume": 47
+    },
+    "cargo_multiple": [
+        {
+            "good": "FUEL",
+            "quantity": 47,
+            "totalVolume": 47
+        },
+        {
+            "good": "METALS",
+            "quantity": 47,
+            "totalVolume": 47
+        }
+    ],
     "flight_plan": {
         "flightPlan": {
             "id": "cko3lan3s10537601ds61filfhcb",
@@ -105,6 +122,164 @@
         "x": 4,
         "y": 12,
         "allowsConstruction": false,
-        "structures": []
+        "structures": [],
+        "messages": []
+    },
+    "system": {
+        "locations": [
+            {
+                "symbol": "OE-PM",
+                "type": "PLANET",
+                "name": "Prime",
+                "x": 20,
+                "y": -25,
+                "allowsConstruction": false,
+                "structures": []
+            },
+            {
+                "symbol": "OE-PM-TR",
+                "type": "MOON",
+                "name": "Tritus",
+                "x": 21,
+                "y": -24,
+                "allowsConstruction": false,
+                "structures": []
+            },
+            {
+                "symbol": "OE-CR",
+                "type": "PLANET",
+                "name": "Carth",
+                "x": 16,
+                "y": 17,
+                "allowsConstruction": false,
+                "structures": []
+            },
+            {
+                "symbol": "OE-KO",
+                "type": "PLANET",
+                "name": "Koria",
+                "x": -48,
+                "y": -7,
+                "allowsConstruction": false,
+                "structures": []
+            },
+            {
+                "symbol": "OE-UC",
+                "type": "PLANET",
+                "name": "Ucarro",
+                "x": -65,
+                "y": 82,
+                "allowsConstruction": false,
+                "structures": []
+            },
+            {
+                "symbol": "OE-UC-AD",
+                "type": "MOON",
+                "name": "Ado",
+                "x": -64,
+                "y": 83,
+                "allowsConstruction": true,
+                "structures": [
+                    {
+                        "id": "cknx5jsm214304191bs6vwxwsosc",
+                        "type": "CHEMICAL_PLANT",
+                        "location": "OE-UC-AD",
+                        "ownedBy": {
+                            "username": "Foonisher"
+                        }
+                    },
+                    {
+                        "id": "cknyu3xzl29051bs6d6mozo9w",
+                        "type": "CHEMICAL_PLANT",
+                        "location": "OE-UC-AD",
+                        "ownedBy": {
+                            "username": "bchoii-14JT1Q0"
+                        }
+                    },
+                    {
+                        "id": "cknz7n7ys10717251bs6kp0ncnnf",
+                        "type": "CHEMICAL_PLANT",
+                        "location": "OE-UC-AD",
+                        "ownedBy": {
+                            "username": "bchoii-14JT1Q0"
+                        }
+                    },
+                    {
+                        "id": "cko2dtcch5130891bs6ctdjdrp9",
+                        "type": "MINE",
+                        "location": "OE-UC-AD",
+                        "ownedBy": {
+                            "username": "bchoii-14JT1Q0"
+                        }
+                    },
+                    {
+                        "id": "cko2ukwb710192131bs6l0cfvzl7",
+                        "type": "FARM",
+                        "location": "OE-UC-AD",
+                        "ownedBy": {
+                            "username": "bobjones"
+                        }
+                    }
+                ]
+            },
+            {
+                "symbol": "OE-UC-OB",
+                "type": "MOON",
+                "name": "Obo",
+                "x": -63,
+                "y": 84,
+                "allowsConstruction": false,
+                "structures": []
+            },
+            {
+                "symbol": "OE-NY",
+                "type": "ASTEROID",
+                "name": "Nyon",
+                "x": 74,
+                "y": 50,
+                "allowsConstruction": true,
+                "structures": []
+            },
+            {
+                "symbol": "OE-XV-91-2",
+                "type": "WORMHOLE",
+                "name": "Wormhole",
+                "x": -2,
+                "y": 145,
+                "allowsConstruction": false,
+                "messages": [
+                    "Extensive research has revealed a partially functioning warp gate harnessing the power of an unstable but traversable wormhole.",
+                    "The scientific community has determined a means of stabilizing the ancient structure.",
+                    "Enter at your own risk.",
+                    "POST https://api.spacetraders.io/game/structures/:structureId/deposit shipId=:shipId good=:goodSymbol quantity=:quantity",
+                    "POST https://api.spacetraders.io/users/{username}/warp-jump shipId=:shipId"
+                ],
+                "structures": [
+                    {
+                        "id": "cknwtjpwi1711i2wwvc1o5mgu",
+                        "type": "WARP_GATE",
+                        "location": "OE-XV-91-2"
+                    }
+                ]
+            },
+            {
+                "symbol": "OE-BO",
+                "type": "GAS_GIANT",
+                "name": "Bo",
+                "x": -64,
+                "y": -96,
+                "allowsConstruction": true,
+                "structures": [
+                    {
+                        "id": "cko1prp6d116547015s6q6eyvxin",
+                        "type": "FUEL_REFINERY",
+                        "location": "OE-BO",
+                        "ownedBy": {
+                            "username": "bobjones"
+                        }
+                    }
+                ]
+            }
+        ]
     }
 }

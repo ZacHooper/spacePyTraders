@@ -54,6 +54,18 @@ class Ship ():
     x: int = None
     y: int = None
 
+    def __post_init__(self):
+        """Handles creating a list of Cargo object in the ship
+        """
+        if all(isinstance(c, dict) for c in self.cargo):
+            self.cargo = [Cargo(**c) for c in self.cargo]
+
+@dataclass
+class Cargo ():
+    good: str
+    quantity: int
+    totalVolume: int
+
 @dataclass
 class Loan ():
     id: str 
@@ -71,3 +83,17 @@ class Location ():
     y: int
     allowsConstruction: bool
     structures: field(default_factory=list)
+    messages: list = None
+
+@dataclass
+class System ():
+    locations: field(default_factory=list)
+
+    def __post_init__(self):
+        """Handles creating a list of Location object in the system
+        """
+        if all(isinstance(loc, dict) for loc in self.locations):
+            self.locations = [Location(**loc) for loc in self.locations]
+
+    def get_location(self, symbol):
+        return next(loc for loc in self.locations if loc.symbol == symbol)
