@@ -59,6 +59,16 @@ class Ship ():
         """
         if all(isinstance(c, dict) for c in self.cargo):
             self.cargo = [Cargo(**c) for c in self.cargo]
+    
+    def calculate_fuel_required(self, dest_dist):
+        calc_fuel = lambda d, p: round((d / 4) + 2 + p)
+        penalties = {
+            "MK-I": 2,
+            "MK-II": 3,
+            "MK-III": 4
+        }
+        penalty = penalties[self.kind]
+        return calc_fuel(dest_dist, penalty)
 
 @dataclass
 class Cargo ():
@@ -86,6 +96,37 @@ class Location ():
     messages: list = None
 
 @dataclass
+class Marketplace (Location):
+    marketplace: list = field(default_factory=list)
+
+    def __post_init__(self):
+        """Handles creating a list of Location object in the system
+        """
+        if all(isinstance(good, dict) for good in self.marketplace):
+            self.marketplace = [Good(**good) for good in self.marketplace]
+
+    def get_good(self, symbol):
+        """Returns a Good object for the symbol provided
+
+        Args:
+            symbol (str): Symbol of the good Eg: "FUEL"
+
+        Returns:
+            Good: Good object for the symbol given
+        """
+        return next(good for good in self.marketplace if good.symbol == symbol)
+
+@dataclass
+class Good ():
+    symbol: str
+    volumePerUnit: int
+    pricePerUnit: int
+    spread: int
+    purchasePricePerUnit: int
+    sellPricePerUnit: int
+    quantityAvailable: int
+
+@dataclass
 class System ():
     locations: field(default_factory=list)
 
@@ -96,4 +137,13 @@ class System ():
             self.locations = [Location(**loc) for loc in self.locations]
 
     def get_location(self, symbol):
+        """Returns a Location object for the symbol provided
+
+        Args:
+            symbol (str): Symbol of the location Eg: "OE-PM"
+
+        Returns:
+            Location: Location object for the symbol given
+        """
         return next(loc for loc in self.locations if loc.symbol == symbol)
+

@@ -89,7 +89,7 @@ class TestLocationMethods(unittest.TestCase):
     def setUp(self):
         self.location = Location(**MOCKS['location'])
 
-    def test_loan_updates(self):
+    def test_location_updates(self):
         self.location.id = "Zac"
         self.assertEqual(self.location.id, "Zac", "ID did not correctly update")
 
@@ -123,6 +123,36 @@ class TestSystemMethods(unittest.TestCase):
     def test_locs_care_locations_objects(self):
         self.assertTrue(all(isinstance(loc, Location) for loc in self.sys.locations), "Not all of the locations are a Location Object")
 
+class TestMarketplaceInit(unittest.TestCase):
+    def test_marketplace_init_manual(self):
+        self.assertIsInstance(Marketplace(symbol="OE-PM", type="PLANET", name="Prime", 
+                                       x=4, y=12, allowsConstruction=False, structures=[], marketplace=[]), 
+                              Marketplace, "Marketplace model did not initiate properly")
 
+    def test_marketplace_init_json(self):
+        self.assertIsInstance(Marketplace(**MOCKS['location_marketplace']), Marketplace, "Marketplace model did not initiate properly")
 
+class TestMarketplaceMethods(unittest.TestCase):
+    def setUp(self):
+        self.marketplace = Marketplace(**MOCKS['location_marketplace'])
+
+    def test_marketplace_updates(self):
+        self.marketplace.symbol = "Zac"
+        self.assertEqual(self.marketplace.symbol, "Zac", "Symbol did not correctly update")
+
+    def test_goods_are_good_objects(self):
+        self.assertTrue(all(isinstance(good, Good) for good in self.marketplace.marketplace), "Not all of the goods are a Good Object")
+
+    def test_get_good(self):
+        self.assertEqual(self.marketplace.get_good("FUEL").symbol, "FUEL", "Did not return the expected good object")
+
+class TestGoodInit(unittest.TestCase):
+    def test_good_init_manual(self):
+        self.assertIsInstance(Good(symbol="BIOMETRIC_FIREARMS", volumePerUnit=1, pricePerUnit=80, 
+                                    spread=1, purchasePricePerUnit=81, sellPricePerUnit=79, 
+                                    quantityAvailable=48877), 
+                              Good, "Good model did not initiate properly")
+
+    def test_good_init_json(self):
+        self.assertIsInstance(Good(**MOCKS['good']), Good, "Good model did not initiate properly")
       

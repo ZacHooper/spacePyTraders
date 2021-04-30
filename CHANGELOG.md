@@ -1,3 +1,11 @@
+# 0.0.5 ()
+## Models
+- Refactored model classes to use DataClass module
+- Added new models: Cargo, Marketplace, Good, System
+
+## Client
+- Fixed bug where throttling wasn't being handled correctly
+
 # 0.0.4 (29-Apr-21)
 ## Models
 ### Ship

@@ -281,5 +281,97 @@
                 ]
             }
         ]
+    },
+    "location_marketplace": {
+        "symbol": "OE-PM",
+        "type": "PLANET",
+        "name": "Prime",
+        "x": 20,
+        "y": -25,
+        "allowsConstruction": false,
+        "marketplace": [
+            {
+                "symbol": "BIOMETRIC_FIREARMS",
+                "volumePerUnit": 1,
+                "pricePerUnit": 80,
+                "spread": 1,
+                "purchasePricePerUnit": 81,
+                "sellPricePerUnit": 79,
+                "quantityAvailable": 48877
+            },
+            {
+                "symbol": "UNSTABLE_COMPOUNDS",
+                "volumePerUnit": 3,
+                "pricePerUnit": 1320,
+                "spread": 4,
+                "purchasePricePerUnit": 1324,
+                "sellPricePerUnit": 1316,
+                "quantityAvailable": 3
+            },
+            {
+                "symbol": "DRONES",
+                "volumePerUnit": 1,
+                "pricePerUnit": 16,
+                "spread": 1,
+                "purchasePricePerUnit": 17,
+                "sellPricePerUnit": 15,
+                "quantityAvailable": 59291
+            },
+            {
+                "symbol": "FUEL",
+                "volumePerUnit": 1,
+                "pricePerUnit": 15,
+                "spread": 1,
+                "purchasePricePerUnit": 16,
+                "sellPricePerUnit": 14,
+                "quantityAvailable": 60123
+            },
+            {
+                "symbol": "FOOD",
+                "volumePerUnit": 1,
+                "pricePerUnit": 35,
+                "spread": 1,
+                "purchasePricePerUnit": 36,
+                "sellPricePerUnit": 34,
+                "quantityAvailable": 22767
+            },
+            {
+                "symbol": "METALS",
+                "volumePerUnit": 1,
+                "pricePerUnit": 16,
+                "spread": 1,
+                "purchasePricePerUnit": 17,
+                "sellPricePerUnit": 15,
+                "quantityAvailable": 32998
+            },
+            {
+                "symbol": "ELECTRONICS",
+                "volumePerUnit": 1,
+                "pricePerUnit": 277,
+                "spread": 1,
+                "purchasePricePerUnit": 278,
+                "sellPricePerUnit": 276,
+                "quantityAvailable": 26736
+            },
+            {
+                "symbol": "PRECISION_INSTRUMENTS",
+                "volumePerUnit": 1,
+                "pricePerUnit": 166,
+                "spread": 2,
+                "purchasePricePerUnit": 168,
+                "sellPricePerUnit": 164,
+                "quantityAvailable": 29650
+            }
+        ],
+        "structures": []
+    },
+    "good": {
+        "symbol": "BIOMETRIC_FIREARMS",
+        "volumePerUnit": 1,
+        "pricePerUnit": 80,
+        "spread": 1,
+        "purchasePricePerUnit": 81,
+        "sellPricePerUnit": 79,
+        "quantityAvailable": 48877
     }
 }
