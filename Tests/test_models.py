@@ -14,14 +14,16 @@ class TestUserInit(unittest.TestCase):
         self.assertIsInstance(User(username="JimHawkins", credits=0, ships=[], loans=[]), User, "User model did not initiate properly")
 
     def test_user_init_json(self):
-        self.assertIsInstance(User(MOCKS['user']), User, "User model did not initiate properly")
+        self.assertIsInstance(User(**MOCKS['user']), User, "User model did not initiate properly")
 
     def test_user_init_user(self):
-        self.assertIsInstance(User(User(MOCKS['user'])), User, "User model did not initiate properly")
+        user1 = User(**MOCKS['user'])
+        user2 = user1
+        self.assertIsInstance(user2, User, "User model did not initiate properly")
 
 class TestUserMethods(unittest.TestCase):
     def setUp(self):
-        self.user = User(data=MOCKS['user'])
+        self.user = User(**MOCKS['user'])
 
     def test_ships_are_ship_objects(self):
         self.assertTrue(all(isinstance(ship, Ship) for ship in self.user.ships), "Not all of the ships are a Ship Object")
@@ -42,14 +44,14 @@ class TestShipInit(unittest.TestCase):
                                    cargo=[]), Ship, "User model did not initiate properly")
 
     def test_ship_init_json(self):
-        self.assertIsInstance(Ship(MOCKS['ship']), Ship, "User model did not initiate properly")
-
-    def test_ship_init_ship(self):
-        self.assertIsInstance(Ship(Ship(MOCKS['ship'])), Ship, "User model did not initiate properly")
+        self.assertIsInstance(build_ship(MOCKS['ship']), Ship, "User model did not initiate properly")
+    
+    def test_ship_init_in_transit(self):
+        self.assertIsInstance(build_ship(MOCKS['ship_in_transit']), Ship, "User model did not initiate properly")
 
 class TestShipMethods(unittest.TestCase):
     def setUp(self):
-        self.ship = Ship(MOCKS['ship'])
+        self.ship = build_ship(MOCKS['ship'])
 
     def test_ship_updates(self):
         self.ship.id = "Zac"
@@ -58,17 +60,14 @@ class TestShipMethods(unittest.TestCase):
 class TestLoanInit(unittest.TestCase):
     def test_loan_init_manual(self):
         self.assertIsInstance(Loan(id="213456", due="2021-04-27T23:12:27.516Z", repaymentAmount=280000, 
-                                    type="STARTUP"), Loan, "Loan model did not initiate properly")
+                                    type="STARTUP", status="CURRENT"), Loan, "Loan model did not initiate properly")
 
     def test_loan_init_json(self):
-        self.assertIsInstance(Loan(MOCKS['user_loan']), Loan, "Loan model did not initiate properly")
-
-    def test_loan_init_loan(self):
-        self.assertIsInstance(Loan(Loan(MOCKS['user_loan'])), Loan, "Loan model did not initiate properly")
+        self.assertIsInstance(Loan(**MOCKS['user_loan']), Loan, "Loan model did not initiate properly")
 
 class TestLoanMethods(unittest.TestCase):
     def setUp(self):
-        self.loan = Loan(MOCKS['user_loan'])
+        self.loan = Loan(**MOCKS['user_loan'])
 
     def test_loan_updates(self):
         self.loan.id = "Zac"
@@ -76,18 +75,16 @@ class TestLoanMethods(unittest.TestCase):
 
 class TestLocationInit(unittest.TestCase):
     def test_location_init_manual(self):
-        self.assertIsInstance(Location(symbol="OE-PM", type="PLANET", name="Prime", x=4, y=12), 
+        self.assertIsInstance(Location(symbol="OE-PM", type="PLANET", name="Prime", 
+                                       x=4, y=12, allowsConstruction=False, structures=[]), 
                               Location, "Location model did not initiate properly")
 
     def test_location_init_json(self):
-        self.assertIsInstance(Location(MOCKS['location']), Location, "Location model did not initiate properly")
-
-    def test_location_init_location(self):
-        self.assertIsInstance(Location(Location(MOCKS['location'])), Location, "Location model did not initiate properly")
+        self.assertIsInstance(Location(**MOCKS['location']), Location, "Location model did not initiate properly")
 
 class TestLocationMethods(unittest.TestCase):
     def setUp(self):
-        self.location = Location(MOCKS['location'])
+        self.location = Location(**MOCKS['location'])
 
     def test_loan_updates(self):
         self.location.id = "Zac"

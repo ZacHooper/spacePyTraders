@@ -56,6 +56,41 @@
         "plating": 10,
         "weapons": 10
     },
+    "ship_in_transit": {
+        "id": "cknxsxdho2443501cs6gwpfzxgr",
+        "flightPlanId": "cko3lan3s10537601ds61filfhcb",
+        "cargo": [
+            {
+                "good": "FUEL",
+                "quantity": 47,
+                "totalVolume": 47
+            }
+        ],
+        "spaceAvailable": 3,
+        "type": "JW-MK-I",
+        "class": "MK-I",
+        "maxCargo": 50,
+        "speed": 1,
+        "manufacturer": "Jackshaw",
+        "plating": 5,
+        "weapons": 5
+        
+    },
+    "flight_plan": {
+        "flightPlan": {
+            "id": "cko3lan3s10537601ds61filfhcb",
+            "shipId": "cknxsxdho2443501cs6gwpfzxgr",
+            "createdAt": "2021-04-30T00:40:24.952Z",
+            "arrivesAt": "2021-04-30T00:41:26.930Z",
+            "destination": "OE-PM-TR",
+            "departure": "OE-PM",
+            "distance": 1,
+            "fuelConsumed": 3,
+            "fuelRemaining": 47,
+            "terminatedAt": null,
+            "timeRemainingInSeconds": 61
+        }
+    },
     "user_loan": {
         "id": "cknxse4cd353061cs65sh2xjvy",
         "due": "2021-04-27T23:12:27.516Z",
