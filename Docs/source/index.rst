@@ -4,11 +4,11 @@ Welcome to SpacePyTraders's documentation!
 .. automodule:: SpacePyTraders.client
     :members:
 
-Api
-########    
-.. autoclass:: SpacePyTraders.client.Api
-    :members:
-    :special-members: __init__
+   Api
+   ########    
+   .. autoclass:: SpacePyTraders.client.Api
+      :members:
+      :special-members: __init__
 
 Client
 ########    

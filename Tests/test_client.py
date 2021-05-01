@@ -1,6 +1,6 @@
 import unittest
 import logging
-from SpaceTraders.client import *
+from SpacePyTraders.client import *
 
 TOKEN = "0930cc36-7dc7-4cb1-8823-d8e72594d91e"
 USERNAME = "JimHawkins"
