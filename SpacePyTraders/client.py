@@ -1,10 +1,28 @@
 import requests
 import logging
 import json
+import time
+from dataclasses import dataclass, field
 
 
 URL = "https://api.spacetraders.io/"
-logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(thread)d - %(message)s', level=logging.INFO)
+
+# Custom Exceptions
+# ------------------------------------------
+@dataclass
+class ThrottleException(Exception):
+    data: field(default_factory=dict)
+    message: str = "Throttle limit was reached. Pausing to wait for throttle"
+
+@dataclass
+class ServerException(Exception):
+    data: field(default_factory=dict)
+    message: str = "Server Error. Pausing before trying again"
+
+@dataclass
+class TooManyTriesException(Exception):
+    message: str = "Has failed too many times to make API call. "
 
 def make_request(method, url, headers, params):
     """Checks which method to use and then makes the actual request to Space Traders API
@@ -64,36 +82,47 @@ class Client ():
         """
         headers = {'Authorization': 'Bearer ' + token}
         # Make the request to the Space Traders API
-        try:
-            r = make_request(method, URL + endpoint, headers, params) 
-            # If an error returned from api 
-            if 'error' in r.json():
-                error = r.json()
-                code = error['error']['code']
-                message = error['error']['message']
-                logging.warning(f"An error has occurred when hitting: {r.request.method} {r.url} with parameters: {params}. Error: " + str(error))
-                
-                # If throttling error
-                if code == 42901:
-                    logging.info("Throttle limit was reached. Pausing to wait for throttle")
+        for i in range(10):
+            try:
+                r = make_request(method, URL + endpoint, headers, params) 
+                # If an error returned from api 
+                if 'error' in r.json():
+                    error = r.json()
+                    code = error['error']['code']
+                    message = error['error']['message']
+                    logging.warning(f"An error has occurred when hitting: {r.request.method} {r.url} with parameters: {params}. Error: " + str(error))
+                    
+                    # If throttling error
+                    if code == 42901:
+                        raise ThrottleException(error)
+
+                    # Retry if server error
+                    if code == 500 or code == 409:
+                        raise ServerException(error)
+                    
+                    # Unknown handling for error
+                    logging.warning(warning_log)
+                    logging.exception(f"Something broke the script. Code: {code} Error Message: {message} ")
+                    return False
+                # If successful return r
+                return r
+
+            except ThrottleException as te:
+                    logging.info(te.message)
                     time.sleep(10)
-                    # Recall this method to make the request again. 
-                    return generic_api_call(method, endpoint, params, token, warning_log)
-                # Retry if server error
-                if code == 500 or code == 409:
-                    logging.info("Server errors. Pausing before trying again.")
+                    continue
+
+            except ServerException as se:
+                    logging.info(se.message)
                     time.sleep(10)
-                    # Recall this method to make the request again. 
-                    return generic_api_call(method, endpoint, params, token, warning_log)
-                
-                # Unknown handling for error
-                logging.warning(warning_log)
-                logging.exception(f"Something broke the script. Code: {code} Error Message: {message} ")
-                return False
-            # If successful return r
-            return r
-        except Exception as e:
-            return e
+                    continue
+            
+            except Exception as e:
+                return e
+        
+        # If failed to make call after 10 tries fail it
+        raise(TooManyTriesException)
+        
 
 class FlightPlans(Client):
     # Get all active flights

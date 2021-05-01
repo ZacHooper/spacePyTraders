@@ -14,14 +14,16 @@ class TestUserInit(unittest.TestCase):
         self.assertIsInstance(User(username="JimHawkins", credits=0, ships=[], loans=[]), User, "User model did not initiate properly")
 
     def test_user_init_json(self):
-        self.assertIsInstance(User(MOCKS['user']), User, "User model did not initiate properly")
+        self.assertIsInstance(User(**MOCKS['user']), User, "User model did not initiate properly")
 
     def test_user_init_user(self):
-        self.assertIsInstance(User(User(MOCKS['user'])), User, "User model did not initiate properly")
+        user1 = User(**MOCKS['user'])
+        user2 = user1
+        self.assertIsInstance(user2, User, "User model did not initiate properly")
 
 class TestUserMethods(unittest.TestCase):
     def setUp(self):
-        self.user = User(data=MOCKS['user'])
+        self.user = User(**MOCKS['user'])
 
     def test_ships_are_ship_objects(self):
         self.assertTrue(all(isinstance(ship, Ship) for ship in self.user.ships), "Not all of the ships are a Ship Object")
@@ -42,33 +44,33 @@ class TestShipInit(unittest.TestCase):
                                    cargo=[]), Ship, "User model did not initiate properly")
 
     def test_ship_init_json(self):
-        self.assertIsInstance(Ship(MOCKS['ship']), Ship, "User model did not initiate properly")
-
-    def test_ship_init_ship(self):
-        self.assertIsInstance(Ship(Ship(MOCKS['ship'])), Ship, "User model did not initiate properly")
+        self.assertIsInstance(build_ship(MOCKS['ship']), Ship, "User model did not initiate properly")
+    
+    def test_ship_init_in_transit(self):
+        self.assertIsInstance(build_ship(MOCKS['ship_in_transit']), Ship, "User model did not initiate properly")
 
 class TestShipMethods(unittest.TestCase):
     def setUp(self):
-        self.ship = Ship(MOCKS['ship'])
+        self.ship = build_ship(MOCKS['ship'])
 
     def test_ship_updates(self):
         self.ship.id = "Zac"
         self.assertEqual(self.ship.id, "Zac", "ID did not correctly update") 
 
+    def test_cargo_are_cargo_objects(self):
+        self.assertTrue(all(isinstance(cargo, Cargo) for cargo in self.ship.cargo), "Not all of the cargo are a Cargo Object")
+
 class TestLoanInit(unittest.TestCase):
     def test_loan_init_manual(self):
         self.assertIsInstance(Loan(id="213456", due="2021-04-27T23:12:27.516Z", repaymentAmount=280000, 
-                                    type="STARTUP"), Loan, "Loan model did not initiate properly")
+                                    type="STARTUP", status="CURRENT"), Loan, "Loan model did not initiate properly")
 
     def test_loan_init_json(self):
-        self.assertIsInstance(Loan(MOCKS['user_loan']), Loan, "Loan model did not initiate properly")
-
-    def test_loan_init_loan(self):
-        self.assertIsInstance(Loan(Loan(MOCKS['user_loan'])), Loan, "Loan model did not initiate properly")
+        self.assertIsInstance(Loan(**MOCKS['user_loan']), Loan, "Loan model did not initiate properly")
 
 class TestLoanMethods(unittest.TestCase):
     def setUp(self):
-        self.loan = Loan(MOCKS['user_loan'])
+        self.loan = Loan(**MOCKS['user_loan'])
 
     def test_loan_updates(self):
         self.loan.id = "Zac"
@@ -76,20 +78,81 @@ class TestLoanMethods(unittest.TestCase):
 
 class TestLocationInit(unittest.TestCase):
     def test_location_init_manual(self):
-        self.assertIsInstance(Location(symbol="OE-PM", type="PLANET", name="Prime", x=4, y=12), 
+        self.assertIsInstance(Location(symbol="OE-PM", type="PLANET", name="Prime", 
+                                       x=4, y=12, allowsConstruction=False, structures=[]), 
                               Location, "Location model did not initiate properly")
 
     def test_location_init_json(self):
-        self.assertIsInstance(Location(MOCKS['location']), Location, "Location model did not initiate properly")
-
-    def test_location_init_location(self):
-        self.assertIsInstance(Location(Location(MOCKS['location'])), Location, "Location model did not initiate properly")
+        self.assertIsInstance(Location(**MOCKS['location']), Location, "Location model did not initiate properly")
 
 class TestLocationMethods(unittest.TestCase):
     def setUp(self):
-        self.location = Location(MOCKS['location'])
+        self.location = Location(**MOCKS['location'])
 
-    def test_loan_updates(self):
+    def test_location_updates(self):
         self.location.id = "Zac"
         self.assertEqual(self.location.id, "Zac", "ID did not correctly update")
+
+class TestCargoInit(unittest.TestCase):
+    def test_cargo_init_manual(self):
+        self.assertIsInstance(Cargo(good="FUEL", quantity=50, totalVolume=50), 
+                              Cargo, "Cargo model did not initiate properly")
+
+    def test_cargo_init_json(self):
+        self.assertIsInstance(Cargo(**MOCKS['cargo']), Cargo, "Cargo model did not initiate properly")
+
+class TestCargoMethods(unittest.TestCase):
+    def setUp(self):
+        self.cargo = Cargo(**MOCKS['cargo'])
+
+    def test_cargo_updates(self):
+        self.cargo.good = "Zac"
+        self.assertEqual(self.cargo.good, "Zac", "Good did not correctly update")
+
+class TestSystemInit(unittest.TestCase):
+    def test_system_init(self):
+        self.assertIsInstance(System(**MOCKS['system']), System, "System model did not initiate properly")
+
+class TestSystemMethods(unittest.TestCase):
+    def setUp(self):
+        self.sys = System(**MOCKS['system'])
+
+    def test_system_get_location(self):
+        self.assertEqual(self.sys.get_location("OE-PM").symbol, "OE-PM", "Did not proprely return the OE-PM location object")
+
+    def test_locs_care_locations_objects(self):
+        self.assertTrue(all(isinstance(loc, Location) for loc in self.sys.locations), "Not all of the locations are a Location Object")
+
+class TestMarketplaceInit(unittest.TestCase):
+    def test_marketplace_init_manual(self):
+        self.assertIsInstance(Marketplace(symbol="OE-PM", type="PLANET", name="Prime", 
+                                       x=4, y=12, allowsConstruction=False, structures=[], marketplace=[]), 
+                              Marketplace, "Marketplace model did not initiate properly")
+
+    def test_marketplace_init_json(self):
+        self.assertIsInstance(Marketplace(**MOCKS['location_marketplace']), Marketplace, "Marketplace model did not initiate properly")
+
+class TestMarketplaceMethods(unittest.TestCase):
+    def setUp(self):
+        self.marketplace = Marketplace(**MOCKS['location_marketplace'])
+
+    def test_marketplace_updates(self):
+        self.marketplace.symbol = "Zac"
+        self.assertEqual(self.marketplace.symbol, "Zac", "Symbol did not correctly update")
+
+    def test_goods_are_good_objects(self):
+        self.assertTrue(all(isinstance(good, Good) for good in self.marketplace.marketplace), "Not all of the goods are a Good Object")
+
+    def test_get_good(self):
+        self.assertEqual(self.marketplace.get_good("FUEL").symbol, "FUEL", "Did not return the expected good object")
+
+class TestGoodInit(unittest.TestCase):
+    def test_good_init_manual(self):
+        self.assertIsInstance(Good(symbol="BIOMETRIC_FIREARMS", volumePerUnit=1, pricePerUnit=80, 
+                                    spread=1, purchasePricePerUnit=81, sellPricePerUnit=79, 
+                                    quantityAvailable=48877), 
+                              Good, "Good model did not initiate properly")
+
+    def test_good_init_json(self):
+        self.assertIsInstance(Good(**MOCKS['good']), Good, "Good model did not initiate properly")
       

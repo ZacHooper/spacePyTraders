@@ -56,6 +56,58 @@
         "plating": 10,
         "weapons": 10
     },
+    "ship_in_transit": {
+        "id": "cknxsxdho2443501cs6gwpfzxgr",
+        "flightPlanId": "cko3lan3s10537601ds61filfhcb",
+        "cargo": [
+            {
+                "good": "FUEL",
+                "quantity": 47,
+                "totalVolume": 47
+            }
+        ],
+        "spaceAvailable": 3,
+        "type": "JW-MK-I",
+        "class": "MK-I",
+        "maxCargo": 50,
+        "speed": 1,
+        "manufacturer": "Jackshaw",
+        "plating": 5,
+        "weapons": 5
+        
+    },
+    "cargo": {
+        "good": "FUEL",
+        "quantity": 47,
+        "totalVolume": 47
+    },
+    "cargo_multiple": [
+        {
+            "good": "FUEL",
+            "quantity": 47,
+            "totalVolume": 47
+        },
+        {
+            "good": "METALS",
+            "quantity": 47,
+            "totalVolume": 47
+        }
+    ],
+    "flight_plan": {
+        "flightPlan": {
+            "id": "cko3lan3s10537601ds61filfhcb",
+            "shipId": "cknxsxdho2443501cs6gwpfzxgr",
+            "createdAt": "2021-04-30T00:40:24.952Z",
+            "arrivesAt": "2021-04-30T00:41:26.930Z",
+            "destination": "OE-PM-TR",
+            "departure": "OE-PM",
+            "distance": 1,
+            "fuelConsumed": 3,
+            "fuelRemaining": 47,
+            "terminatedAt": null,
+            "timeRemainingInSeconds": 61
+        }
+    },
     "user_loan": {
         "id": "cknxse4cd353061cs65sh2xjvy",
         "due": "2021-04-27T23:12:27.516Z",
@@ -68,6 +120,258 @@
         "type": "PLANET",
         "name": "Prime",
         "x": 4,
-        "y": 12
+        "y": 12,
+        "allowsConstruction": false,
+        "structures": [],
+        "messages": []
+    },
+    "system": {
+        "locations": [
+            {
+                "symbol": "OE-PM",
+                "type": "PLANET",
+                "name": "Prime",
+                "x": 20,
+                "y": -25,
+                "allowsConstruction": false,
+                "structures": []
+            },
+            {
+                "symbol": "OE-PM-TR",
+                "type": "MOON",
+                "name": "Tritus",
+                "x": 21,
+                "y": -24,
+                "allowsConstruction": false,
+                "structures": []
+            },
+            {
+                "symbol": "OE-CR",
+                "type": "PLANET",
+                "name": "Carth",
+                "x": 16,
+                "y": 17,
+                "allowsConstruction": false,
+                "structures": []
+            },
+            {
+                "symbol": "OE-KO",
+                "type": "PLANET",
+                "name": "Koria",
+                "x": -48,
+                "y": -7,
+                "allowsConstruction": false,
+                "structures": []
+            },
+            {
+                "symbol": "OE-UC",
+                "type": "PLANET",
+                "name": "Ucarro",
+                "x": -65,
+                "y": 82,
+                "allowsConstruction": false,
+                "structures": []
+            },
+            {
+                "symbol": "OE-UC-AD",
+                "type": "MOON",
+                "name": "Ado",
+                "x": -64,
+                "y": 83,
+                "allowsConstruction": true,
+                "structures": [
+                    {
+                        "id": "cknx5jsm214304191bs6vwxwsosc",
+                        "type": "CHEMICAL_PLANT",
+                        "location": "OE-UC-AD",
+                        "ownedBy": {
+                            "username": "Foonisher"
+                        }
+                    },
+                    {
+                        "id": "cknyu3xzl29051bs6d6mozo9w",
+                        "type": "CHEMICAL_PLANT",
+                        "location": "OE-UC-AD",
+                        "ownedBy": {
+                            "username": "bchoii-14JT1Q0"
+                        }
+                    },
+                    {
+                        "id": "cknz7n7ys10717251bs6kp0ncnnf",
+                        "type": "CHEMICAL_PLANT",
+                        "location": "OE-UC-AD",
+                        "ownedBy": {
+                            "username": "bchoii-14JT1Q0"
+                        }
+                    },
+                    {
+                        "id": "cko2dtcch5130891bs6ctdjdrp9",
+                        "type": "MINE",
+                        "location": "OE-UC-AD",
+                        "ownedBy": {
+                            "username": "bchoii-14JT1Q0"
+                        }
+                    },
+                    {
+                        "id": "cko2ukwb710192131bs6l0cfvzl7",
+                        "type": "FARM",
+                        "location": "OE-UC-AD",
+                        "ownedBy": {
+                            "username": "bobjones"
+                        }
+                    }
+                ]
+            },
+            {
+                "symbol": "OE-UC-OB",
+                "type": "MOON",
+                "name": "Obo",
+                "x": -63,
+                "y": 84,
+                "allowsConstruction": false,
+                "structures": []
+            },
+            {
+                "symbol": "OE-NY",
+                "type": "ASTEROID",
+                "name": "Nyon",
+                "x": 74,
+                "y": 50,
+                "allowsConstruction": true,
+                "structures": []
+            },
+            {
+                "symbol": "OE-XV-91-2",
+                "type": "WORMHOLE",
+                "name": "Wormhole",
+                "x": -2,
+                "y": 145,
+                "allowsConstruction": false,
+                "messages": [
+                    "Extensive research has revealed a partially functioning warp gate harnessing the power of an unstable but traversable wormhole.",
+                    "The scientific community has determined a means of stabilizing the ancient structure.",
+                    "Enter at your own risk.",
+                    "POST https://api.spacetraders.io/game/structures/:structureId/deposit shipId=:shipId good=:goodSymbol quantity=:quantity",
+                    "POST https://api.spacetraders.io/users/{username}/warp-jump shipId=:shipId"
+                ],
+                "structures": [
+                    {
+                        "id": "cknwtjpwi1711i2wwvc1o5mgu",
+                        "type": "WARP_GATE",
+                        "location": "OE-XV-91-2"
+                    }
+                ]
+            },
+            {
+                "symbol": "OE-BO",
+                "type": "GAS_GIANT",
+                "name": "Bo",
+                "x": -64,
+                "y": -96,
+                "allowsConstruction": true,
+                "structures": [
+                    {
+                        "id": "cko1prp6d116547015s6q6eyvxin",
+                        "type": "FUEL_REFINERY",
+                        "location": "OE-BO",
+                        "ownedBy": {
+                            "username": "bobjones"
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    "location_marketplace": {
+        "symbol": "OE-PM",
+        "type": "PLANET",
+        "name": "Prime",
+        "x": 20,
+        "y": -25,
+        "allowsConstruction": false,
+        "marketplace": [
+            {
+                "symbol": "BIOMETRIC_FIREARMS",
+                "volumePerUnit": 1,
+                "pricePerUnit": 80,
+                "spread": 1,
+                "purchasePricePerUnit": 81,
+                "sellPricePerUnit": 79,
+                "quantityAvailable": 48877
+            },
+            {
+                "symbol": "UNSTABLE_COMPOUNDS",
+                "volumePerUnit": 3,
+                "pricePerUnit": 1320,
+                "spread": 4,
+                "purchasePricePerUnit": 1324,
+                "sellPricePerUnit": 1316,
+                "quantityAvailable": 3
+            },
+            {
+                "symbol": "DRONES",
+                "volumePerUnit": 1,
+                "pricePerUnit": 16,
+                "spread": 1,
+                "purchasePricePerUnit": 17,
+                "sellPricePerUnit": 15,
+                "quantityAvailable": 59291
+            },
+            {
+                "symbol": "FUEL",
+                "volumePerUnit": 1,
+                "pricePerUnit": 15,
+                "spread": 1,
+                "purchasePricePerUnit": 16,
+                "sellPricePerUnit": 14,
+                "quantityAvailable": 60123
+            },
+            {
+                "symbol": "FOOD",
+                "volumePerUnit": 1,
+                "pricePerUnit": 35,
+                "spread": 1,
+                "purchasePricePerUnit": 36,
+                "sellPricePerUnit": 34,
+                "quantityAvailable": 22767
+            },
+            {
+                "symbol": "METALS",
+                "volumePerUnit": 1,
+                "pricePerUnit": 16,
+                "spread": 1,
+                "purchasePricePerUnit": 17,
+                "sellPricePerUnit": 15,
+                "quantityAvailable": 32998
+            },
+            {
+                "symbol": "ELECTRONICS",
+                "volumePerUnit": 1,
+                "pricePerUnit": 277,
+                "spread": 1,
+                "purchasePricePerUnit": 278,
+                "sellPricePerUnit": 276,
+                "quantityAvailable": 26736
+            },
+            {
+                "symbol": "PRECISION_INSTRUMENTS",
+                "volumePerUnit": 1,
+                "pricePerUnit": 166,
+                "spread": 2,
+                "purchasePricePerUnit": 168,
+                "sellPricePerUnit": 164,
+                "quantityAvailable": 29650
+            }
+        ],
+        "structures": []
+    },
+    "good": {
+        "symbol": "BIOMETRIC_FIREARMS",
+        "volumePerUnit": 1,
+        "pricePerUnit": 80,
+        "spread": 1,
+        "purchasePricePerUnit": 81,
+        "sellPricePerUnit": 79,
+        "quantityAvailable": 48877
     }
 }
