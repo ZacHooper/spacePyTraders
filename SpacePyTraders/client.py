@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 
 
 URL = "https://api.spacetraders.io/"
-logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(thread)d - %(message)s', level=logging.INFO)
 
 # Custom Exceptions
 # ------------------------------------------
