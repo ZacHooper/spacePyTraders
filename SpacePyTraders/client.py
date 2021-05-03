@@ -127,7 +127,7 @@ class Client ():
 
             except ServerException as se:
                     logging.info(se.message)
-                    time.sleep(10)
+                    time.sleep(throttle_time)
                     continue
             
             except Exception as e:
@@ -191,8 +191,25 @@ class Game (Client):
         """Check to see if game is up
         """
         endpoint = f"game/status"
-        warning_log = F"Game is currently down"
+        warning_log = "Game is currently down"
         logging.info(f"Checking if game is up")
+        res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
+        return res if res else False
+
+class Leaderboard (Client):
+    def get_player_net_worths(self, raw_res=False, throttle_time=10):
+        """Returns a ranking list of players net-worth. It also returns the players net-worth
+
+        Args:
+            raw_res (bool, optional): Return the actual request response. Defaults to False.
+            throttle_time (int, optional): Overwrite how long to wait when throttling. Defaults to 10.
+
+        Returns:
+            dict: A dictionary containing a list of the top 10 wealthiest players and the user's net-worth
+        """
+        endpoint = f"game/leaderboard/net-worth"
+        warning_log = "Unable to retrieve the net worth leaderboard"
+        logging.debug(f"Retreiving the net worth leaderboard")
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
         return res if res else False
 
@@ -613,6 +630,7 @@ class Api ():
         self.token = token
         self.flightplans = FlightPlans(username, token)
         self.game = Game(username, token)
+        self.leaderboard = Leaderboard(username, token)
         self.loans = Loans(username, token)
         self.locations = Locations(username, token)
         self.marketplace = Marketplace(username, token)
@@ -638,6 +656,7 @@ class Api ():
             if res.ok:
                 self.token = res.json()['token']
                 self.game.token = self.token
+                self.leaderboard.token = self.token
                 self.loans.token = self.token
                 self.locations.token = self.token
                 self.marketplace.token = self.token

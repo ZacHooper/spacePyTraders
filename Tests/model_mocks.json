@@ -386,5 +386,335 @@
     },
     "game_status" : {
         "status": "spacetraders is currently online and available to play"
+    },
+    "errors" : {
+        "no_ship_at_purchase_location" : {
+            "error": {
+                "message": "You need to have a ship at the point of purchase when buying a new ship.",
+                "code": 3
+            }
+        }
+    },
+    "buy_ship": {
+        "credits": 99044,
+        "ship": {
+            "id": "cko80wv1d15629101bs6ke32rt6f",
+            "location": "OE-PM-TR",
+            "x": 21,
+            "y": -24,
+            "cargo": [],
+            "spaceAvailable": 100,
+            "type": "GR-MK-I",
+            "class": "MK-I",
+            "maxCargo": 100,
+            "speed": 1,
+            "manufacturer": "Gravager",
+            "plating": 10,
+            "weapons": 5
+        }
+    },
+    "get_available_ships": {
+        "ships": [
+            {
+                "type": "HM-MK-I",
+                "class": "MK-I",
+                "maxCargo": 50,
+                "speed": 3,
+                "manufacturer": "Hermes",
+                "plating": 20,
+                "weapons": 5,
+                "purchaseLocations": [
+                    {
+                        "system": "OE",
+                        "location": "OE-PM-TR",
+                        "price": 57525
+                    }
+                ]
+            },
+            {
+                "type": "EM-MK-I",
+                "class": "MK-I",
+                "maxCargo": 50,
+                "speed": 2,
+                "manufacturer": "Electrum",
+                "plating": 5,
+                "weapons": 10,
+                "purchaseLocations": [
+                    {
+                        "system": "OE",
+                        "location": "OE-PM-TR",
+                        "price": 37750
+                    }
+                ]
+            },
+            {
+                "type": "ZA-MK-III",
+                "class": "MK-III",
+                "maxCargo": 300,
+                "speed": 2,
+                "manufacturer": "Zetra",
+                "plating": 10,
+                "weapons": 10,
+                "purchaseLocations": [
+                    {
+                        "system": "OE",
+                        "location": "OE-PM-TR",
+                        "price": 213900
+                    },
+                    {
+                        "system": "OE",
+                        "location": "OE-UC-OB",
+                        "price": 213900
+                    }
+                ]
+            },
+            {
+                "type": "ZA-MK-II",
+                "class": "MK-II",
+                "maxCargo": 100,
+                "speed": 2,
+                "manufacturer": "Zetra",
+                "plating": 5,
+                "weapons": 5,
+                "purchaseLocations": [
+                    {
+                        "system": "OE",
+                        "location": "OE-PM-TR",
+                        "price": 72700
+                    },
+                    {
+                        "system": "OE",
+                        "location": "OE-UC-OB",
+                        "price": 72700
+                    }
+                ]
+            },
+            {
+                "type": "GR-MK-I",
+                "class": "MK-I",
+                "maxCargo": 100,
+                "speed": 1,
+                "manufacturer": "Gravager",
+                "plating": 10,
+                "weapons": 5,
+                "purchaseLocations": [
+                    {
+                        "system": "OE",
+                        "location": "OE-PM-TR",
+                        "price": 42650
+                    }
+                ]
+            },
+            {
+                "type": "JW-MK-II",
+                "class": "MK-II",
+                "maxCargo": 100,
+                "speed": 2,
+                "manufacturer": "Jackshaw",
+                "plating": 10,
+                "weapons": 10,
+                "purchaseLocations": [
+                    {
+                        "system": "OE",
+                        "location": "OE-PM-TR",
+                        "price": 83300
+                    }
+                ]
+            },
+            {
+                "type": "JW-MK-I",
+                "class": "MK-I",
+                "maxCargo": 50,
+                "speed": 1,
+                "manufacturer": "Jackshaw",
+                "plating": 5,
+                "weapons": 5,
+                "purchaseLocations": [
+                    {
+                        "system": "OE",
+                        "location": "OE-PM-TR",
+                        "price": 21125
+                    },
+                    {
+                        "system": "OE",
+                        "location": "OE-NY",
+                        "price": 21125
+                    }
+                ]
+            },
+            {
+                "type": "HM-MK-III",
+                "class": "MK-III",
+                "maxCargo": 300,
+                "speed": 4,
+                "manufacturer": "Hermes",
+                "plating": 20,
+                "weapons": 5,
+                "purchaseLocations": [
+                    {
+                        "system": "OE",
+                        "location": "OE-UC-AD",
+                        "price": 445200
+                    },
+                    {
+                        "system": "XV",
+                        "location": "XV-ST",
+                        "price": 445200
+                    }
+                ]
+            },
+            {
+                "type": "GR-MK-III",
+                "class": "MK-III",
+                "maxCargo": 500,
+                "speed": 1,
+                "manufacturer": "Gravager",
+                "plating": 10,
+                "weapons": 10,
+                "purchaseLocations": [
+                    {
+                        "system": "OE",
+                        "location": "OE-UC-AD",
+                        "price": 203210
+                    },
+                    {
+                        "system": "OE",
+                        "location": "OE-NY",
+                        "price": 203210
+                    }
+                ]
+            },
+            {
+                "type": "GR-MK-II",
+                "class": "MK-II",
+                "maxCargo": 300,
+                "speed": 1,
+                "manufacturer": "Gravager",
+                "plating": 10,
+                "weapons": 5,
+                "purchaseLocations": [
+                    {
+                        "system": "OE",
+                        "location": "OE-UC-AD",
+                        "price": 125550
+                    },
+                    {
+                        "system": "OE",
+                        "location": "OE-NY",
+                        "price": 125550
+                    }
+                ]
+            },
+            {
+                "type": "EM-MK-IV",
+                "class": "MK-IV",
+                "maxCargo": 100,
+                "speed": 4,
+                "manufacturer": "Electrum",
+                "plating": 10,
+                "weapons": 20,
+                "purchaseLocations": [
+                    {
+                        "system": "XV",
+                        "location": "XV-ST",
+                        "price": 147000
+                    }
+                ]
+            },
+            {
+                "type": "EM-MK-III",
+                "class": "MK-III",
+                "maxCargo": 100,
+                "speed": 3,
+                "manufacturer": "Electrum",
+                "plating": 10,
+                "weapons": 15,
+                "purchaseLocations": [
+                    {
+                        "system": "XV",
+                        "location": "XV-ST",
+                        "price": 110250
+                    }
+                ]
+            }
+        ]
+    },
+    "get_user_ships": {
+        "ships": [
+            {
+                "id": "cko7y75vu9197021bs64vja9ffw",
+                "flightPlanId": "cko84s8z110983601bs6kocyemjx",
+                "cargo": [
+                    {
+                        "good": "FUEL",
+                        "quantity": 3,
+                        "totalVolume": 3
+                    },
+                    {
+                        "good": "METALS",
+                        "quantity": 96,
+                        "totalVolume": 96
+                    }
+                ],
+                "spaceAvailable": 1,
+                "type": "GR-MK-I",
+                "class": "MK-I",
+                "maxCargo": 100,
+                "speed": 1,
+                "manufacturer": "Gravager",
+                "plating": 10,
+                "weapons": 5
+            },
+            {
+                "id": "cko80wv1d15629101bs6ke32rt6f",
+                "flightPlanId": "cko84s2fl10949871bs6fw2bhe36",
+                "cargo": [
+                    {
+                        "good": "FUEL",
+                        "quantity": 3,
+                        "totalVolume": 3
+                    },
+                    {
+                        "good": "METALS",
+                        "quantity": 96,
+                        "totalVolume": 96
+                    }
+                ],
+                "spaceAvailable": 1,
+                "type": "GR-MK-I",
+                "class": "MK-I",
+                "maxCargo": 100,
+                "speed": 1,
+                "manufacturer": "Gravager",
+                "plating": 10,
+                "weapons": 5
+            },
+            {
+                "id": "cko7y75ht9193471bs6noxq7sy4",
+                "location": "OE-PM",
+                "x": 20,
+                "y": -25,
+                "cargo": [
+                    {
+                        "good": "METALS",
+                        "quantity": 96,
+                        "totalVolume": 96
+                    },
+                    {
+                        "good": "FUEL",
+                        "quantity": 3,
+                        "totalVolume": 3
+                    }
+                ],
+                "spaceAvailable": 1,
+                "type": "GR-MK-I",
+                "class": "MK-I",
+                "maxCargo": 100,
+                "speed": 1,
+                "manufacturer": "Gravager",
+                "plating": 10,
+                "weapons": 5
+            }
+        ]
     }
 }
