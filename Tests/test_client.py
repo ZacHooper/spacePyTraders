@@ -32,7 +32,6 @@ class TestMakeRequestFunction(unittest.TestCase):
         # Want the user already created error to be returned
         self.assertEqual(res.status_code, 409, "POST request failed to fire properly")
 
-
 class TestClientClassInit(unittest.TestCase):
     def test_client_with_token_init(self):
         """Tests that the Client class will correctly initiate and that the properties can be updated
@@ -321,7 +320,6 @@ class TestFlightPlan(unittest.TestCase):
         with self.assertRaises(TypeError, msg="Error wasn't raised when there was a missing parameter"):
             self.fp.get_flight_plan()
 
-    
 class TestPurchaseOrder(unittest.TestCase):
     def setUp(self):
         logging.disable()
@@ -359,7 +357,6 @@ class TestPurchaseOrder(unittest.TestCase):
         with self.assertRaises(TypeError, msg="Type Error not raised when required parameter missing"):
             self.po.new_purchase_order("12345", "FUEL")
     
-
 class TestGame(unittest.TestCase):
     def setUp(self):
         logging.disable()
@@ -469,132 +466,350 @@ class TestLoans(unittest.TestCase):
     @responses.activate                           
     def test_request_loan_missing_param(self):
         with self.assertRaises(TypeError, msg="Type Error not raised when required parameter missing"):
-            self.loans.request_loan()
+            self.loans.request_loan()    
 
+class TestUsers(unittest.TestCase):
+    def setUp(self):
+        logging.disable()
+        self.users = Users(USERNAME, TOKEN)
+        self.responses = responses.RequestsMock()
+        self.responses.start()
+        # Get User Info
+        responses.add(responses.GET, f"{BASE_URL}users/{USERNAME}", json=MOCKS['user'], status=200)
+    
+    def tearDown(self):
+        logging.disable(logging.NOTSET)
+        self.addCleanup(self.responses.stop)
+        self.addCleanup(self.responses.reset)
 
-class TestUsersInit(unittest.TestCase):
     def test_users_init(self):
         self.assertIsInstance(Users("JimHawkins", "12345"), Users, "Failed to initiate the Users Class")
         self.assertEqual(Users("JimHawkins", "12345").username, "JimHawkins", "Did not set the username attribute correctly")
         self.assertEqual(Users("JimHawkins", "12345").token, "12345", "Did not set the token attribute correctly")
 
-class TestUsersMethods(unittest.TestCase):
+    # Request Loan
+    # ----------------
+    @responses.activate
+    def test_get_user_info(self):
+        """Test that the correct endpoint is used"""
+        self.assertNotIsInstance(self.users.get_your_info(), 
+                                 requests.exceptions.ConnectionError, 
+                                 "Incorrect endpoint was used to get user info")     
+
+class TestLocations(unittest.TestCase):
     def setUp(self):
         logging.disable()
-        self.users = Users(USERNAME, TOKEN)
-    
+        self.locations = Locations(USERNAME, TOKEN)
+        self.responses = responses.RequestsMock()
+        self.responses.start()
+        # Get a location
+        responses.add(responses.GET, f"{BASE_URL}game/locations/OE-PM", json=MOCKS['location'], status=200)
+        # Get ships at a location
+        responses.add(responses.GET, f"{BASE_URL}game/locations/OE-PM/ships", json={'get_location_ships':'get response'}, status=200)
+        # Get locations in a system
+        responses.add(responses.GET, f"{BASE_URL}game/systems/OE/locations", json=MOCKS['system'], status=200)
+
     def tearDown(self):
         logging.disable(logging.NOTSET)
+        self.addCleanup(self.responses.stop)
+        self.addCleanup(self.responses.reset)
 
-    def test_get_loans_available(self):
-        self.assertIsInstance(self.users.get_your_info(), dict, "API did not return dict as expected")
-
-class TestLocationsInit(unittest.TestCase):
     def test_locations_init(self):
         self.assertIsInstance(Locations("JimHawkins", "12345"), Locations, "Failed to initiate the Locations Class")
         self.assertEqual(Locations("JimHawkins", "12345").username, "JimHawkins", "Did not set the username attribute correctly")
         self.assertEqual(Locations("JimHawkins", "12345").token, "12345", "Did not set the token attribute correctly")
 
-class TestLocationsMethods(unittest.TestCase):
+    # Get a Location
+    # ----------------
+    @responses.activate
+    def test_get_location_endpoint(self):
+        """Test that the correct endpoint is used"""
+        self.assertNotIsInstance(self.locations.get_location("OE-PM"), 
+                                 requests.exceptions.ConnectionError, 
+                                 "Incorrect endpoint was used to get a location") 
+
+    @responses.activate                           
+    def test_get_location_params(self):
+        self.locations.get_location("OE-PM")
+        self.assertEqual(responses.calls[0].request.params, {}, "Parameters supplied when there shouldn't have been any")
+
+    @responses.activate                           
+    def test_get_location_missing_params(self):
+        with self.assertRaises(TypeError, msg="Type Error not raised when required parameter missing"):
+            self.locations.get_location()   
+
+    # Get ships at a Location
+    # ----------------
+    @responses.activate
+    def test_get_ships_at_location_endpoint(self):
+        """Test that the correct endpoint is used"""
+        self.assertNotIsInstance(self.locations.get_ships_at_location("OE-PM"), 
+                                 requests.exceptions.ConnectionError, 
+                                 "Incorrect endpoint was used to get ships at a location") 
+
+    @responses.activate                           
+    def test_get_ships_at_location_params(self):
+        self.locations.get_ships_at_location("OE-PM")
+        self.assertEqual(responses.calls[0].request.params, {}, "Parameters supplied when there shouldn't have been any")
+
+    @responses.activate                           
+    def test_get_ships_at_location_missing_params(self):
+        with self.assertRaises(TypeError, msg="Type Error not raised when required parameter missing"):
+            self.locations.get_location()    
+    
+    # Get locations in a system
+    # ----------------
+    @responses.activate
+    def test_get_locations_in_system_endpoint(self):
+        """Test that the correct endpoint is used"""
+        self.assertNotIsInstance(self.locations.get_system_locations("OE"), 
+                                 requests.exceptions.ConnectionError, 
+                                 "Incorrect endpoint was used to get locations in a system") 
+
+    @responses.activate                           
+    def test_get_locations_in_system_params(self):
+        self.locations.get_system_locations("OE")
+        self.assertEqual(responses.calls[0].request.params, {}, "Parameters supplied when there shouldn't have been any")
+
+    @responses.activate                           
+    def test_get_locations_in_system_missing_params(self):
+        with self.assertRaises(TypeError, msg="Type Error not raised when required parameter missing"):
+            self.locations.get_system_locations()    
+
+class TestMarketplace(unittest.TestCase):
     def setUp(self):
         logging.disable()
-        self.locations = Locations(USERNAME, TOKEN)
+        self.marketplace = Marketplace(USERNAME, TOKEN)
+        self.responses = responses.RequestsMock()
+        self.responses.start()
+        # Get Marketplace
+        responses.add(responses.GET, f"{BASE_URL}game/locations/OE-PM/marketplace", 
+                      json=MOCKS['location_marketplace'], status=200)
     
     def tearDown(self):
         logging.disable(logging.NOTSET)
+        self.addCleanup(self.responses.stop)
+        self.addCleanup(self.responses.reset)
 
-    def test_get_location(self):
-        self.assertIsInstance(self.locations.get_location("OE-PM-TR"), dict, "API did not return dict as expected")
-    
-    def test_get_ships_at_location(self):
-        self.assertIsInstance(self.locations.get_ships_at_location("OE-PM-TR"), dict, "API did not return dict as expected")
-
-    def test_get_locations_in_system(self):
-        self.assertIsInstance(self.locations.get_system_locations("OE"), dict, "API did not return dict as expected")
-
-class TestMarketplaceInit(unittest.TestCase):
     def test_marketplace_init(self):
+        """Test initialisation of the Marketplace client Class"""
         self.assertIsInstance(Marketplace("JimHawkins", "12345"), Marketplace, "Failed to initiate the Marketplace Class")
         self.assertEqual(Marketplace("JimHawkins", "12345").username, "JimHawkins", "Did not set the username attribute correctly")
         self.assertEqual(Marketplace("JimHawkins", "12345").token, "12345", "Did not set the token attribute correctly")
 
-class TestMarketplaceMethods(unittest.TestCase):
+    # Get location's marketplace
+    # ----------------
+    @responses.activate
+    def test_get_marketplace_endpoint(self):
+        """Test that the correct endpoint is used"""
+        self.assertNotIsInstance(self.marketplace.get_marketplace("OE-PM"), 
+                                 requests.exceptions.ConnectionError, 
+                                 "Incorrect endpoint was used to get a location's marketplace") 
+
+    @responses.activate                           
+    def test_get_marketplace_params(self):
+        """Test that no parameters are pulled into the request"""
+        self.marketplace.get_marketplace("OE-PM")
+        self.assertEqual(responses.calls[0].request.params, {}, "Parameters supplied when there shouldn't have been any")
+
+    @responses.activate                           
+    def test_get_marketplace_missing_params(self):
+        """Test that an exception is raised if any required arguments are missing"""
+        with self.assertRaises(TypeError, msg="Type Error not raised when required parameter missing"):
+            self.marketplace.get_marketplace()     
+
+class TestSellOrders(unittest.TestCase):
     def setUp(self):
         logging.disable()
-        self.marketplace = Marketplace(USERNAME, TOKEN)
+        self.so = SellOrders(USERNAME, TOKEN)
+        self.responses = responses.RequestsMock()
+        self.responses.start()
+        # Make a sell order
+        responses.add(responses.POST, f"{BASE_URL}users/{USERNAME}/sell-orders", json={'sell_order':'get response'}, status=200)
     
     def tearDown(self):
         logging.disable(logging.NOTSET)
+        self.addCleanup(self.responses.stop)
+        self.addCleanup(self.responses.reset)
 
-    def test_get_location(self):
-        self.assertIsInstance(self.marketplace.get_marketplace("OE-PM-TR"), dict, "API did not return dict as expected")
-
-class TestSellOrdersInit(unittest.TestCase):
     def test_sell_order_init(self):
         self.assertIsInstance(SellOrders("JimHawkins", "12345"), SellOrders, "Failed to initiate the SellOrders Class")
         self.assertEqual(SellOrders("JimHawkins", "12345").username, "JimHawkins", "Did not set the username attribute correctly")
         self.assertEqual(SellOrders("JimHawkins", "12345").token, "12345", "Did not set the token attribute correctly")
 
-class TestSellOrdersMethods(unittest.TestCase):
+    # Get location's marketplace
+    # ----------------
+    @responses.activate
+    def test_get_marketplace_endpoint(self):
+        """Test that the correct endpoint is used"""
+        self.assertNotIsInstance(self.so.new_sell_order("12345", "FUEL", 5), 
+                                 requests.exceptions.ConnectionError, 
+                                 "Incorrect endpoint was used to make a sell order") 
+
+    @responses.activate                           
+    def test_get_marketplace_params(self):
+        """Test that the correct parameters are placed into the request"""
+        self.so.new_sell_order("12345", "FUEL", 5)
+        self.assertEqual(responses.calls[0].request.params, {'good':'FUEL', 'quantity':'5', 'shipId':'12345'}, "Incorrect parameters supplied for request")
+
+    @responses.activate                           
+    def test_get_marketplace_missing_params(self):
+        """Test that an exception is raised when any required arguments are missing"""
+        with self.assertRaises(TypeError, msg="Type Error not raised when required parameter missing"):
+            self.so.new_sell_order("12345", "FUEL")
+
+class TestStructures(unittest.TestCase):
     def setUp(self):
         logging.disable()
-        self.so = SellOrders(USERNAME, TOKEN)
-    
+        self.structures = Structures(USERNAME, TOKEN)
+        self.responses = responses.RequestsMock()
+        self.responses.start()
+        # Create a new structure
+        responses.add(responses.POST, f"{BASE_URL}users/{USERNAME}/structures", json={'new_structure':'get response'}, status=200)
+        # Deposit Goods Into Structure
+        responses.add(responses.POST, f"{BASE_URL}users/{USERNAME}/structures/12345/deposit", json={'deposit_goods':'get response'}, status=200)
+        # Get A structure
+        responses.add(responses.GET, f"{BASE_URL}users/{USERNAME}/structures/12345", json={'get_strucutre':'get response'}, status=200)
+        # Get a list of users structures
+        responses.add(responses.GET, f"{BASE_URL}users/{USERNAME}/structures", json={'structure_list':'get response'}, status=200)
+        # Transfer Goods from structure
+        responses.add(responses.POST, f"{BASE_URL}users/{USERNAME}/structures/12345/transfer", json={'transfer_goods':'get response'}, status=200)
+
     def tearDown(self):
         logging.disable(logging.NOTSET)
+        self.addCleanup(self.responses.stop)
+        self.addCleanup(self.responses.reset)
 
-    def test_submit_flight_plan_fail(self):
-        self.assertEqual(self.so.new_sell_order("12345", "FUEL", 5), False, "API call didn't fail when expected to")
-
-class TestStructuresInit(unittest.TestCase):
     def test_structures_init(self):
         self.assertIsInstance(Structures("JimHawkins", "12345"), Structures, "Failed to initiate the Structures Class")
         self.assertEqual(Structures("JimHawkins", "12345").username, "JimHawkins", "Did not set the username attribute correctly")
         self.assertEqual(Structures("JimHawkins", "12345").token, "12345", "Did not set the token attribute correctly")
 
-class TestStructuresMethods(unittest.TestCase):
+
+    # Create Structure
+    # ----------------
+    @responses.activate
+    def test_create_new_structure_endpoint(self):
+        """Test that the correct endpoint is used"""
+        self.assertNotIsInstance(self.structures.create_new_structure("OE-PM", "MINE"), 
+                                 requests.exceptions.ConnectionError, 
+                                 "Incorrect endpoint was used to make a structure") 
+
+    @responses.activate                           
+    def test_create_new_structure_params(self):
+        """Test that the correct parameters are placed into the request"""
+        self.structures.create_new_structure("OE-PM", "MINE")
+        self.assertEqual(responses.calls[0].request.params, {'location':'OE-PM', 'type':'MINE'}, "Incorrect parameters supplied for request")
+
+    @responses.activate                           
+    def test_create_new_structure_missing_params(self):
+        """Test that an exception is raised when any required arguments are missing"""
+        with self.assertRaises(TypeError, msg="Type Error not raised when required parameter missing"):
+            self.structures.create_new_structure("OE-PM")
+
+
+    # Deposit Goods in Structure
+    # ----------------
+    @responses.activate
+    def test_deposit_goods_endpoint(self):
+        """Test that the correct endpoint is used"""
+        self.assertNotIsInstance(self.structures.deposit_goods("12345", "54321", "FUEL", 50), 
+                                 requests.exceptions.ConnectionError, 
+                                 "Incorrect endpoint was used to deposit goods into structure") 
+
+    @responses.activate                           
+    def test_deposit_goods_params(self):
+        """Test that the correct parameters are placed into the request"""
+        self.structures.deposit_goods("12345", "54321", "FUEL", 50)
+        self.assertEqual(responses.calls[0].request.params, {'shipId':'54321', 'good':'FUEL', 'quantity':'50'}, "Incorrect parameters supplied for request")
+
+    @responses.activate                           
+    def test_deposit_goods_missing_params(self):
+        """Test that an exception is raised when any required arguments are missing"""
+        with self.assertRaises(TypeError, msg="Type Error not raised when required parameter missing"):
+            self.structures.deposit_goods("1234", "1234", "FUEL")
+
+
+    # Get Structure
+    # ----------------
+    @responses.activate
+    def test_get_structure_endpoint(self):
+        """Test that the correct endpoint is used"""
+        self.assertNotIsInstance(self.structures.get_structure("12345"), 
+                                 requests.exceptions.ConnectionError, 
+                                 "Incorrect endpoint was used to get structure") 
+
+    @responses.activate                           
+    def test_get_structure_params(self):
+        """Test that the correct parameters are placed into the request"""
+        self.structures.get_structure("12345")
+        self.assertEqual(responses.calls[0].request.params, {}, "Parameters supplied when there shouldn't have been any")
+
+    @responses.activate                           
+    def test_get_structure_missing_params(self):
+        """Test that an exception is raised when any required arguments are missing"""
+        with self.assertRaises(TypeError, msg="Type Error not raised when required parameter missing"):
+            self.structures.get_structure()
+
+
+    # Get User's Structures
+    # ----------------
+    @responses.activate
+    def test_get_users_structures_endpoint(self):
+        """Test that the correct endpoint is used"""
+        self.assertNotIsInstance(self.structures.get_users_structures(), 
+                                 requests.exceptions.ConnectionError, 
+                                 "Incorrect endpoint was used to get list of user's structures")
+
+
+    # Get Structure
+    # ----------------
+    @responses.activate
+    def test_transfer_goods_endpoint(self):
+        """Test that the correct endpoint is used"""
+        self.assertNotIsInstance(self.structures.transfer_goods("12345", "54321", "FUEL", 50), 
+                                 requests.exceptions.ConnectionError, 
+                                 "Incorrect endpoint was used to transfer goods from structure") 
+
+    @responses.activate                           
+    def test_transfer_goods_params(self):
+        """Test that the correct parameters are placed into the request"""
+        self.structures.transfer_goods("12345", "54321", "FUEL", 50)
+        self.assertEqual(responses.calls[0].request.params, {'shipId':'54321', 'good':'FUEL', 'quantity':'50'}, "Parameters supplied when there shouldn't have been any")
+
+    @responses.activate                           
+    def test_transfer_goods_missing_params(self):
+        """Test that an exception is raised when any required arguments are missing"""
+        with self.assertRaises(TypeError, msg="Type Error not raised when required parameter missing"):
+            self.structures.transfer_goods("12345", "54321", "FUEL")
+
+class TestSystems(unittest.TestCase):
     def setUp(self):
         logging.disable()
-        self.structures = Structures(USERNAME, TOKEN)
+        self.systems = Systems(USERNAME, TOKEN)
+        self.responses = responses.RequestsMock()
+        self.responses.start()
+        # Get System
+        responses.add(responses.GET, f"{BASE_URL}game/systems", json=MOCKS['system'], status=200)
     
     def tearDown(self):
         logging.disable(logging.NOTSET)
+        self.addCleanup(self.responses.stop)
+        self.addCleanup(self.responses.reset)
 
-    def test_create_new_structure(self):
-        self.assertEqual(self.structures.create_new_structure("OE-PM", "MINE"), False, "API call didn't fail when expected to")
-
-    def test_deposit_goods(self):
-        self.assertEqual(self.structures.deposit_goods("1234", "1234", "FUEL", 50), False, "API call didn't fail when expected to")
-
-    def test_get_structure(self):
-        self.assertEqual(self.structures.get_structure("1234"), False, "API call didn't fail when expected to")
-
-    def test_get_users_structures(self):
-        self.assertIsInstance(self.structures.get_users_structures()['structures'], list, "API call didn't fail when expected to")
-
-    def test_transfer_goods(self):
-        self.assertEqual(self.structures.transfer_goods("1234", "1234", "FUEL", 50), False, "API call didn't fail when expected to")
-
-class TestSystemsInit(unittest.TestCase):
     def test_systems_init(self):
         self.assertIsInstance(Systems("JimHawkins", "12345"), Systems, "Failed to initiate the Systems Class")
         self.assertEqual(Systems("JimHawkins", "12345").username, "JimHawkins", "Did not set the username attribute correctly")
         self.assertEqual(Systems("JimHawkins", "12345").token, "12345", "Did not set the token attribute correctly")
 
-class TestSystemsMethods(unittest.TestCase):
-    def setUp(self):
-        logging.disable()
-        self.systems = Systems(USERNAME, TOKEN)
-    
-    def tearDown(self):
-        logging.disable(logging.NOTSET)
-
-    def test_get_systems(self):
-        self.assertIsInstance(self.systems.get_systems()['systems'], list, "API call didn't return the expected list of systems")
-
-class TestGetUserToken(unittest.TestCase):
-    def test_get_user_token(self):
-        self.assertIsNone(get_user_token("JimHawkins"), "Failed to handle a username that already exists")    
+    # Get System
+    # ----------------
+    @responses.activate
+    def test_get_systems_endpoint(self):
+        """Test that the correct endpoint is used"""
+        self.assertNotIsInstance(self.systems.get_systems(), 
+                                 requests.exceptions.ConnectionError, 
+                                 "Incorrect endpoint was used to get system") 
 
 class TestLeaderboard(unittest.TestCase):
     """Tests API calls related to the Game/Leaderboard"""
