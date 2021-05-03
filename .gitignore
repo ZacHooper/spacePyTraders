@@ -11,6 +11,7 @@ spaceTraders.pyc
 # For personal Projects
 zac.py
 db_handler.py
+startup.py
 
 # Misc Folders
 /Archived_Databases
