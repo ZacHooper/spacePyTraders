@@ -115,6 +115,16 @@
         "status": "CURRENT",
         "type": "STARTUP"
     },
+    "request_loan" : {
+        "credits": 200000,
+        "loan": {
+            "id": "cknxse4cd353061cs65sh2xjvy",
+            "due": "2021-04-27T23:12:27.516Z",
+            "repaymentAmount": 280000,
+            "status": "CURRENT",
+            "type": "STARTUP"
+        }
+    },
     "location": {
         "symbol": "OE-PM",
         "type": "PLANET",
