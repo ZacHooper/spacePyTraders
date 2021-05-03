@@ -1,9 +1,14 @@
 import unittest
+import requests
+import responses
 import logging
 from SpacePyTraders.client import *
 
-TOKEN = "0930cc36-7dc7-4cb1-8823-d8e72594d91e"
-USERNAME = "JimHawkins"
+TOKEN = "e283a204-f577-465f-89e4-8ff024c4344d"
+USERNAME = "JimHawkins3"
+
+with open('Tests/model_mocks.json','r') as infile:
+    MOCKS = json.load(infile)
 
 class TestMakeRequestFunction(unittest.TestCase):
     def setUp(self):
@@ -12,23 +17,38 @@ class TestMakeRequestFunction(unittest.TestCase):
     def tearDown(self):
         logging.disable(logging.NOTSET)
 
+    @responses.activate
     def test_make_request_get(self):
+        responses.add(responses.GET, "https://api.spacetraders.io/game/status", json=MOCKS['game_status'], status=200)
         res = make_request("GET", "https://api.spacetraders.io/game/status", None, None)
         self.assertEqual(res.status_code, 200, "Either game is down or GET request failed to fire properly")
     
     def test_make_request_post(self):
-        res = make_request("POST", "https://api.spacetraders.io/users/JimHawkins/token", None, None)
+        res = make_request("POST", f"https://api.spacetraders.io/users/{USERNAME}/token", headers={"authentication": "Bearer " + TOKEN}, params={"test":123})
         # Want the user already created error to be returned
         self.assertEqual(res.status_code, 409, "POST request failed to fire properly")
-    
-    def test_make_request_bad_method(self):
-        self.assertRaises(KeyError, make_request, "BLAH", "https://api.spacetraders.io/users/JimHawkins/token", None, None)
+
 
 class TestClientClassInit(unittest.TestCase):
     def test_client_with_token_init(self):
         self.assertIsInstance(Client("JimHawkins", "12345"), Client, "Failed to initiate the Client Class")
         self.assertEqual(Client("JimHawkins", "12345").username, "JimHawkins", "Did not set the username attribute correctly")
         self.assertEqual(Client("JimHawkins", "12345").token, "12345", "Did not set the token attribute correctly")
+
+class TestClientClassMethods(unittest.TestCase):
+    def setUp(self):
+        logging.disable()
+        self.client = Client(USERNAME, TOKEN)
+    
+    def tearDown(self):
+        logging.disable(logging.NOTSET)
+
+    @responses.activate
+    def test_generic_endpoint_throttling_too_many_tries(self):
+        responses.add(responses.GET, "https://api.spacetraders.io/game/status", json={'error': {'code': 42901, 'message': 'Fail'}}, status=429)
+        with self.assertRaises(TooManyTriesException):
+            """Throttling handling will happen should stop after 10 times raising TooManyTriesException"""
+            res = self.client.generic_api_call("GET", "game/status", token=self.client.token, throttle_time=0)
 
 class TestShipInit(unittest.TestCase):
     def test_ships_init(self):
@@ -99,12 +119,35 @@ class TestPurchaseOrderMethods(unittest.TestCase):
     def setUp(self):
         logging.disable()
         self.po = PurchaseOrders(USERNAME, TOKEN)
+        self.responses = responses.RequestsMock()
+        self.responses.start()
+
+        responses.add(responses.POST, f"https://api.spacetraders.io/users/{USERNAME}/purchase-orders",
+                      json={'error': 'not found'}, status=200)
+
+        self.addCleanup(self.responses.stop)
+        self.addCleanup(self.responses.reset)
     
     def tearDown(self):
         logging.disable(logging.NOTSET)
 
-    def test_submit_flight_plan_fail(self):
-        self.assertEqual(self.po.new_purchase_order("12345", "FUEL", 5), False, "API call didn't fail when expected to")
+    @responses.activate
+    def test_submit_purchase_order_url(self):
+        self.assertNotIsInstance(self.po.new_purchase_order("12345", "FUEL", 5), 
+                                 requests.exceptions.ConnectionError, 
+                                 "Incorrect endpoint was used to make Purchase Order Request")
+
+    @responses.activate                           
+    def test_submit_purchase_order_params(self):
+        self.po.new_purchase_order("12345", "FUEL", 5)
+        self.assertEqual(responses.calls[0].request.params, {"shipId": '12345', "good": "FUEL", "quantity": '5'}, "Incorrect parameters were supplied to the request")
+
+    @responses.activate                           
+    def test_submit_purchase_order_params_2(self):
+        with self.assertRaises(TypeError, msg="Type Error not raised when required parameter missing"):
+            self.po.new_purchase_order("12345", "FUEL")
+
+    
 
 class TestGameInit(unittest.TestCase):
     def test_game_init(self):

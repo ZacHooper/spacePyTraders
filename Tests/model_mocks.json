@@ -373,5 +373,8 @@
         "purchasePricePerUnit": 81,
         "sellPricePerUnit": 79,
         "quantityAvailable": 48877
+    },
+    "game_status" : {
+        "status": "spacetraders is currently online and available to play"
     }
 }
