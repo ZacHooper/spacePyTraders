@@ -1,11 +1,12 @@
 import unittest
-from unittest import mock
 import requests
 import responses
 import logging
 from SpacePyTraders.client import *
+import pytest
+from collections import namedtuple
 
-TOKEN = "e283a204-f577-465f-89e4-8ff024c4344d"
+TOKEN = "e8c9ac0d-e1ec-45e9-b808-d622a7717f46"
 USERNAME = "JimHawkins3"
 BASE_URL = "https://api.spacetraders.io/"
 
@@ -838,3 +839,12 @@ class TestLeaderboard(unittest.TestCase):
         self.assertNotIsInstance(self.leaderboard.get_player_net_worths(), 
                                  requests.exceptions.ConnectionError, 
                                  "Incorrect endpoint was used to get net-worth leaderboard") 
+
+@pytest.fixture
+def my():
+    logging.disable()
+    return My(USERNAME, TOKEN)
+
+def test_my_account(my):
+    responses.add(responses.GET, f"{BASE_URL}my/account", json=MOCKS['user'], status=200)
+    assert my.account() is not False

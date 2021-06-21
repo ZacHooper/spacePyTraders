@@ -136,7 +136,26 @@ class Client ():
         
         # If failed to make call after 10 tries fail it
         raise(TooManyTriesException)
-        
+
+class My(Client):
+    # Used to get info about user
+    def account(self, raw_res=False, throttle_time=10):
+        """Get's the user's info
+
+        Args:
+            raw_res (bool, optional): Get the actual response from requests. Defaults to False.
+            throttle_time (int, optional): change the throttle time to wait. Defaults to 10.
+
+        Returns:
+            dict: Returns a dictionary containing the user's details
+        """
+        endpoint = f"my/account"
+        warning_log = F"Unable to get {self.username} user info"
+        logging.info(f"Getting user info for {self.username}")
+        res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
+        return res if res else False
+
+     
 
 class FlightPlans(Client):
     # Get all active flights
