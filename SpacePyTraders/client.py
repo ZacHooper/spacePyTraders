@@ -3,6 +3,7 @@ import logging
 import json
 import time
 from dataclasses import dataclass, field
+import warnings
 
 
 URL = "https://api.spacetraders.io/"
@@ -618,7 +619,8 @@ class Users (Client):
             dict: dict containing your user data
         """
         # Get user
-        endpoint = f"users/{self.username}"
+        warnings.warn("Users class is being deprecated and replaced by the `My` class. \nTo get your info please now use Api.my.account()", DeprecationWarning)
+        endpoint = f"my/account"
         warning_log = F"Unable to get {self.username} user info"
         logging.info(f"Getting user info for {self.username}")
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)

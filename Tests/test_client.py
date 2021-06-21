@@ -24,6 +24,7 @@ class TestMakeRequestFunction(unittest.TestCase):
         """Tests if the method will actually make a request call and if the right method is used. 
         """
         responses.add(responses.GET, "https://api.spacetraders.io/game/status", json=MOCKS['game_status'], status=200)
+        responses.add(responses.POST, "https://api.spacetraders.io/game/status", json=MOCKS['game_status'], status=200)
         res = make_request("GET", "https://api.spacetraders.io/game/status", None, None)
         self.assertEqual(res.status_code, 200, "Either game is down or GET request failed to fire properly")
     
@@ -475,7 +476,7 @@ class TestUsers(unittest.TestCase):
         self.responses = responses.RequestsMock()
         self.responses.start()
         # Get User Info
-        responses.add(responses.GET, f"{BASE_URL}users/{USERNAME}", json=MOCKS['user'], status=200)
+        responses.add(responses.GET, f"{BASE_URL}my/account", json=MOCKS['user'], status=200)
     
     def tearDown(self):
         logging.disable(logging.NOTSET)
