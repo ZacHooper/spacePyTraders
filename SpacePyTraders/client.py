@@ -240,6 +240,7 @@ class Loans (Client):
         Returns:
             dict: dict containing a list of loans
         """
+        warnings.warn("get_loans_available has now been moved to the Types class. Place now use `types.loans()`. This method will remain until the next update.")
         endpoint = f"game/loans"
         warning_log = F"Unable to retrieve the loans available"
         logging.info(f"Retrieving the loans currently available")
@@ -440,6 +441,7 @@ class Ships (Client):
 
         API LINK: https://api.spacetraders.io/#api-ships-ships
         """
+        warnings.warn("get_available_ships is being deprecated and is moving to the Types class. \nTo get your info please now use Api.types.ships()", DeprecationWarning)
         endpoint = f"game/ships"
         params = {"class": type}
         warning_log = F"Unable to get available ships. Class Filter: {type}"
@@ -695,6 +697,75 @@ class Users (Client):
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
         return res if res else False    
 
+class Types (Client):
+    def goods(self, raw_res=False, throttle_time=10):
+        """Get's all the available goods in the game
+
+        Args:
+            raw_res (bool, optional): Returns the actual request response. Defaults to False.
+            throttle_time (int, optional): Change how long to wait if throttled. Defaults to 10.
+
+        Returns:
+            dict: A dict containing a list of all the goods in the game
+        """
+        endpoint = f"types/goods"
+        warning_log = F"Unable to get available goods"
+        logging.info(f"Getting available goods")
+        res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log, 
+                                    raw_res=raw_res, throttle_time=throttle_time)
+        return res if res else False 
+
+    def loans(self, raw_res=False, throttle_time=10):
+        """Get's all the available loans in the game
+
+        Args:
+            raw_res (bool, optional): Returns the actual request response. Defaults to False.
+            throttle_time (int, optional): Change how long to wait if throttled. Defaults to 10.
+
+        Returns:
+            dict: A dict containing a list of all the loans in the game
+        """
+        endpoint = f"types/loans"
+        warning_log = F"Unable to get available loans"
+        logging.info(f"Getting available loans")
+        res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log, 
+                                    raw_res=raw_res, throttle_time=throttle_time)
+        return res if res else False 
+    
+    def structures(self, raw_res=False, throttle_time=10):
+        """Get's all the available structures in the game
+
+        Args:
+            raw_res (bool, optional): Returns the actual request response. Defaults to False.
+            throttle_time (int, optional): Change how long to wait if throttled. Defaults to 10.
+
+        Returns:
+            dict: A dict containing a list of all the structures in the game
+        """
+        endpoint = f"types/structures"
+        warning_log = F"Unable to get available structures"
+        logging.info(f"Getting available structures")
+        res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log, 
+                                    raw_res=raw_res, throttle_time=throttle_time)
+        return res if res else False 
+
+    def ships(self, raw_res=False, throttle_time=10):
+        """Get's all the available ships in the game
+
+        Args:
+            raw_res (bool, optional): Returns the actual request response. Defaults to False.
+            throttle_time (int, optional): Change how long to wait if throttled. Defaults to 10.
+
+        Returns:
+            dict: A dict containing a list of all the ships in the game
+        """
+        endpoint = f"types/ships"
+        warning_log = F"Unable to get available ships"
+        logging.info(f"Getting available ships")
+        res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log, 
+                                    raw_res=raw_res, throttle_time=throttle_time)
+        return res if res else False 
+
 class Api ():
     def __init__(self, username, token=None):
         self.username = username
@@ -711,6 +782,7 @@ class Api ():
         self.structures = Structures(username, token)
         self.systems = Systems(username, token)
         self.users = Users(username, token)
+        self.types = Types(username, token)
 
     def generate_token(self):
         """Trys to create a new user and return their token
@@ -737,6 +809,7 @@ class Api ():
                 self.structures.token = self.token
                 self.systems.token = self.token
                 self.users.token = self.token
+                self.types.token = self.token
             else:
                 logging.exception(f"Code: {res.json()['error']['code']}, Message: {res.json()['error']['message']}")
                 return None

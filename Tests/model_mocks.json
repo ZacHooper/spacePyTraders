@@ -716,5 +716,72 @@
                 "weapons": 5
             }
         ]
+    },
+    "types_goods" : {
+        "goods": [
+            {
+                "name": "Fuel",
+                "symbol": "FUEL",
+                "volumePerUnit": 1
+            },
+            {
+                "name": "Chemicals",
+                "symbol": "CHEMICALS",
+                "volumePerUnit": 1
+            },
+            {
+                "name": "Metals",
+                "symbol": "METALS",
+                "volumePerUnit": 1
+            }
+        ]
+    },
+    "types_loans": {
+        "loans": [
+            {
+                "amount": 200000,
+                "collateralRequired": false,
+                "rate": 40,
+                "termInDays": 2,
+                "type": "STARTUP"
+            }
+        ]
+    },
+    "types_structures": {
+        "structures": [
+            {
+                "allowedLocationTypes": [
+                    "MOON",
+                    "ASTEROID"
+                ],
+                "consumes": [
+                    "DRONES",
+                    "MACHINERY"
+                ],
+                "name": "Mine",
+                "price": 1293550,
+                "produces": [
+                    "METALS",
+                    "RARE_METALS"
+                ],
+                "type": "MINE"
+            },
+            {
+                "allowedLocationTypes": [
+                    "GAS_GIANT"
+                ],
+                "consumes": [
+                    "DRONES",
+                    "MACHINERY",
+                    "CHEMICALS"
+                ],
+                "name": "Fuel Refinery",
+                "price": 288000,
+                "produces": [
+                    "FUEL"
+                ],
+                "type": "FUEL_REFINERY"
+            }
+        ]
     }
 }

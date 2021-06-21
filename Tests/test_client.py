@@ -7,7 +7,7 @@ import pytest
 from collections import namedtuple
 
 TOKEN = "e8c9ac0d-e1ec-45e9-b808-d622a7717f46"
-USERNAME = "JimHawkins3"
+USERNAME = "JimHawkins"
 BASE_URL = "https://api.spacetraders.io/"
 
 with open('Tests/model_mocks.json','r') as infile:
@@ -835,6 +835,22 @@ class TestSystems(unittest.TestCase):
                                  requests.exceptions.ConnectionError, 
                                  "Incorrect endpoint was used to get system") 
 
+# System Endpoints
+# ----------------
+@pytest.mark.systems
+def test_system_get_active_flightplans(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"https://api.spacetraders.io/game/systems/OE/flight-plans", json={'flightPlans': 'get the response'}, status=200) 
+    r = api.systems.get_active_flight_plans("OE")
+    assert isinstance(r, dict)
+
+@pytest.mark.systems
+def test_system_get_system_locations(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}game/systems/OE/locations", json=MOCKS['system'], status=200)
+    r = api.systems.get_system_locations("OE")
+    assert isinstance(r, dict)
+
+
+
 class TestLeaderboard(unittest.TestCase):
     """Tests API calls related to the Game/Leaderboard"""
     def setUp(self):
@@ -862,6 +878,8 @@ class TestLeaderboard(unittest.TestCase):
                                  requests.exceptions.ConnectionError, 
                                  "Incorrect endpoint was used to get net-worth leaderboard") 
 
+# Account Endpoints
+# ----------------
 @pytest.fixture
 def my():
     logging.disable()
@@ -870,3 +888,35 @@ def my():
 def test_my_account(my):
     responses.add(responses.GET, f"{BASE_URL}my/account", json=MOCKS['user'], status=200)
     assert my.account() is not False
+
+# Types Endpoints
+# ----------------
+@pytest.mark.types
+def test_types_init():
+    assert isinstance(Types("JimHawkins", "12345"), Types)
+    assert Types("JimHawkins", "12345").username == "JimHawkins", "Did not set the username attribute correctly"
+    assert Types("JimHawkins", "12345").token == "12345", "Did not set the token attribute correctly"
+
+@pytest.mark.types
+def test_types_get_goods(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}types/goods", json=MOCKS['types_goods'], status=200)
+    r = api.types.goods()
+    assert isinstance(r, dict)
+
+@pytest.mark.types
+def test_types_loans(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}types/loans", json=MOCKS['types_loans'], status=200)
+    r = api.types.loans()
+    assert isinstance(r, dict)
+
+@pytest.mark.types
+def test_types_structures(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}types/structures", json=MOCKS['types_structures'], status=200)
+    r = api.types.structures()
+    assert isinstance(r, dict)
+
+@pytest.mark.types
+def test_types_ships(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}types/ships", json=MOCKS['get_available_ships'], status=200)
+    r = api.types.ships()
+    assert isinstance(r, dict)
