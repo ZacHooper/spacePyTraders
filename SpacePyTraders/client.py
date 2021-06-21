@@ -3,6 +3,7 @@ import logging
 import json
 import time
 from dataclasses import dataclass, field
+from ratelimit import limits, sleep_and_retry
 
 
 URL = "https://api.spacetraders.io/"
@@ -24,6 +25,8 @@ class ServerException(Exception):
 class TooManyTriesException(Exception):
     message: str = "Has failed too many times to make API call. "
 
+@sleep_and_retry
+@limits(calls=2, period=1.2)
 def make_request(method, url, headers, params):
     """Checks which method to use and then makes the actual request to Space Traders API
 
@@ -48,15 +51,9 @@ def make_request(method, url, headers, params):
         return requests.put(url, headers=headers, params=params)
     elif method == "DELETE":
         return requests.delete(url, headers=headers, params=params)
-    # methods = {
-    #     "POST": ,
-    #     "GET": requests.get(url, headers=headers, params=params),
-    #     "PUT": ,
-    #     "DELETE": 
-    # }
 
     # If an Invalid method provided throw exception
-    if method not in methods:
+    if method not in ["GET", "POST", "PUT", "DELETE"]:
         logging.exception(f'Invalid method provided: {method}')
 
     # return methods[method]   
@@ -181,7 +178,7 @@ class FlightPlans(Client):
         endpoint = f"users/{self.username}/flight-plans"
         params = {"shipId": shipId, "destination": destination}
         warning_log = F"Unable to create Flight Plan for ship: {shipId}."
-        logging.info(f"Creating flight plan for ship: {shipId} to destination: {destination}")
+        logging.debug(f"Creating flight plan for ship: {shipId} to destination: {destination}")
         res = self.generic_api_call("POST", endpoint, params=params, token=self.token, warning_log=warning_log)
         return res if res else False
 
@@ -388,7 +385,7 @@ class Ships (Client):
         endpoint = f"users/{self.username}/ships"
         params = {"location": location, "type": type}
         warning_log = F"Unable to buy ship type: {type}, at location: {location}."
-        logging.info(f"Buying ship of type: {type} at location: {location}")
+        logging.debug(f"Buying ship of type: {type} at location: {location}")
         res = self.generic_api_call("POST", endpoint, params=params, token=self.token, warning_log=warning_log)
         return res if res else False
 
