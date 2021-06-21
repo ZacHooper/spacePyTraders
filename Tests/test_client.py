@@ -13,6 +13,17 @@ BASE_URL = "https://api.spacetraders.io/"
 with open('Tests/model_mocks.json','r') as infile:
     MOCKS = json.load(infile)
 
+@pytest.fixture
+def api():
+    # logging.disable()
+    return Api(USERNAME, TOKEN)
+
+@pytest.fixture
+def mock_endpoints():
+    res = responses.RequestsMock()
+    res.start()
+    return res
+
 class TestMakeRequestFunction(unittest.TestCase):
     def setUp(self):
         logging.disable()
@@ -577,6 +588,17 @@ class TestLocations(unittest.TestCase):
     def test_get_locations_in_system_missing_params(self):
         with self.assertRaises(TypeError, msg="Type Error not raised when required parameter missing"):
             self.locations.get_system_locations()    
+
+# Location Tests
+# ----------------
+@pytest.mark.locations
+@pytest.mark.test
+def test_get_marketplace(api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"https://api.spacetraders.io/game/locations/OE-PM/marketplace", json={"GET_EXAMPLE": "EXAMPLE"}, status=200)
+    r = api.locations.get_marketplace("OE-PM")
+    assert isinstance(r, dict)
+
+
 
 class TestMarketplace(unittest.TestCase):
     def setUp(self):
