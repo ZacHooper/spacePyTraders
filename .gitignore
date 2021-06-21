@@ -180,3 +180,7 @@ Thumbs.db
 
 
 # End of https://www.toptal.com/developers/gitignore/api/python
+run.py
+automation/__init__.py
+automation/tracker.py
+automation/trader.py
