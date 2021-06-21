@@ -7,6 +7,8 @@
 spaceTraders.pyc
 /.ipynb_checkpoints
 */secrets
+/automation
+run.py
 
 # For personal Projects
 zac.py
