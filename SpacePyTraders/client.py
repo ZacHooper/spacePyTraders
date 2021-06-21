@@ -167,7 +167,7 @@ class FlightPlans(Client):
             dict : dict containing a list of flight plans for each system as the key
         """
         warnings.warn("get_active_flight_plans has now been moved to the Systems class. Place now use `systems.get_active_flight_plans()`. This method will remain until the next update.")
-        endpoint = f"game/systems/{symbol}/flight-plans"
+        endpoint = f"systems/{symbol}/flight-plans"
         warning_log = F"Unable to get flight plans for system: {symbol}."
         logging.info(f"Getting the flight plans in the {symbol} system")
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
@@ -304,7 +304,7 @@ class Locations (Client):
         Returns:
             dict: A dict containing info about a location
         """
-        endpoint = f"game/locations/{symbol}"
+        endpoint = f"locations/{symbol}"
         warning_log = F"Unable to get info for the location: {symbol}"
         logging.info(f"Getting location info for {symbol}")
         res = self.generic_api_call("GET", endpoint,token=self.token, warning_log=warning_log)
@@ -320,7 +320,7 @@ class Locations (Client):
         Returns:
             dict: A dict containing a JSON list of the ships docked at the location. 
         """
-        endpoint = f"game/locations/{symbol}/ships"
+        endpoint = f"locations/{symbol}/ships"
         warning_log = F"Unable to get ships docked at the location: {symbol}"
         logging.info(f"Getting the ships docked at: {symbol}")
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
@@ -337,7 +337,7 @@ class Locations (Client):
             dict: A dict containing a JSON list of the locations in the system
         """
         warnings.warn("get_system_locations has now moved to the Systems class. \n\nPlease now use `systems.get_system_locations()`. \n\nThis method will remain until the next update.")
-        endpoint = f"game/systems/{symbol}/locations"
+        endpoint = f"systems/{symbol}/locations"
         warning_log = F"Unable to get the locations in the system: {symbol}"
         logging.info(f"Getting the locations in system: {symbol}")
         params = {"type": type} if type is not None else None
@@ -353,7 +353,7 @@ class Locations (Client):
         Returns:
             dict: A dict containing details of the location and a JSON list of the items available in the marketplace
         """
-        endpoint = f"game/locations/{symbol}/marketplace"
+        endpoint = f"locations/{symbol}/marketplace"
         warning_log = F"Unable to get the marketplace for the location: {symbol}"
         logging.info(f"Getting the marketplace for location: {symbol}")
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
@@ -371,7 +371,7 @@ class Marketplace (Client):
             dict: A dict containing details of the location and a JSON list of the items available in the marketplace
         """
         warnings.warn("get_marketplace has now moved to the Locations class. \n\nPlease now use `location.get_marketplace()`. \n\nThis method will remain until the next update.")
-        endpoint = f"game/locations/{symbol}/marketplace"
+        endpoint = f"locations/{symbol}/marketplace"
         warning_log = F"Unable to get the marketplace for the location: {symbol}"
         logging.info(f"Getting the marketplace for location: {symbol}")
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
@@ -657,7 +657,7 @@ class Systems (Client):
         Returns:
             dict : dict containing a list of flight plans for each system as the key
         """
-        endpoint = f"game/systems/{symbol}/flight-plans"
+        endpoint = f"systems/{symbol}/flight-plans"
         warning_log = F"Unable to get flight plans for system: {symbol}."
         logging.info(f"Getting the flight plans in the {symbol} system")
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
@@ -673,14 +673,13 @@ class Systems (Client):
         Returns:
             dict: A dict containing a JSON list of the locations in the system
         """
-        endpoint = f"game/systems/{symbol}/locations"
+        endpoint = f"systems/{symbol}/locations"
         warning_log = F"Unable to get the locations in the system: {symbol}"
         logging.info(f"Getting the locations in system: {symbol}")
         params = {"type": type} if type is not None else None
         res = self.generic_api_call("GET", endpoint, params=params, token=self.token, warning_log=warning_log)
         return res if res else False  
     
-
 class Users (Client):
 
     def get_your_info(self, raw_res=False, throttle_time=10):

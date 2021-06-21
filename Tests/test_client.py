@@ -255,7 +255,7 @@ class TestFlightPlan(unittest.TestCase):
         # Submit Flight Plan
         responses.add(responses.POST, f"{BASE_URL}users/{USERNAME}/flight-plans", json=MOCKS['flight_plan'], status=200)
         # All active flight plans
-        responses.add(responses.GET, f"{BASE_URL}game/systems/OE/flight-plans", json={'flightPlans': 'get the response'}, status=200)
+        responses.add(responses.GET, f"{BASE_URL}systems/OE/flight-plans", json={'flightPlans': 'get the response'}, status=200)
         # Get active flight
         responses.add(responses.GET, f"{BASE_URL}users/{USERNAME}/flight-plans/456789", json={'flightPlans': 'get the response'}, status=200)
         
@@ -509,95 +509,33 @@ class TestUsers(unittest.TestCase):
                                  requests.exceptions.ConnectionError, 
                                  "Incorrect endpoint was used to get user info")     
 
-class TestLocations(unittest.TestCase):
-    def setUp(self):
-        logging.disable()
-        self.locations = Locations(USERNAME, TOKEN)
-        self.responses = responses.RequestsMock()
-        self.responses.start()
-        # Get a location
-        responses.add(responses.GET, f"{BASE_URL}game/locations/OE-PM", json=MOCKS['location'], status=200)
-        # Get ships at a location
-        responses.add(responses.GET, f"{BASE_URL}game/locations/OE-PM/ships", json={'get_location_ships':'get response'}, status=200)
-        # Get locations in a system
-        responses.add(responses.GET, f"{BASE_URL}game/systems/OE/locations", json=MOCKS['system'], status=200)
-
-    def tearDown(self):
-        logging.disable(logging.NOTSET)
-        self.addCleanup(self.responses.stop)
-        self.addCleanup(self.responses.reset)
-
-    def test_locations_init(self):
-        self.assertIsInstance(Locations("JimHawkins", "12345"), Locations, "Failed to initiate the Locations Class")
-        self.assertEqual(Locations("JimHawkins", "12345").username, "JimHawkins", "Did not set the username attribute correctly")
-        self.assertEqual(Locations("JimHawkins", "12345").token, "12345", "Did not set the token attribute correctly")
-
-    # Get a Location
-    # ----------------
-    @responses.activate
-    def test_get_location_endpoint(self):
-        """Test that the correct endpoint is used"""
-        self.assertNotIsInstance(self.locations.get_location("OE-PM"), 
-                                 requests.exceptions.ConnectionError, 
-                                 "Incorrect endpoint was used to get a location") 
-
-    @responses.activate                           
-    def test_get_location_params(self):
-        self.locations.get_location("OE-PM")
-        self.assertEqual(responses.calls[0].request.params, {}, "Parameters supplied when there shouldn't have been any")
-
-    @responses.activate                           
-    def test_get_location_missing_params(self):
-        with self.assertRaises(TypeError, msg="Type Error not raised when required parameter missing"):
-            self.locations.get_location()   
-
-    # Get ships at a Location
-    # ----------------
-    @responses.activate
-    def test_get_ships_at_location_endpoint(self):
-        """Test that the correct endpoint is used"""
-        self.assertNotIsInstance(self.locations.get_ships_at_location("OE-PM"), 
-                                 requests.exceptions.ConnectionError, 
-                                 "Incorrect endpoint was used to get ships at a location") 
-
-    @responses.activate                           
-    def test_get_ships_at_location_params(self):
-        self.locations.get_ships_at_location("OE-PM")
-        self.assertEqual(responses.calls[0].request.params, {}, "Parameters supplied when there shouldn't have been any")
-
-    @responses.activate                           
-    def test_get_ships_at_location_missing_params(self):
-        with self.assertRaises(TypeError, msg="Type Error not raised when required parameter missing"):
-            self.locations.get_location()    
-    
-    # Get locations in a system
-    # ----------------
-    @responses.activate
-    def test_get_locations_in_system_endpoint(self):
-        """Test that the correct endpoint is used"""
-        self.assertNotIsInstance(self.locations.get_system_locations("OE"), 
-                                 requests.exceptions.ConnectionError, 
-                                 "Incorrect endpoint was used to get locations in a system") 
-
-    @responses.activate                           
-    def test_get_locations_in_system_params(self):
-        self.locations.get_system_locations("OE")
-        self.assertEqual(responses.calls[0].request.params, {}, "Parameters supplied when there shouldn't have been any")
-
-    @responses.activate                           
-    def test_get_locations_in_system_missing_params(self):
-        with self.assertRaises(TypeError, msg="Type Error not raised when required parameter missing"):
-            self.locations.get_system_locations()    
 
 # Location Tests
 # ----------------
 @pytest.mark.locations
-@pytest.mark.test
+def test_locations_init():
+    location = Locations("JimHawkins", "12345")
+    assert isinstance(location, Locations)
+    assert location.username == "JimHawkins", "Username did not initiate correctly"
+    assert location.token == "12345", "Token did not initiate correctly"
+
+@pytest.mark.locations
 def test_get_marketplace(api, mock_endpoints):
-    mock_endpoints.add(responses.GET, f"https://api.spacetraders.io/game/locations/OE-PM/marketplace", json={"GET_EXAMPLE": "EXAMPLE"}, status=200)
+    mock_endpoints.add(responses.GET, f"https://api.spacetraders.io/locations/OE-PM/marketplace", json={"GET_EXAMPLE": "EXAMPLE"}, status=200)
     r = api.locations.get_marketplace("OE-PM")
     assert isinstance(r, dict)
 
+@pytest.mark.locations
+def test_get_location_endpoint(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}locations/OE-PM", json=MOCKS['location'], status=200)
+    r = api.locations.get_location("OE-PM")
+    assert isinstance(r, dict)
+
+@pytest.mark.locations
+def test_get_location_ships_endpoint(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}locations/OE-PM/ships", json={'get_location_ships':'get response'}, status=200)
+    r = api.locations.get_ships_at_location("OE-PM")
+    assert isinstance(r, dict)
 
 
 class TestMarketplace(unittest.TestCase):
@@ -607,7 +545,7 @@ class TestMarketplace(unittest.TestCase):
         self.responses = responses.RequestsMock()
         self.responses.start()
         # Get Marketplace
-        responses.add(responses.GET, f"{BASE_URL}game/locations/OE-PM/marketplace", 
+        responses.add(responses.GET, f"{BASE_URL}locations/OE-PM/marketplace", 
                       json=MOCKS['location_marketplace'], status=200)
     
     def tearDown(self):
@@ -839,13 +777,13 @@ class TestSystems(unittest.TestCase):
 # ----------------
 @pytest.mark.systems
 def test_system_get_active_flightplans(api: Api, mock_endpoints):
-    mock_endpoints.add(responses.GET, f"https://api.spacetraders.io/game/systems/OE/flight-plans", json={'flightPlans': 'get the response'}, status=200) 
+    mock_endpoints.add(responses.GET, f"https://api.spacetraders.io/systems/OE/flight-plans", json={'flightPlans': 'get the response'}, status=200) 
     r = api.systems.get_active_flight_plans("OE")
     assert isinstance(r, dict)
 
 @pytest.mark.systems
 def test_system_get_system_locations(api: Api, mock_endpoints):
-    mock_endpoints.add(responses.GET, f"{BASE_URL}game/systems/OE/locations", json=MOCKS['system'], status=200)
+    mock_endpoints.add(responses.GET, f"{BASE_URL}systems/OE/locations", json=MOCKS['system'], status=200)
     r = api.systems.get_system_locations("OE")
     assert isinstance(r, dict)
 
