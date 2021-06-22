@@ -137,9 +137,9 @@ class Client ():
         # If failed to make call after 10 tries fail it
         raise(TooManyTriesException)
 
-class My(Client):
+class Account (Client):
     # Used to get info about user
-    def account(self, raw_res=False, throttle_time=10):
+    def info(self, raw_res=False, throttle_time=10):
         """Get's the user's info
 
         Args:
@@ -183,7 +183,7 @@ class FlightPlans(Client):
         Returns:
             dict : dict containing the details of the flight plan
         """
-        endpoint = f"users/{self.username}/flight-plans/{flightPlanId}"
+        endpoint = f"my/flight-plans/{flightPlanId}"
         warning_log = F"Unable to get flight plan: {flightPlanId}."
         logging.info(f"Getting flight plan: {flightPlanId}")
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
@@ -197,7 +197,7 @@ class FlightPlans(Client):
             shipId (str): ID of the ship to fly
             destination (str): Symbol of the locatino to fly the ship to
         """
-        endpoint = f"users/{self.username}/flight-plans"
+        endpoint = f"my/flight-plans"
         params = {"shipId": shipId, "destination": destination}
         warning_log = F"Unable to create Flight Plan for ship: {shipId}."
         logging.info(f"Creating flight plan for ship: {shipId} to destination: {destination}")
@@ -254,7 +254,7 @@ class Loans (Client):
         Returns:
             dict: dict containing a list of loans
         """
-        endpoint = f"users/{self.username}/loans"
+        endpoint = f"my/loans"
         warning_log = F"Unable to retrieve the loans of the user"
         logging.info(f"Retrieving the loans of the user: {self.username}")
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
@@ -270,7 +270,7 @@ class Loans (Client):
         Returns:
             dict: Success or fail message
         """
-        endpoint = f"users/{self.username}/loans/{loanId}"
+        endpoint = f"my/loans/{loanId}"
         warning_log = F"Unable to pay off loan: {loanId}"
         logging.info(f"Paying off loan")
         res = self.generic_api_call("PUT", endpoint, token=self.token, warning_log=warning_log)
@@ -286,7 +286,7 @@ class Loans (Client):
         Returns:
             dict: The loan taken
         """
-        endpoint = f"users/{self.username}/loans"
+        endpoint = f"my/loans"
         warning_log = F"Unable to take loan of type: {type}"
         logging.info(f"Requesting {type} loan")
         params = {"type": type}
@@ -391,7 +391,7 @@ class PurchaseOrders (Client):
         Returns:
             dict: A dict containing the user's remaining credits, the ships updated cargo and the order just made.
         """
-        endpoint = f"users/{self.username}/purchase-orders"
+        endpoint = f"my/purchase-orders"
         params = {"shipId": shipId, "good": good, "quantity": quantity}
         warning_log = F"Unable to make purchase order for ship: {shipId}, good: {good} & quantity: {quantity}"
         res = self.generic_api_call("POST", endpoint, params=params, token=self.token, warning_log=warning_log)
@@ -407,7 +407,7 @@ class SellOrders (Client):
             good (str): Symbol of the good to sell
             quantity (int): How many units of the good to sell
         """
-        endpoint = f"users/{self.username}/sell-orders"
+        endpoint = f"my/sell-orders"
         params = {"shipId": shipId, "good": good, "quantity": quantity}
         warning_log = F"Unable to make sell order for ship: {shipId}, good: {good} & quantity: {quantity}"
         res = self.generic_api_call("POST", endpoint, params=params, token=self.token, warning_log=warning_log)
@@ -422,7 +422,7 @@ class Ships (Client):
             location (str): symbol of the location the ship to buy is
             type (str): type of ship you want to buy e.g. GR-MK-III
         """
-        endpoint = f"users/{self.username}/ships"
+        endpoint = f"my/ships"
         params = {"location": location, "type": type}
         warning_log = F"Unable to buy ship type: {type}, at location: {location}."
         logging.info(f"Buying ship of type: {type} at location: {location}")
@@ -461,7 +461,7 @@ class Ships (Client):
 
         API LINK: https://api.spacetraders.io/#api-ships-GetShip
         """
-        endpoint = f"users/{self.username}/ships/{shipId}"
+        endpoint = f"my/ships/{shipId}"
         warning_log = F"Unable to get info fo ship: {shipId}"
         logging.info(f"Getting info on ship: {shipId}")
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
@@ -476,7 +476,7 @@ class Ships (Client):
 
         API Link: https://api.spacetraders.io/#api-ships-GetShips
         """
-        endpoint = f"users/{self.username}/ships"
+        endpoint = f"my/ships"
         warning_log = F"Unable to get list of owned ships."
         logging.info(f"Getting a list of owned ships")
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
@@ -496,11 +496,11 @@ class Ships (Client):
 
         API Link: https://api.spacetraders.io/#api-ships-JettisonCargo
         """
-        endpoint = f"users/{self.username}/ships/{shipId}/jettison"
+        endpoint = f"my/ships/{shipId}/jettison"
         warning_log = F"Unable to jettison cargo from ship. Params - shipId: {shipId}, good: {good}, quantity: {quantity}"
         logging.info(f"Jettison the following cargo from ship: {shipId}, good: {good}, quantity: {quantity}")
         params = {"good": good, "quantity": quantity}
-        res = self.generic_api_call("PUT", endpoint, params=params, token=self.token, warning_log=warning_log)
+        res = self.generic_api_call("POST", endpoint, params=params, token=self.token, warning_log=warning_log)
         return res if res else False
 
     # Scrap Ship
@@ -519,7 +519,7 @@ class Ships (Client):
         Raises:
             Exception: If something went wrong during the scrapping process
         """
-        endpoint = f"users/{self.username}/ships/{shipId}/"
+        endpoint = f"my/ships/{shipId}/"
         warning_log = f"Failed to scrap ship ({shipId})."
         logging.info(f"Scrapping ship: {shipId}")
         res = self.generic_api_call("DELETE", endpoint, token=self.token, warning_log=warning_log)
@@ -540,11 +540,11 @@ class Ships (Client):
 
         API Link: https://api.spacetraders.io/#api-ships-TransferCargo
         """
-        endpoint = f"users/{self.username}/ships/{fromShipId}/transfer"
+        endpoint = f"my/ships/{fromShipId}/transfer"
         warning_log = F"Unable to transfer {quantity} units of {good} from ship: {fromShipId} to ship: {toShipId}"
         logging.info(f"Transferring {quantity} units of {good} from ship: {fromShipId} to ship: {toShipId}")
         params = {"toShipId": toShipId, "good": good, "quantity": quantity}
-        res = self.generic_api_call("PUT", endpoint, params=params, token=self.token, warning_log=warning_log)
+        res = self.generic_api_call("POST", endpoint, params=params, token=self.token, warning_log=warning_log)
         return res if res else False
 
 class Structures (Client):
@@ -556,7 +556,7 @@ class Structures (Client):
             location (str): symbol of the location to build the structure
             type (str): type of structure you want to build
         """
-        endpoint = f"users/{self.username}/structures"
+        endpoint = f"my/structures"
         params = {"location": location, "type": type}
         warning_log = F"Unable to create structure type: {type}, at location: {location}."
         logging.info(f"Creating structure of type: {type} at location: {location}")
@@ -576,7 +576,7 @@ class Structures (Client):
         Returns:
             dict : dict containing the updated info of the ship and structure
         """
-        endpoint = f"users/{self.username}/structures/{structureId}/deposit"
+        endpoint = f"my/structures/{structureId}/deposit"
         params = {"shipId": shipId, "good": good, "quantity": quantity}
         warning_log = F"Unable to deposit {quantity} units of {good} from ship: {shipId} into structure: {structureId}"
         logging.info(f"Depositing {quantity} units of {good} from ship: {shipId} into structure: {structureId}")
@@ -593,7 +593,7 @@ class Structures (Client):
         Returns:
             dict : dict containing the info of the strucutre
         """
-        endpoint = f"users/{self.username}/structures/{structureId}"
+        endpoint = f"my/structures/{structureId}"
         warning_log = F"Unable to get the info for structure: {structureId}"
         logging.info(f"Getting info about structure: {structureId}")
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
@@ -606,7 +606,7 @@ class Structures (Client):
         Returns:
             dict : dict containings a JSON list of the structures the user owns
         """
-        endpoint = f"users/{self.username}/structures"
+        endpoint = f"my/structures"
         warning_log = F"Unable to get the info about your structures"
         logging.info(f"Getting info about the user's structures")
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
@@ -625,7 +625,7 @@ class Structures (Client):
         Returns:
             dict : dict containing the updated info of the ship and structure
         """
-        endpoint = f"users/{self.username}/structures/{structureId}/transfer"
+        endpoint = f"my/structures/{structureId}/transfer"
         params = {"shipId": shipId, "good": good, "quantity": quantity}
         warning_log = F"Unable to transfer {quantity} units of {good} from structure: {structureId} into ship: {shipId}"
         logging.info(f"Transferring {quantity} units of {good} from structure: {structureId} into ship: {shipId}")
@@ -689,7 +689,7 @@ class Users (Client):
             dict: dict containing your user data
         """
         # Get user
-        warnings.warn("Users class is being deprecated and replaced by the `My` class. \nTo get your info please now use Api.my.account()", DeprecationWarning)
+        warnings.warn("Users class is being deprecated and replaced by the `Account` class. \nTo get your info please now use Api.account.info()", DeprecationWarning)
         endpoint = f"my/account"
         warning_log = F"Unable to get {self.username} user info"
         logging.info(f"Getting user info for {self.username}")
@@ -769,6 +769,7 @@ class Api ():
     def __init__(self, username, token=None):
         self.username = username
         self.token = token
+        self.account = Account(username, token)
         self.flightplans = FlightPlans(username, token)
         self.game = Game(username, token)
         self.leaderboard = Leaderboard(username, token)
@@ -809,6 +810,7 @@ class Api ():
                 self.systems.token = self.token
                 self.users.token = self.token
                 self.types.token = self.token
+                self.account = self.token
             else:
                 logging.exception(f"Code: {res.json()['error']['code']}, Message: {res.json()['error']['message']}")
                 return None
