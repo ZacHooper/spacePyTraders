@@ -8,6 +8,9 @@ Client Module
 The client is what provides easy pythonic interaction with the Space Traders API. 
 Interact with the API with better human readable code rather than convoluted requests.
 
+.. automodule:: SpacePyTraders.client
+   :members:
+
 Api
 ########    
 .. autoclass:: SpacePyTraders.client.Api
