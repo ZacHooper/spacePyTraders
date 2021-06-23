@@ -74,7 +74,6 @@
         "manufacturer": "Jackshaw",
         "plating": 5,
         "weapons": 5
-        
     },
     "cargo": {
         "good": "FUEL",
@@ -115,7 +114,7 @@
         "status": "CURRENT",
         "type": "STARTUP"
     },
-    "request_loan" : {
+    "request_loan": {
         "credits": 200000,
         "loan": {
             "id": "cknxse4cd353061cs65sh2xjvy",
@@ -384,11 +383,11 @@
         "sellPricePerUnit": 79,
         "quantityAvailable": 48877
     },
-    "game_status" : {
+    "game_status": {
         "status": "spacetraders is currently online and available to play"
     },
-    "errors" : {
-        "no_ship_at_purchase_location" : {
+    "errors": {
+        "no_ship_at_purchase_location": {
             "error": {
                 "message": "You need to have a ship at the point of purchase when buying a new ship.",
                 "code": 3
