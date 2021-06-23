@@ -12,7 +12,7 @@ with open('README.md','r') as fh:
 # This call to setup() does all the work
 setup(
     name="SpacePyTraders",
-    version="0.0.4",
+    version="0.0.5",
     description="Access the Space Traders API with Python",
     # long_description=README,
     # long_description_content_type="text/markdown",
