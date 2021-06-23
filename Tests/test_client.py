@@ -1,9 +1,27 @@
 import unittest
+import requests
+import responses
 import logging
 from SpacePyTraders.client import *
+import pytest
 
-TOKEN = "0930cc36-7dc7-4cb1-8823-d8e72594d91e"
+TOKEN = "e8c9ac0d-e1ec-45e9-b808-d622a7717f46"
 USERNAME = "JimHawkins"
+BASE_URL = "https://api.spacetraders.io/"
+
+with open('Tests/model_mocks.json','r') as infile:
+    MOCKS = json.load(infile)
+
+@pytest.fixture
+def api():
+    # logging.disable()
+    return Api(USERNAME, TOKEN)
+
+@pytest.fixture
+def mock_endpoints():
+    res = responses.RequestsMock()
+    res.start()
+    return res
 
 class TestMakeRequestFunction(unittest.TestCase):
     def setUp(self):
@@ -12,265 +30,451 @@ class TestMakeRequestFunction(unittest.TestCase):
     def tearDown(self):
         logging.disable(logging.NOTSET)
 
+    @responses.activate
     def test_make_request_get(self):
+        """Tests if the method will actually make a request call and if the right method is used. 
+        """
+        responses.add(responses.GET, "https://api.spacetraders.io/game/status", json=MOCKS['game_status'], status=200)
+        responses.add(responses.POST, "https://api.spacetraders.io/game/status", json=MOCKS['game_status'], status=200)
         res = make_request("GET", "https://api.spacetraders.io/game/status", None, None)
         self.assertEqual(res.status_code, 200, "Either game is down or GET request failed to fire properly")
     
     def test_make_request_post(self):
-        res = make_request("POST", "https://api.spacetraders.io/users/JimHawkins/token", None, None)
+        res = make_request("POST", f"https://api.spacetraders.io/users/{USERNAME}/token", headers={"authentication": "Bearer " + TOKEN}, params={"test":123})
         # Want the user already created error to be returned
         self.assertEqual(res.status_code, 409, "POST request failed to fire properly")
-    
-    def test_make_request_bad_method(self):
-        self.assertRaises(KeyError, make_request, "BLAH", "https://api.spacetraders.io/users/JimHawkins/token", None, None)
 
 class TestClientClassInit(unittest.TestCase):
     def test_client_with_token_init(self):
+        """Tests that the Client class will correctly initiate and that the properties can be updated
+        """
         self.assertIsInstance(Client("JimHawkins", "12345"), Client, "Failed to initiate the Client Class")
         self.assertEqual(Client("JimHawkins", "12345").username, "JimHawkins", "Did not set the username attribute correctly")
         self.assertEqual(Client("JimHawkins", "12345").token, "12345", "Did not set the token attribute correctly")
 
-class TestShipInit(unittest.TestCase):
-    def test_ships_init(self):
-        self.assertIsInstance(Ships("JimHawkins", "12345"), Ships, "Failed to initiate the Ships Class")
-        self.assertEqual(Ships("JimHawkins", "12345").username, "JimHawkins", "Did not set the username attribute correctly")
-        self.assertEqual(Ships("JimHawkins", "12345").token, "12345", "Did not set the token attribute correctly")
-
-class TestShipMethods(unittest.TestCase):
+class TestClientClassMethods(unittest.TestCase):
     def setUp(self):
-        logging.disable()
-        self.ships = Ships(USERNAME, TOKEN)
+        self.client = Client(USERNAME, TOKEN)
     
     def tearDown(self):
-        logging.disable(logging.NOTSET)
-    
-    def test_ships_scrap_ship(self):
-        # This should fail as expected and return false
-        self.assertEqual(self.ships.scrap_ship("12345"), False, "API call didn't fail when expected to")
-    
-    def test_ships_buy_ship(self):
-        self.assertEqual(self.ships.buy_ship("OE-BO", "HM-MK-III"), False, "API call didn't fail when expected to")
-    
-    def test_get_available_ships(self):
-        self.assertEqual(self.ships.get_available_ships("MK-IIII"), False, "API call didn't fail when expected to")
+        pass
 
-    def test_ships_get_ship_info(self):
-        self.assertEqual(self.ships.get_ship("1234"), False, "API call didn't fail when expected to")
-    
-    def test_get_list_of_users_ships(self):
-        self.assertIsInstance(self.ships.get_user_ships()['ships'], list, "API didn't return the expected list")
-
-    def test_jettison_cargo(self):
-        self.assertEqual(self.ships.jettinson_cargo("1234", "FUEL", 50), False, "API call didn't fail when expected to")
-
-    def test_transfer_cargo(self):
-        self.assertEqual(self.ships.transfer_cargo("1221345", "1234", "FUEL", 50), False, "API call didn't fail when expected to")
-
-class TestFlightPlanInit(unittest.TestCase):
-    def test_flight_plan_init(self):
-        self.assertIsInstance(FlightPlans("JimHawkins", "12345"), FlightPlans, "Failed to initiate the FlightPlans Class")
-        self.assertEqual(FlightPlans("JimHawkins", "12345").username, "JimHawkins", "Did not set the username attribute correctly")
-        self.assertEqual(FlightPlans("JimHawkins", "12345").token, "12345", "Did not set the token attribute correctly")
-
-class TestFlightPlanMethods(unittest.TestCase):
-    def setUp(self):
+    @responses.activate
+    def test_generic_endpoint_throttling_too_many_tries(self):
+        """Tests that the method will correctly handle when throttling occurs and that it will throw an expection when
+        it has retired a certain amount of times. """
         logging.disable()
-        self.fp = FlightPlans(USERNAME, TOKEN)
-    
-    def tearDown(self):
+        responses.add(responses.GET, "https://api.spacetraders.io/game/status", json={'error': {'code': 42901, 'message': 'Fail'}}, status=429)
+        with self.assertRaises(TooManyTriesException):
+            """Throttling handling will happen should stop after 10 times raising TooManyTriesException"""
+            res = self.client.generic_api_call("GET", "game/status", token=self.client.token, throttle_time=0)
         logging.disable(logging.NOTSET)
 
-    def test_submit_flight_plan_fail(self):
-        self.assertEqual(self.fp.new_flight_plan("12345", "OE-PM-TR"), False, "API call didn't fail when expected to")
+    @responses.activate
+    def test_generic_endpoint_breaking_warning_log(self):
+        """Tests that the method will correctly use the warning log provided to it
+        """
+        responses.add(responses.GET, "https://api.spacetraders.io/game/status", json={'error': {'code': 6000, 'message': 'Fail'}}, status=600)
+        with self.assertLogs(level='INFO') as cm:
+            self.client.generic_api_call("GET", "game/status", warning_log="Game is currently down", token=self.client.token)
+        self.assertEqual(cm.output[1], 'WARNING:root:Game is currently down', "Warning log message did not correctly be displayed on an unknown error code")    
 
-    def test_get_active_flight_plans_fail(self):
-        self.assertEqual(self.fp.get_active_flight_plans("OEV"), False, "API call didn't fail when expected to")
+# Ships Endpoints
+# ----------------------
+@pytest.mark.ships
+def test_ships_init():
+    """ Test that the class initiates properly """
+    ship = Ships("JimHawkins", "12345")
+    assert isinstance(ship, Ships)
+    assert ship.username == "JimHawkins"
+    assert ship.token == "12345"
 
-    def test_get_active_flight_plan(self):
-        self.assertEqual(self.fp.get_flight_plan("456789"), False, "API call didn't fail when expected to")
+@pytest.mark.ships
+def test_ships_buy_ship(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{BASE_URL}my/ships", json=MOCKS['buy_ship'], status=200)
+    r = api.ships.buy_ship("OE-PM", "HM-MK-III")
+    assert mock_endpoints.calls[0].request.params == {"location": "OE-PM", "type": "HM-MK-III"}
+    assert isinstance(r, dict)
 
-class TestPurchaseOrderInit(unittest.TestCase):
-    def test_purchase_order_init(self):
-        self.assertIsInstance(PurchaseOrders("JimHawkins", "12345"), PurchaseOrders, "Failed to initiate the PurchaseOrders Class")
-        self.assertEqual(PurchaseOrders("JimHawkins", "12345").username, "JimHawkins", "Did not set the username attribute correctly")
-        self.assertEqual(PurchaseOrders("JimHawkins", "12345").token, "12345", "Did not set the token attribute correctly")
+@pytest.mark.ships
+def test_ships_get_users_ship(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}my/ships/12345", json=MOCKS['ship'], status=200)
+    r = api.ships.get_ship("12345")
+    assert isinstance(r, dict)
 
-class TestPurchaseOrderMethods(unittest.TestCase):
-    def setUp(self):
-        logging.disable()
-        self.po = PurchaseOrders(USERNAME, TOKEN)
+@pytest.mark.ships
+def test_ships_get_users_ships(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}my/ships", json=MOCKS['get_user_ships'], status=200)
+    r = api.ships.get_user_ships()
+    assert isinstance(r, dict)
+
+@pytest.mark.ships
+def test_ships_jettison_cargo(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{BASE_URL}my/ships/12345/jettison", json=MOCKS['jettison_cargo'], status=200)
+    r = api.ships.jettinson_cargo("12345", "FUEL", 1)
+    assert mock_endpoints.calls[0].request.params == {"good": "FUEL", "quantity": "1"}
+    assert isinstance(r, dict)
+
+@pytest.mark.ships
+def test_ships_scrap_ship(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.DELETE, f"{BASE_URL}my/ships/12345/", json=MOCKS['scrap_ship'], status=200)
+    r = api.ships.scrap_ship("12345")
+    assert isinstance(r, dict)
+
+@pytest.mark.ships
+def test_ships_transfer_cargo(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{BASE_URL}my/ships/12345/transfer", json=MOCKS['transfer_cargo'], status=200)
+    r = api.ships.transfer_cargo("12345", "54321", "FUEL", 1)
+    assert mock_endpoints.calls[0].request.params == {"toShipId": "54321", "good": "FUEL", "quantity": "1"}
+    assert isinstance(r, dict)
+
+# FlightPlan Endpoints
+# ----------------------
+@pytest.mark.flightplans
+def test_flightplans_init():
+    """ Test that the class initiates properly """
+    fp = FlightPlans("JimHawkins", "12345")
+    assert isinstance(fp, FlightPlans)
+    assert fp.username == "JimHawkins"
+    assert fp.token == "12345"
+
+@pytest.mark.flightplans
+def test_flightplans_get_flightplan(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}my/flight-plans/12345", json=MOCKS['flightplan'], status=200)
+    r = api.flightplans.get_flight_plan("12345")
+    assert isinstance(r, dict)
+#match=responses.json_params_matcher({"shipId": "12345", "destination": "OE-PM"}),
+@pytest.mark.flightplans
+def test_flightplans_submit_flightplan(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{BASE_URL}my/flight-plans", json=MOCKS['submit_flightplan'], status=200)
+    r = api.flightplans.new_flight_plan("12345", "OE-PM")
+    assert mock_endpoints.calls[0].request.params == {"shipId": "12345", "destination": "OE-PM"}
+    assert isinstance(r, dict)
+
+# PurchaseOrders Endpoints
+# ----------------------
+@pytest.mark.purchaseOrders
+def test_purchaseOrder_init():
+    """ Test that the class initiates properly """
+    po = PurchaseOrders("JimHawkins", "12345")
+    assert isinstance(po, PurchaseOrders)
+    assert po.username == "JimHawkins"
+    assert po.token == "12345"
+
+@pytest.mark.purchaseOrders
+def test_purchaseOrders_submit_order(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{BASE_URL}my/purchase-orders",
+                  json=MOCKS['purchase_order'], status=200)
+    r = api.purchaseOrders.new_purchase_order("12345", "FUEL", 1)
+    assert mock_endpoints.calls[0].request.params == {"shipId": "12345", "good": "FUEL", "quantity": "1"}
+    assert isinstance(r, dict)
+
     
-    def tearDown(self):
-        logging.disable(logging.NOTSET)
-
-    def test_submit_flight_plan_fail(self):
-        self.assertEqual(self.po.new_purchase_order("12345", "FUEL", 5), False, "API call didn't fail when expected to")
-
-class TestGameInit(unittest.TestCase):
-    def test_game_init(self):
-        self.assertIsInstance(Game("JimHawkins", "12345"), Game, "Failed to initiate the Game Class")
-        self.assertEqual(Game("JimHawkins", "12345").username, "JimHawkins", "Did not set the username attribute correctly")
-        self.assertEqual(Game("JimHawkins", "12345").token, "12345", "Did not set the token attribute correctly")
-
-class TestGameMethods(unittest.TestCase):
+class TestGame(unittest.TestCase):
     def setUp(self):
         logging.disable()
         self.game = Game(USERNAME, TOKEN)
+        self.responses = responses.RequestsMock()
+        self.responses.start()
+        # Game Status
+        responses.add(responses.GET, f"{BASE_URL}game/status", json=MOCKS['game_status'], status=200)
     
     def tearDown(self):
         logging.disable(logging.NOTSET)
+        self.addCleanup(self.responses.stop)
+        self.addCleanup(self.responses.reset)
 
-    def test_get_game_status(self):
-        self.assertIsInstance(self.game.get_game_status(), dict, "API did not return dict as expected")
+    def test_game_init(self):
+        """Test if the Game class initialises properly"""
+        self.assertIsInstance(Game("JimHawkins", "12345"), Game, "Failed to initiate the Game Class")
+        self.assertEqual(Game("JimHawkins", "12345").username, "JimHawkins", "Did not set the username attribute correctly")
+        self.assertEqual(Game("JimHawkins", "12345").token, "12345", "Did not set the token attribute correctly")
+    
+    # Game Status
+    # ----------------
+    @responses.activate
+    def test_get_game_status_endpoint(self):
+        """Test that the correct endpoint is used"""
+        self.assertNotIsInstance(self.game.get_game_status(), 
+                                 requests.exceptions.ConnectionError, 
+                                 "Incorrect endpoint was used to game's status")    
 
-class TestLoansInit(unittest.TestCase):
-    def test_loans_init(self):
-        self.assertIsInstance(Loans("JimHawkins", "12345"), Loans, "Failed to initiate the Loans Class")
-        self.assertEqual(Loans("JimHawkins", "12345").username, "JimHawkins", "Did not set the username attribute correctly")
-        self.assertEqual(Loans("JimHawkins", "12345").token, "12345", "Did not set the token attribute correctly")
+# Loan Endpoints
+# ----------------------
+@pytest.mark.loans
+def test_loans_init():
+    """ Test that the class initiates properly """
+    loan = Loans("JimHawkins", "12345")
+    assert isinstance(loan, Loans)
+    assert loan.username == "JimHawkins"
+    assert loan.token == "12345"
 
-class TestLoansMethods(unittest.TestCase):
+@pytest.mark.loans
+def test_loans_get_loans(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}my/loans", json=MOCKS['user_loan'], status=200)
+    r = api.loans.get_user_loans()
+    assert isinstance(r, dict)
+
+@pytest.mark.loans
+def test_loans_request_loans(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{BASE_URL}my/loans", json=MOCKS['request_loan'], status=200)
+    r = api.loans.request_loan("STARTUP")
+    assert mock_endpoints.calls[0].request.params == {"type": "STARTUP"}
+    assert isinstance(r, dict)
+
+@pytest.mark.loans
+def test_loans_pay_loans(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.PUT, f"{BASE_URL}my/loans/12345", json=MOCKS['pay_loan'], status=200)
+    r = api.loans.pay_off_loan("12345")
+    assert isinstance(r, dict)
+
+# Location Tests
+# ----------------
+@pytest.mark.locations
+def test_locations_init():
+    location = Locations("JimHawkins", "12345")
+    assert isinstance(location, Locations)
+    assert location.username == "JimHawkins", "Username did not initiate correctly"
+    assert location.token == "12345", "Token did not initiate correctly"
+
+@pytest.mark.locations
+def test_get_marketplace(api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"https://api.spacetraders.io/locations/OE-PM/marketplace", json={"GET_EXAMPLE": "EXAMPLE"}, status=200)
+    r = api.locations.get_marketplace("OE-PM")
+    assert isinstance(r, dict)
+
+@pytest.mark.locations
+def test_get_location_endpoint(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}locations/OE-PM", json=MOCKS['location'], status=200)
+    r = api.locations.get_location("OE-PM")
+    assert isinstance(r, dict)
+
+@pytest.mark.locations
+def test_get_location_ships_endpoint(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}locations/OE-PM/ships", json={'get_location_ships':'get response'}, status=200)
+    r = api.locations.get_ships_at_location("OE-PM")
+    assert isinstance(r, dict)
+
+# SellOrders Endpoints
+# ----------------------
+@pytest.mark.sellOrders
+def test_sellOrders_init():
+    """ Test that the class initiates properly """
+    po = SellOrders("JimHawkins", "12345")
+    assert isinstance(po, SellOrders)
+    assert po.username == "JimHawkins"
+    assert po.token == "12345"
+
+@pytest.mark.sellOrders
+def test_sellOrders_submit_order(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{BASE_URL}my/sell-orders",
+                  json=MOCKS['sell_order'], status=200)
+    r = api.sellOrders.new_sell_order("12345", "FUEL", 1)
+    assert mock_endpoints.calls[0].request.params == {"shipId": "12345", "good": "FUEL", "quantity": "1"}
+    assert isinstance(r, dict)
+
+# Structures Endpoints
+# ----------------------
+@pytest.mark.structures
+def test_structures_init():
+    """ Test that the class initiates properly """
+    structure = Structures("JimHawkins", "12345")
+    assert isinstance(structure, Structures)
+    assert structure.username == "JimHawkins"
+    assert structure.token == "12345"
+
+@pytest.mark.structures
+def test_strucutres_create_structure(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{BASE_URL}my/structures", json=MOCKS['create_structures'], status=200)
+    r = api.structures.create_new_structure("OE-PM", "MINE")
+    assert mock_endpoints.calls[0].request.params == {"location": "OE-PM", "type": "MINE"}
+    assert isinstance(r, dict)
+
+@pytest.mark.structures
+def test_strucutres_deposit_to_user_structure(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{BASE_URL}my/structures/12345/deposit", json=MOCKS['deposit_to_user_structure'], status=200)
+    r = api.structures.deposit_goods("12345", "54321", "FUEL", "1")
+    assert mock_endpoints.calls[0].request.params == {"shipId": "54321", "good": "FUEL", "quantity": "1"}
+    assert isinstance(r, dict)
+
+@pytest.mark.structures
+def test_structures_transfer_to_ship(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{BASE_URL}my/structures/12345/transfer", json=MOCKS['transfer_to_ship_'], status=200)
+    r = api.structures.transfer_goods("12345", "54321", "FUEL", "1")
+    assert mock_endpoints.calls[0].request.params == {"shipId": "54321", "good": "FUEL", "quantity": "1"}
+    assert isinstance(r, dict)
+
+@pytest.mark.structures
+def test_structures_get_user_structure(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}my/structures/12345", json=MOCKS['get_user_structure'], status=200)
+    r = api.structures.get_structure("12345")
+    assert isinstance(r, dict)
+
+@pytest.mark.structures
+def test_structures_get_user_structures(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}my/structures", json=MOCKS['get_user_structures'], status=200)
+    r = api.structures.get_users_structures()
+    assert isinstance(r, dict) 
+
+@pytest.mark.structures
+def test_strucutres_deposit_to_a_structure(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{BASE_URL}structures/12345/deposit", json=MOCKS['deposit_to_a_structure'], status=200)
+    r = api.structures.deposit_goods("12345", "54321", "FUEL", "1", user_owned=False)
+    assert mock_endpoints.calls[0].request.params == {"shipId": "54321", "good": "FUEL", "quantity": "1"}
+    assert isinstance(r, dict)
+
+@pytest.mark.structures
+def test_structures_get_a_structure(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}structures/12345", json=MOCKS['get_a_structure'], status=200)
+    r = api.structures.get_structure("12345", user_owned=False)
+    assert isinstance(r, dict)
+
+
+class TestSystems(unittest.TestCase):
     def setUp(self):
         logging.disable()
-        self.loans = Loans(USERNAME, TOKEN)
+        self.systems = Systems(USERNAME, TOKEN)
+        self.responses = responses.RequestsMock()
+        self.responses.start()
+        # Get System
+        responses.add(responses.GET, f"{BASE_URL}game/systems", json=MOCKS['system'], status=200)
     
     def tearDown(self):
         logging.disable(logging.NOTSET)
+        self.addCleanup(self.responses.stop)
+        self.addCleanup(self.responses.reset)
 
-    def test_get_loans_available(self):
-        self.assertIsInstance(self.loans.get_loans_available(), dict, "API did not return dict as expected")
-
-    def test_get_user_loans(self):
-        self.assertIsInstance(self.loans.get_user_loans(), dict, "API did not return dict as expected")
-
-    def test_pay_off_loan(self):
-        self.assertEqual(self.loans.pay_off_loan("asdfasdf"), False, "API did not fail as expected")
-
-    def test_request_loan(self):
-        self.assertEqual(self.loans.pay_off_loan("asdfasdf"), False, "API did not fail as expected")
-
-class TestUsersInit(unittest.TestCase):
-    def test_users_init(self):
-        self.assertIsInstance(Users("JimHawkins", "12345"), Users, "Failed to initiate the Users Class")
-        self.assertEqual(Users("JimHawkins", "12345").username, "JimHawkins", "Did not set the username attribute correctly")
-        self.assertEqual(Users("JimHawkins", "12345").token, "12345", "Did not set the token attribute correctly")
-
-class TestUsersMethods(unittest.TestCase):
-    def setUp(self):
-        logging.disable()
-        self.users = Users(USERNAME, TOKEN)
-    
-    def tearDown(self):
-        logging.disable(logging.NOTSET)
-
-    def test_get_loans_available(self):
-        self.assertIsInstance(self.users.get_your_info(), dict, "API did not return dict as expected")
-
-class TestLocationsInit(unittest.TestCase):
-    def test_locations_init(self):
-        self.assertIsInstance(Locations("JimHawkins", "12345"), Locations, "Failed to initiate the Locations Class")
-        self.assertEqual(Locations("JimHawkins", "12345").username, "JimHawkins", "Did not set the username attribute correctly")
-        self.assertEqual(Locations("JimHawkins", "12345").token, "12345", "Did not set the token attribute correctly")
-
-class TestLocationsMethods(unittest.TestCase):
-    def setUp(self):
-        logging.disable()
-        self.locations = Locations(USERNAME, TOKEN)
-    
-    def tearDown(self):
-        logging.disable(logging.NOTSET)
-
-    def test_get_location(self):
-        self.assertIsInstance(self.locations.get_location("OE-PM-TR"), dict, "API did not return dict as expected")
-    
-    def test_get_ships_at_location(self):
-        self.assertIsInstance(self.locations.get_ships_at_location("OE-PM-TR"), dict, "API did not return dict as expected")
-
-    def test_get_locations_in_system(self):
-        self.assertIsInstance(self.locations.get_system_locations("OE"), dict, "API did not return dict as expected")
-
-class TestMarketplaceInit(unittest.TestCase):
-    def test_marketplace_init(self):
-        self.assertIsInstance(Marketplace("JimHawkins", "12345"), Marketplace, "Failed to initiate the Marketplace Class")
-        self.assertEqual(Marketplace("JimHawkins", "12345").username, "JimHawkins", "Did not set the username attribute correctly")
-        self.assertEqual(Marketplace("JimHawkins", "12345").token, "12345", "Did not set the token attribute correctly")
-
-class TestMarketplaceMethods(unittest.TestCase):
-    def setUp(self):
-        logging.disable()
-        self.marketplace = Marketplace(USERNAME, TOKEN)
-    
-    def tearDown(self):
-        logging.disable(logging.NOTSET)
-
-    def test_get_location(self):
-        self.assertIsInstance(self.marketplace.get_marketplace("OE-PM-TR"), dict, "API did not return dict as expected")
-
-class TestSellOrdersInit(unittest.TestCase):
-    def test_sell_order_init(self):
-        self.assertIsInstance(SellOrders("JimHawkins", "12345"), SellOrders, "Failed to initiate the SellOrders Class")
-        self.assertEqual(SellOrders("JimHawkins", "12345").username, "JimHawkins", "Did not set the username attribute correctly")
-        self.assertEqual(SellOrders("JimHawkins", "12345").token, "12345", "Did not set the token attribute correctly")
-
-class TestSellOrdersMethods(unittest.TestCase):
-    def setUp(self):
-        logging.disable()
-        self.so = SellOrders(USERNAME, TOKEN)
-    
-    def tearDown(self):
-        logging.disable(logging.NOTSET)
-
-    def test_submit_flight_plan_fail(self):
-        self.assertEqual(self.so.new_sell_order("12345", "FUEL", 5), False, "API call didn't fail when expected to")
-
-class TestStructuresInit(unittest.TestCase):
-    def test_structures_init(self):
-        self.assertIsInstance(Structures("JimHawkins", "12345"), Structures, "Failed to initiate the Structures Class")
-        self.assertEqual(Structures("JimHawkins", "12345").username, "JimHawkins", "Did not set the username attribute correctly")
-        self.assertEqual(Structures("JimHawkins", "12345").token, "12345", "Did not set the token attribute correctly")
-
-class TestStructuresMethods(unittest.TestCase):
-    def setUp(self):
-        logging.disable()
-        self.structures = Structures(USERNAME, TOKEN)
-    
-    def tearDown(self):
-        logging.disable(logging.NOTSET)
-
-    def test_create_new_structure(self):
-        self.assertEqual(self.structures.create_new_structure("OE-PM", "MINE"), False, "API call didn't fail when expected to")
-
-    def test_deposit_goods(self):
-        self.assertEqual(self.structures.deposit_goods("1234", "1234", "FUEL", 50), False, "API call didn't fail when expected to")
-
-    def test_get_structure(self):
-        self.assertEqual(self.structures.get_structure("1234"), False, "API call didn't fail when expected to")
-
-    def test_get_users_structures(self):
-        self.assertIsInstance(self.structures.get_users_structures()['structures'], list, "API call didn't fail when expected to")
-
-    def test_transfer_goods(self):
-        self.assertEqual(self.structures.transfer_goods("1234", "1234", "FUEL", 50), False, "API call didn't fail when expected to")
-
-class TestSystemsInit(unittest.TestCase):
     def test_systems_init(self):
         self.assertIsInstance(Systems("JimHawkins", "12345"), Systems, "Failed to initiate the Systems Class")
         self.assertEqual(Systems("JimHawkins", "12345").username, "JimHawkins", "Did not set the username attribute correctly")
         self.assertEqual(Systems("JimHawkins", "12345").token, "12345", "Did not set the token attribute correctly")
 
-class TestSystemsMethods(unittest.TestCase):
+    # Get System
+    # ----------------
+    @responses.activate
+    def test_get_systems_endpoint(self):
+        """Test that the correct endpoint is used"""
+        self.assertNotIsInstance(self.systems.get_systems(), 
+                                 requests.exceptions.ConnectionError, 
+                                 "Incorrect endpoint was used to get system") 
+
+# System Endpoints
+# ----------------
+@pytest.mark.systems
+def test_system_get_active_flightplans(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"https://api.spacetraders.io/systems/OE/flight-plans", json={'flightPlans': 'get the response'}, status=200) 
+    r = api.systems.get_active_flight_plans("OE")
+    assert isinstance(r, dict)
+
+@pytest.mark.systems
+def test_system_get_system_locations(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}systems/OE/locations", json=MOCKS['system'], status=200)
+    r = api.systems.get_system_locations("OE")
+    assert isinstance(r, dict)
+
+@pytest.mark.systems
+def test_system_get_system_docked_ships(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}systems/OE/ships", json=MOCKS['system_docked_ships'], status=200)
+    r = api.systems.get_system_docked_ships("OE")
+    assert isinstance(r, dict)
+
+@pytest.mark.systems
+def test_system_get_a_system(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}systems/OE", json=MOCKS['get_system'], status=200)
+    r = api.systems.get_system("OE")
+    assert isinstance(r, dict)
+
+@pytest.mark.systems
+def test_system_get_available_ships(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}systems/OE/ship-listings", json=MOCKS['system_ship_listings'], status=200)
+    r = api.systems.get_available_ships("OE")
+    assert isinstance(r, dict)
+
+class TestLeaderboard(unittest.TestCase):
+    """Tests API calls related to the Game/Leaderboard"""
     def setUp(self):
         logging.disable()
-        self.systems = Systems(USERNAME, TOKEN)
+        self.leaderboard = Leaderboard(USERNAME, TOKEN)
+        self.responses = responses.RequestsMock()
+        self.responses.start()
+        # Endpoints
+        responses.add(responses.GET, "https://api.spacetraders.io/game/leaderboard/net-worth")
     
     def tearDown(self):
         logging.disable(logging.NOTSET)
+        self.addCleanup(self.responses.stop)
+        self.addCleanup(self.responses.reset)
 
-    def test_get_systems(self):
-        self.assertIsInstance(self.systems.get_systems()['systems'], list, "API call didn't return the expected list of systems")
+    def test_leaderboard_init(self):
+        self.assertIsInstance(Leaderboard("JimHawkins", "12345"), Leaderboard, "Failed to initiate the Leaderboard Class")
+        self.assertEqual(Leaderboard("JimHawkins", "12345").username, "JimHawkins", "Did not set the username attribute correctly")
+        self.assertEqual(Leaderboard("JimHawkins", "12345").token, "12345", "Did not set the token attribute correctly")    
 
-class TestGetUserToken(unittest.TestCase):
-    def test_get_user_token(self):
-        self.assertIsNone(get_user_token("JimHawkins"), "Failed to handle a username that already exists")
+    @responses.activate
+    def test_submit_purchase_order_url(self):
+        """Test that the correct endpoint is being used"""
+        self.assertNotIsInstance(self.leaderboard.get_player_net_worths(), 
+                                 requests.exceptions.ConnectionError, 
+                                 "Incorrect endpoint was used to get net-worth leaderboard") 
 
- 
+# Account Endpoints
+# ----------------
+@pytest.mark.account
+def test_account_init():
+    account = Account("JimHawkins", "12345")
+    assert isinstance(account, Account)
+    assert account.username == "JimHawkins", "Did not set the username attribute correctly"
+    assert account.token == "12345", "Did not set the token attribute correctly"
+
+@pytest.mark.account
+def test_account_get_info(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}my/account", json=MOCKS['user'], status=200)
+    assert api.account.info() is not False
+
+# Types Endpoints
+# ----------------
+@pytest.mark.types
+def test_types_init():
+    assert isinstance(Types("JimHawkins", "12345"), Types)
+    assert Types("JimHawkins", "12345").username == "JimHawkins", "Did not set the username attribute correctly"
+    assert Types("JimHawkins", "12345").token == "12345", "Did not set the token attribute correctly"
+
+@pytest.mark.types
+def test_types_get_goods(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}types/goods", json=MOCKS['types_goods'], status=200)
+    r = api.types.goods()
+    assert isinstance(r, dict)
+
+@pytest.mark.types
+def test_types_loans(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}types/loans", json=MOCKS['types_loans'], status=200)
+    r = api.types.loans()
+    assert isinstance(r, dict)
+
+@pytest.mark.types
+def test_types_structures(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}types/structures", json=MOCKS['types_structures'], status=200)
+    r = api.types.structures()
+    assert isinstance(r, dict)
+
+@pytest.mark.types
+def test_types_ships(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}types/ships", json=MOCKS['get_available_ships'], status=200)
+    r = api.types.ships()
+    assert isinstance(r, dict)
+
+# Warp Jump Endpoints
+# ----------------
+
+@pytest.mark.warpjump
+def test_warp_jump_init():
+    assert isinstance(WarpJump("JimHawkins", "12345"), WarpJump)
+    assert WarpJump("JimHawkins", "12345").username == "JimHawkins", "Did not set the username attribute correctly"
+    assert WarpJump("JimHawkins", "12345").token == "12345", "Did not set the token attribute correctly"
+
+@pytest.mark.warpjump
+def test_warp_jump_attempt_jump(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{BASE_URL}my/warp-jumps", json=MOCKS['warp_jump'], status=200)
+    r = api.warpjump.attempt_jump("12345")
+    assert mock_endpoints.calls[0].request.params == {"shipId": "12345"}
+    assert isinstance(r, dict)

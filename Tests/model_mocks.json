@@ -74,7 +74,6 @@
         "manufacturer": "Jackshaw",
         "plating": 5,
         "weapons": 5
-        
     },
     "cargo": {
         "good": "FUEL",
@@ -114,6 +113,16 @@
         "repaymentAmount": 280000,
         "status": "CURRENT",
         "type": "STARTUP"
+    },
+    "request_loan": {
+        "credits": 200000,
+        "loan": {
+            "id": "cknxse4cd353061cs65sh2xjvy",
+            "due": "2021-04-27T23:12:27.516Z",
+            "repaymentAmount": 280000,
+            "status": "CURRENT",
+            "type": "STARTUP"
+        }
     },
     "location": {
         "symbol": "OE-PM",
@@ -373,5 +382,960 @@
         "purchasePricePerUnit": 81,
         "sellPricePerUnit": 79,
         "quantityAvailable": 48877
+    },
+    "game_status": {
+        "status": "spacetraders is currently online and available to play"
+    },
+    "errors": {
+        "no_ship_at_purchase_location": {
+            "error": {
+                "message": "You need to have a ship at the point of purchase when buying a new ship.",
+                "code": 3
+            }
+        }
+    },
+    "buy_ship": {
+        "credits": 99044,
+        "ship": {
+            "id": "cko80wv1d15629101bs6ke32rt6f",
+            "location": "OE-PM-TR",
+            "x": 21,
+            "y": -24,
+            "cargo": [],
+            "spaceAvailable": 100,
+            "type": "GR-MK-I",
+            "class": "MK-I",
+            "maxCargo": 100,
+            "speed": 1,
+            "manufacturer": "Gravager",
+            "plating": 10,
+            "weapons": 5
+        }
+    },
+    "get_available_ships": {
+        "ships": [
+            {
+                "type": "HM-MK-I",
+                "class": "MK-I",
+                "maxCargo": 50,
+                "speed": 3,
+                "manufacturer": "Hermes",
+                "plating": 20,
+                "weapons": 5,
+                "purchaseLocations": [
+                    {
+                        "system": "OE",
+                        "location": "OE-PM-TR",
+                        "price": 57525
+                    }
+                ]
+            },
+            {
+                "type": "EM-MK-I",
+                "class": "MK-I",
+                "maxCargo": 50,
+                "speed": 2,
+                "manufacturer": "Electrum",
+                "plating": 5,
+                "weapons": 10,
+                "purchaseLocations": [
+                    {
+                        "system": "OE",
+                        "location": "OE-PM-TR",
+                        "price": 37750
+                    }
+                ]
+            },
+            {
+                "type": "ZA-MK-III",
+                "class": "MK-III",
+                "maxCargo": 300,
+                "speed": 2,
+                "manufacturer": "Zetra",
+                "plating": 10,
+                "weapons": 10,
+                "purchaseLocations": [
+                    {
+                        "system": "OE",
+                        "location": "OE-PM-TR",
+                        "price": 213900
+                    },
+                    {
+                        "system": "OE",
+                        "location": "OE-UC-OB",
+                        "price": 213900
+                    }
+                ]
+            },
+            {
+                "type": "ZA-MK-II",
+                "class": "MK-II",
+                "maxCargo": 100,
+                "speed": 2,
+                "manufacturer": "Zetra",
+                "plating": 5,
+                "weapons": 5,
+                "purchaseLocations": [
+                    {
+                        "system": "OE",
+                        "location": "OE-PM-TR",
+                        "price": 72700
+                    },
+                    {
+                        "system": "OE",
+                        "location": "OE-UC-OB",
+                        "price": 72700
+                    }
+                ]
+            },
+            {
+                "type": "GR-MK-I",
+                "class": "MK-I",
+                "maxCargo": 100,
+                "speed": 1,
+                "manufacturer": "Gravager",
+                "plating": 10,
+                "weapons": 5,
+                "purchaseLocations": [
+                    {
+                        "system": "OE",
+                        "location": "OE-PM-TR",
+                        "price": 42650
+                    }
+                ]
+            },
+            {
+                "type": "JW-MK-II",
+                "class": "MK-II",
+                "maxCargo": 100,
+                "speed": 2,
+                "manufacturer": "Jackshaw",
+                "plating": 10,
+                "weapons": 10,
+                "purchaseLocations": [
+                    {
+                        "system": "OE",
+                        "location": "OE-PM-TR",
+                        "price": 83300
+                    }
+                ]
+            },
+            {
+                "type": "JW-MK-I",
+                "class": "MK-I",
+                "maxCargo": 50,
+                "speed": 1,
+                "manufacturer": "Jackshaw",
+                "plating": 5,
+                "weapons": 5,
+                "purchaseLocations": [
+                    {
+                        "system": "OE",
+                        "location": "OE-PM-TR",
+                        "price": 21125
+                    },
+                    {
+                        "system": "OE",
+                        "location": "OE-NY",
+                        "price": 21125
+                    }
+                ]
+            },
+            {
+                "type": "HM-MK-III",
+                "class": "MK-III",
+                "maxCargo": 300,
+                "speed": 4,
+                "manufacturer": "Hermes",
+                "plating": 20,
+                "weapons": 5,
+                "purchaseLocations": [
+                    {
+                        "system": "OE",
+                        "location": "OE-UC-AD",
+                        "price": 445200
+                    },
+                    {
+                        "system": "XV",
+                        "location": "XV-ST",
+                        "price": 445200
+                    }
+                ]
+            },
+            {
+                "type": "GR-MK-III",
+                "class": "MK-III",
+                "maxCargo": 500,
+                "speed": 1,
+                "manufacturer": "Gravager",
+                "plating": 10,
+                "weapons": 10,
+                "purchaseLocations": [
+                    {
+                        "system": "OE",
+                        "location": "OE-UC-AD",
+                        "price": 203210
+                    },
+                    {
+                        "system": "OE",
+                        "location": "OE-NY",
+                        "price": 203210
+                    }
+                ]
+            },
+            {
+                "type": "GR-MK-II",
+                "class": "MK-II",
+                "maxCargo": 300,
+                "speed": 1,
+                "manufacturer": "Gravager",
+                "plating": 10,
+                "weapons": 5,
+                "purchaseLocations": [
+                    {
+                        "system": "OE",
+                        "location": "OE-UC-AD",
+                        "price": 125550
+                    },
+                    {
+                        "system": "OE",
+                        "location": "OE-NY",
+                        "price": 125550
+                    }
+                ]
+            },
+            {
+                "type": "EM-MK-IV",
+                "class": "MK-IV",
+                "maxCargo": 100,
+                "speed": 4,
+                "manufacturer": "Electrum",
+                "plating": 10,
+                "weapons": 20,
+                "purchaseLocations": [
+                    {
+                        "system": "XV",
+                        "location": "XV-ST",
+                        "price": 147000
+                    }
+                ]
+            },
+            {
+                "type": "EM-MK-III",
+                "class": "MK-III",
+                "maxCargo": 100,
+                "speed": 3,
+                "manufacturer": "Electrum",
+                "plating": 10,
+                "weapons": 15,
+                "purchaseLocations": [
+                    {
+                        "system": "XV",
+                        "location": "XV-ST",
+                        "price": 110250
+                    }
+                ]
+            }
+        ]
+    },
+    "get_user_ships": {
+        "ships": [
+            {
+                "id": "cko7y75vu9197021bs64vja9ffw",
+                "flightPlanId": "cko84s8z110983601bs6kocyemjx",
+                "cargo": [
+                    {
+                        "good": "FUEL",
+                        "quantity": 3,
+                        "totalVolume": 3
+                    },
+                    {
+                        "good": "METALS",
+                        "quantity": 96,
+                        "totalVolume": 96
+                    }
+                ],
+                "spaceAvailable": 1,
+                "type": "GR-MK-I",
+                "class": "MK-I",
+                "maxCargo": 100,
+                "speed": 1,
+                "manufacturer": "Gravager",
+                "plating": 10,
+                "weapons": 5
+            },
+            {
+                "id": "cko80wv1d15629101bs6ke32rt6f",
+                "flightPlanId": "cko84s2fl10949871bs6fw2bhe36",
+                "cargo": [
+                    {
+                        "good": "FUEL",
+                        "quantity": 3,
+                        "totalVolume": 3
+                    },
+                    {
+                        "good": "METALS",
+                        "quantity": 96,
+                        "totalVolume": 96
+                    }
+                ],
+                "spaceAvailable": 1,
+                "type": "GR-MK-I",
+                "class": "MK-I",
+                "maxCargo": 100,
+                "speed": 1,
+                "manufacturer": "Gravager",
+                "plating": 10,
+                "weapons": 5
+            },
+            {
+                "id": "cko7y75ht9193471bs6noxq7sy4",
+                "location": "OE-PM",
+                "x": 20,
+                "y": -25,
+                "cargo": [
+                    {
+                        "good": "METALS",
+                        "quantity": 96,
+                        "totalVolume": 96
+                    },
+                    {
+                        "good": "FUEL",
+                        "quantity": 3,
+                        "totalVolume": 3
+                    }
+                ],
+                "spaceAvailable": 1,
+                "type": "GR-MK-I",
+                "class": "MK-I",
+                "maxCargo": 100,
+                "speed": 1,
+                "manufacturer": "Gravager",
+                "plating": 10,
+                "weapons": 5
+            }
+        ]
+    },
+    "types_goods" : {
+        "goods": [
+            {
+                "name": "Fuel",
+                "symbol": "FUEL",
+                "volumePerUnit": 1
+            },
+            {
+                "name": "Chemicals",
+                "symbol": "CHEMICALS",
+                "volumePerUnit": 1
+            },
+            {
+                "name": "Metals",
+                "symbol": "METALS",
+                "volumePerUnit": 1
+            }
+        ]
+    },
+    "types_loans": {
+        "loans": [
+            {
+                "amount": 200000,
+                "collateralRequired": false,
+                "rate": 40,
+                "termInDays": 2,
+                "type": "STARTUP"
+            }
+        ]
+    },
+    "types_structures": {
+        "structures": [
+            {
+                "allowedLocationTypes": [
+                    "MOON",
+                    "ASTEROID"
+                ],
+                "consumes": [
+                    "DRONES",
+                    "MACHINERY"
+                ],
+                "name": "Mine",
+                "price": 1293550,
+                "produces": [
+                    "METALS",
+                    "RARE_METALS"
+                ],
+                "type": "MINE"
+            },
+            {
+                "allowedLocationTypes": [
+                    "GAS_GIANT"
+                ],
+                "consumes": [
+                    "DRONES",
+                    "MACHINERY",
+                    "CHEMICALS"
+                ],
+                "name": "Fuel Refinery",
+                "price": 288000,
+                "produces": [
+                    "FUEL"
+                ],
+                "type": "FUEL_REFINERY"
+            }
+        ]
+    },
+    "flightplan" : {
+        "flightPlan": {
+          "arrivesAt": "2021-03-28T23:11:50.068Z",
+          "createdAt": "2021-03-28T23:05:05.078Z",
+          "departure": "OE-PM-TR",
+          "destination": "OE-CR",
+          "distance": 46,
+          "fuelConsumed": 13,
+          "fuelRemaining": 67,
+          "id": "ckmtrssae0402zgopsy39y9z7",
+          "shipId": "ckmtrlqpz0109zgopkeqs4m5s",
+          "terminatedAt": null,
+          "timeRemainingInSeconds": 365
+        }
+    },
+    "submit_flightplan": {
+        "flightPlan": {
+            "arrivesAt": "2021-05-13T18:41:24.963Z",
+            "createdAt": "2021-05-13T18:40:23.003Z",
+            "departure": "OE-PM-TR",
+            "destination": "OE-PM",
+            "distance": 1,
+            "fuelConsumed": 1,
+            "fuelRemaining": 18,
+            "id": "ckon8lk9m005354nz12qjbucx",
+            "shipId": "ckon84fo20196vinzktdlvdlv",
+            "terminatedAt": null,
+            "timeRemainingInSeconds": 61
+        }
+    },
+    "pay_loan": {
+        "credits": 0,
+        "loans": [
+            {
+                "due": "2021-05-15T02:32:43.269Z",
+                "id": "ckoma153c0060zbnzquw2xa29",
+                "repaymentAmount": 280000,
+                "status": "PAID",
+                "type": "STARTUP"
+            }
+        ]
+    },
+    "purchase_order": {
+        "credits": 157675,
+        "order": {
+            "good": "FUEL",
+            "pricePerUnit": 3,
+            "quantity": 5,
+            "total": 15
+        },
+        "ship": {
+            "cargo": [
+                {
+                    "good": "FUEL",
+                    "quantity": 23,
+                    "totalVolume": 23
+                }
+            ],
+            "class": "MK-I",
+            "id": "ckon84fo20196vinzktdlvdlv",
+            "location": "OE-PM-TR",
+            "manufacturer": "Jackshaw",
+            "maxCargo": 50,
+            "plating": 5,
+            "spaceAvailable": 27,
+            "speed": 1,
+            "type": "JW-MK-I",
+            "weapons": 5,
+            "x": 21,
+            "y": -24
+        }
+    },
+    "sell_order": {
+        "credits": 157680,
+        "order": {
+            "good": "FUEL",
+            "pricePerUnit": 1,
+            "quantity": 5,
+            "total": 5
+        },
+        "ship": {
+            "cargo": [
+                {
+                    "good": "FUEL",
+                    "quantity": 18,
+                    "totalVolume": 18
+                }
+            ],
+            "class": "MK-I",
+            "id": "ckon84fo20196vinzktdlvdlv",
+            "location": "OE-PM-TR",
+            "manufacturer": "Jackshaw",
+            "maxCargo": 50,
+            "plating": 5,
+            "spaceAvailable": 32,
+            "speed": 1,
+            "type": "JW-MK-I",
+            "weapons": 5,
+            "x": 21,
+            "y": -24
+        }
+    },
+    "jettison_cargo":{
+        "good": "FUEL",
+        "quantityRemaining": 17,
+        "shipId": "ckomaazzi00236jnz9d4088kf"
+    },
+    "scrap_ship":{
+        "success": "Ship scrapped for 5282 credits"
+    },
+    "transfer_cargo":{
+        "fromShip": {
+            "id": "ckn85whu00091r5opkrb5qpzh",
+            "cargo": [
+                {
+                    "good": "FUEL",
+                    "quantity": 18,
+                    "totalVolume": 18
+                }
+            ],
+            "spaceAvailable": 32,
+            "type": "JW-MK-I",
+            "class": "MK-I",
+            "maxCargo": 50,
+            "speed": 1,
+            "manufacturer": "Jackshaw",
+            "plating": 5,
+            "weapons": 5
+        },
+        "toShip": {
+            "id": "ckn85wijo0137r5opxjqxyxmp",
+            "cargo": [
+                {
+                    "good": "FUEL",
+                    "quantity": 2,
+                    "totalVolume": 2
+                }
+            ],
+            "spaceAvailable": 48,
+            "type": "JW-MK-I",
+            "class": "MK-I",
+            "maxCargo": 50,
+            "speed": 1,
+            "manufacturer": "Jackshaw",
+            "plating": 5,
+            "weapons": 5
+        }
+    },
+    "create_structures":{
+        "structure": {
+            "active": false,
+            "consumes": [
+                "DRONES",
+                "MACHINERY"
+            ],
+            "id": "ckon8d0j400291vnzmgwahsyz",
+            "inventory": [
+                {
+                    "good": "FOOD",
+                    "quantity": 0
+                },
+                {
+                    "good": "DRONES",
+                    "quantity": 0
+                },
+                {
+                    "good": "MACHINERY",
+                    "quantity": 0
+                }
+            ],
+            "location": "OE-PM",
+            "ownedBy": {
+                "username": "testuser0"
+            },
+            "produces": [
+                "FOOD"
+            ],
+            "status": "Production halted. Required inventory is missing.",
+            "type": "FARM"
+        }
+    },
+    "deposit_to_user_structure":{
+        "deposit": {
+            "good": "DRONES",
+            "quantity": 10
+        },
+        "ship": {
+            "cargo": [
+                {
+                    "good": "FUEL",
+                    "quantity": 19,
+                    "totalVolume": 19
+                }
+            ],
+            "class": "MK-I",
+            "id": "ckomaazzi00236jnz9d4088kf",
+            "location": "OE-PM",
+            "manufacturer": "Jackshaw",
+            "maxCargo": 50,
+            "plating": 5,
+            "spaceAvailable": 31,
+            "speed": 1,
+            "type": "JW-MK-I",
+            "weapons": 5,
+            "x": 20,
+            "y": -25
+        },
+        "structure": {
+            "active": false,
+            "consumes": [
+                "DRONES",
+                "MACHINERY"
+            ],
+            "id": "ckon8d0j400291vnzmgwahsyz",
+            "inventory": [
+                {
+                    "good": "FOOD",
+                    "quantity": 0
+                },
+                {
+                    "good": "MACHINERY",
+                    "quantity": 0
+                },
+                {
+                    "good": "DRONES",
+                    "quantity": 10
+                }
+            ],
+            "location": "OE-PM",
+            "ownedBy": {
+                "username": "testuser0"
+            },
+            "produces": [
+                "FOOD"
+            ],
+            "status": "Production halted. Required inventory is missing.",
+            "type": "FARM"
+        }
+    },
+    "transfer_to_ship_":{
+        "ship": {
+            "cargo": [
+                {
+                    "good": "FUEL",
+                    "quantity": 17,
+                    "totalVolume": 17
+                },
+                {
+                    "good": "FOOD",
+                    "quantity": 10,
+                    "totalVolume": 10
+                }
+            ],
+            "class": "MK-I",
+            "id": "ckomaazzi00236jnz9d4088kf",
+            "location": "OE-PM",
+            "manufacturer": "Jackshaw",
+            "maxCargo": 50,
+            "plating": 5,
+            "spaceAvailable": 20,
+            "speed": 1,
+            "type": "JW-MK-I",
+            "weapons": 5,
+            "x": 20,
+            "y": -25
+        },
+        "structure": {
+            "active": true,
+            "consumes": [
+                "DRONES",
+                "MACHINERY"
+            ],
+            "id": "ckon8d0j400291vnzmgwahsyz",
+            "inventory": [
+                {
+                    "good": "MACHINERY",
+                    "quantity": 18
+                },
+                {
+                    "good": "DRONES",
+                    "quantity": 15
+                },
+                {
+                    "good": "FOOD",
+                    "quantity": 4
+                }
+            ],
+            "location": "OE-PM",
+            "ownedBy": {
+                "username": "testuser0"
+            },
+            "produces": [
+                "FOOD"
+            ],
+            "status": "Production running. Required inventory is available.",
+            "type": "FARM"
+        },
+        "transfer": {
+            "good": "FOOD",
+            "quantity": 10
+        }
+    },
+    "get_user_structure":{
+        "structure": {
+            "active": false,
+            "consumes": [
+                "DRONES",
+                "MACHINERY"
+            ],
+            "id": "ckon8d0j400291vnzmgwahsyz",
+            "inventory": [
+                {
+                    "good": "FOOD",
+                    "quantity": 0
+                },
+                {
+                    "good": "MACHINERY",
+                    "quantity": 0
+                },
+                {
+                    "good": "DRONES",
+                    "quantity": 10
+                }
+            ],
+            "location": "OE-PM",
+            "ownedBy": {
+                "username": "testuser0"
+            },
+            "produces": [
+                "FOOD"
+            ],
+            "status": "Production halted. Required inventory is missing.",
+            "type": "FARM"
+        }
+    },
+    "get_user_structures":{
+        "structures": [
+            {
+                "active": false,
+                "consumes": [
+                    "DRONES",
+                    "MACHINERY"
+                ],
+                "id": "ckon8d0j400291vnzmgwahsyz",
+                "inventory": [
+                    {
+                        "good": "FOOD",
+                        "quantity": 0
+                    },
+                    {
+                        "good": "MACHINERY",
+                        "quantity": 0
+                    },
+                    {
+                        "good": "DRONES",
+                        "quantity": 10
+                    }
+                ],
+                "location": "OE-PM",
+                "ownedBy": {
+                    "username": "testuser0"
+                },
+                "produces": [
+                    "FOOD"
+                ],
+                "status": "Production halted. Required inventory is missing.",
+                "type": "FARM"
+            },
+            {
+                "active": false,
+                "consumes": [
+                    "DRONES",
+                    "MACHINERY"
+                ],
+                "id": "ckon91tp90059d2nz2q74ds8v",
+                "inventory": [
+                    {
+                        "good": "METALS",
+                        "quantity": 0
+                    },
+                    {
+                        "good": "RARE_METALS",
+                        "quantity": 0
+                    },
+                    {
+                        "good": "DRONES",
+                        "quantity": 0
+                    },
+                    {
+                        "good": "MACHINERY",
+                        "quantity": 0
+                    }
+                ],
+                "location": "OE-NY",
+                "ownedBy": {
+                    "username": "testuser0"
+                },
+                "produces": [
+                    "METALS",
+                    "RARE_METALS"
+                ],
+                "status": "Production halted. Required inventory is missing.",
+                "type": "MINE"
+            }
+        ]
+    },
+    "warp_jump":{
+        "flightPlan": {
+            "arrivesAt": "2021-05-13T20:54:59.167Z",
+            "createdAt": "2021-05-13T20:52:35.198Z",
+            "departure": "OE-W-XV",
+            "destination": "XV-W-OE",
+            "distance": 0,
+            "fuelConsumed": 0,
+            "id": "ckondbksd00307xnzhy5yboxj",
+            "shipId": "ckonchfd50072rjnzsqmdijyq",
+            "terminatedAt": null,
+            "timeRemainingInSeconds": 143
+        }
+    },
+    "deposit_to_a_structure": {
+        "deposit": {
+            "good": "METALS",
+            "quantity": 10
+        },
+        "ship": {
+            "cargo": [],
+            "class": "MK-I",
+            "id": "ckonchfd50072rjnzsqmdijyq",
+            "location": "OE-W-XV",
+            "manufacturer": "Jackshaw",
+            "maxCargo": 50,
+            "plating": 5,
+            "spaceAvailable": 50,
+            "speed": 1,
+            "type": "JW-MK-I",
+            "weapons": 5,
+            "x": -2,
+            "y": 145
+        },
+        "structure": {
+            "completed": true,
+            "id": "ckonbz97y1650ninzroui51fm",
+            "materials": [
+                {
+                    "good": "MACHINERY",
+                    "quantity": 12000,
+                    "targetQuantity": 15000
+                },
+                {
+                    "good": "CONSTRUCTION_MATERIALS",
+                    "quantity": 20000,
+                    "targetQuantity": 25000
+                },
+                {
+                    "good": "ELECTRONICS",
+                    "quantity": 8000,
+                    "targetQuantity": 10000
+                },
+                {
+                    "good": "METALS",
+                    "quantity": 120010,
+                    "targetQuantity": 150000
+                }
+            ],
+            "name": "Warp Gate",
+            "stability": 0.80005
+        }
+    },
+    "system_docked_ships": {
+        "ships": [
+            {
+                "shipId": "ckoop2ce600491bnzi76xs2eb",
+                "shipType": "JW-MK-I",
+                "username": "testuser0"
+            }
+        ]
+    },
+    "get_system": {
+        "system": {
+            "name": "Omicron Eridani",
+            "symbol": "OE"
+        }
+    },
+    "system_ship_listings": {
+        "shipListings": [
+            {
+                "class": "MK-I",
+                "manufacturer": "Jackshaw",
+                "maxCargo": 50,
+                "plating": 5,
+                "purchaseLocations": [
+                    {
+                        "location": "OE-PM-TR",
+                        "price": 21125,
+                        "system": "OE"
+                    }
+                ],
+                "speed": 1,
+                "type": "JW-MK-I",
+                "weapons": 5
+            },
+            {
+                "class": "MK-II",
+                "manufacturer": "Zetra",
+                "maxCargo": 100,
+                "plating": 5,
+                "purchaseLocations": [
+                    {
+                        "location": "OE-PM-TR",
+                        "price": 72700,
+                        "system": "OE"
+                    },
+                    {
+                        "location": "OE-UC-OB",
+                        "price": 72700,
+                        "system": "OE"
+                    }
+                ],
+                "speed": 2,
+                "type": "ZA-MK-II",
+                "weapons": 5
+            }
+        ]
+    },
+    "get_a_structure": {
+        "structure": {
+            "completed": true,
+            "id": "ckonbz97y1650ninzroui51fm",
+            "materials": [
+                {
+                    "good": "MACHINERY",
+                    "quantity": 12000,
+                    "targetQuantity": 15000
+                },
+                {
+                    "good": "CONSTRUCTION_MATERIALS",
+                    "quantity": 20000,
+                    "targetQuantity": 25000
+                },
+                {
+                    "good": "ELECTRONICS",
+                    "quantity": 8000,
+                    "targetQuantity": 10000
+                },
+                {
+                    "good": "METALS",
+                    "quantity": 120000,
+                    "targetQuantity": 150000
+                }
+            ],
+            "name": "Warp Gate",
+            "stability": 0.8
+        }
     }
 }

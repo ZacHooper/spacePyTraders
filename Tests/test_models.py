@@ -2,9 +2,16 @@ import unittest
 import logging
 import json
 from SpacePyTraders.models import *
+from collections import namedtuple
+import pytest
 
 TOKEN = "0930cc36-7dc7-4cb1-8823-d8e72594d91e"
 USERNAME = "JimHawkins"
+
+@pytest.fixture
+def user_details():
+    User = namedtuple("User", ["token", "username"])
+    return User(TOKEN, USERNAME)
 
 with open('./Tests/model_mocks.json', 'r') as infile:
     MOCKS = json.load(infile)

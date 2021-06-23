@@ -7,10 +7,13 @@
 spaceTraders.pyc
 /.ipynb_checkpoints
 */secrets
+/automation
+run.py
 
 # For personal Projects
 zac.py
 db_handler.py
+startup.py
 
 # Misc Folders
 /Archived_Databases
@@ -179,3 +182,7 @@ Thumbs.db
 
 
 # End of https://www.toptal.com/developers/gitignore/api/python
+run.py
+automation/__init__.py
+automation/tracker.py
+automation/trader.py
