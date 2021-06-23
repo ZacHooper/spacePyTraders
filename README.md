@@ -23,7 +23,7 @@ TOKEN = "YOUR TOKEN"
 
 api = client.Api(USERNAME,TOKEN)
 
-print(api.users.get_your_info())
+print(api.account.info())
 
 >>> 
 {
