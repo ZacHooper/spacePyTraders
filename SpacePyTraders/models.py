@@ -3,6 +3,18 @@ import math
 
 @dataclass
 class User ():
+    """
+    The basic user object. Great way to store and access a user's credits, ships and loans.
+
+    Args:
+        username (str): The username of the user
+        credits (int): How many credits does the user have
+        ships (list): A list of the ships the user owns
+        loans (list): A list of the loans the user has
+
+    Returns:
+        User: returns a user object
+    """
     username: str
     credits: int
     ships: field(default_factory=list)

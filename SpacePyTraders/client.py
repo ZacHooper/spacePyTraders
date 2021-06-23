@@ -155,7 +155,11 @@ class Account (Client):
 class FlightPlans(Client):
     # Get all active flights
     def get_active_flight_plans(self, symbol, raw_res=False, throttle_time=10):
-        """Get all the currently active flight plans in the system given. This is for all global accounts
+        """THIS METHOD IS BEING DEPRECATED
+        This method has been moved to the systems class. Please now use `systems.get_active_flight_plans()`
+        to get the active flight plans in the system given.
+        
+        Get all the currently active flight plans in the system given. This is for all global accounts
 
         Args:
             symbol (str): Symbol of the system. OE or XV
@@ -163,7 +167,7 @@ class FlightPlans(Client):
         Returns:
             dict : dict containing a list of flight plans for each system as the key
         """
-        warnings.warn("get_active_flight_plans has now been moved to the Systems class. Place now use `systems.get_active_flight_plans()`. This method will remain until the next update.")
+        warnings.warn("get_active_flight_plans has now been moved to the Systems class. Place now use `systems.get_active_flight_plans()`. This method will remain until the next update.", DeprecationWarning)
         endpoint = f"systems/{symbol}/flight-plans"
         warning_log = F"Unable to get flight plans for system: {symbol}."
         logging.info(f"Getting the flight plans in the {symbol} system")
@@ -232,7 +236,10 @@ class Leaderboard (Client):
 class Loans (Client):
     # Get available loans
     def get_loans_available(self, raw_res=False, throttle_time=10):
-        """Gets the list of loans available
+        """THIS METHOD IS BEING DEPRECATED
+        This method has now been moved to the types class. Please now use `types.get_loans_available()`.
+        
+        Gets the list of loans available
 
         Returns:
             dict: dict containing a list of loans
@@ -325,7 +332,10 @@ class Locations (Client):
 
     # Get System's Locations
     def get_system_locations(self, symbol, type=None, raw_res=False, throttle_time=10):
-        """Get locations in the defined system
+        """THIS METHOD IS BEING DEPRECATED
+        This method has now moved to the systems class. Please now use `systems.get_system_locations()`.
+
+        Get locations in the defined system
 
         Args:
             symbol (str): The symbol for the system eg: OE
@@ -357,9 +367,14 @@ class Locations (Client):
         return res if res else False  
 
 class Marketplace (Client):
+    """THIS CLASS IS BEING DEPRECATED
+    All containing methods have been removed or are being deprecated."""
     # Get Location's marketplace
     def get_marketplace(self, symbol, raw_res=False, throttle_time=10):
-        """Get the marketplace for the location provided
+        """THIS METHOD IS BEING DEPRECATED
+        This method has moved to the Location class. Please now use `locations.get_marketplace()`.
+
+        Get the marketplace for the location provided
 
         Args:
             symbol (str): The symbol for the location eg: OE-PM
@@ -428,7 +443,10 @@ class Ships (Client):
 
     # Get available ships
     def get_available_ships(self, type=None, raw_res=False, throttle_time=10):
-        """Get the avialable ships to purchase across all systems
+        """THIS METHOD IS BEING DEPRECATED
+        This method has now moved to the types class. Please now use `types.ships()`.
+
+        Get the avialable ships to purchase across all systems
 
         Args:
             type (str, optional): Filter the list of ships to the class level. eg 'MK-II' (Note: those are capital i's). Defaults to None.
@@ -741,9 +759,15 @@ class Systems (Client):
         return res if res else False 
 
 class Users (Client):
+    """THIS CLASS IS BEING DEPRECATED
+    All methods have been removed or are being deprecated."""
 
     def get_your_info(self, raw_res=False, throttle_time=10):
-        """Get your user info
+        """THIS METHOD IS BEING DEPRECATED
+
+        This method has now moved to the Account class. Please now use `account.info()`
+        
+        Get your user info
 
         Returns:
             dict: dict containing your user data
