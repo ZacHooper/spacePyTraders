@@ -88,10 +88,6 @@ Warp Jumps
 .. autoclass:: SpacePyTraders.client.WarpJump
    :members:
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
 Models Module
 #############
 
