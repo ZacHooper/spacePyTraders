@@ -1,7 +1,20 @@
 from dataclasses import dataclass, field
+import math
 
 @dataclass
 class User ():
+    """
+    The basic user object. Great way to store and access a user's credits, ships and loans.
+
+    Args:
+        username (str): The username of the user
+        credits (int): How many credits does the user have
+        ships (list): A list of the ships the user owns
+        loans (list): A list of the loans the user has
+
+    Returns:
+        User: returns a user object
+    """
     username: str
     credits: int
     ships: field(default_factory=list)
@@ -61,7 +74,7 @@ class Ship ():
             self.cargo = [Cargo(**c) for c in self.cargo]
     
     def calculate_fuel_required(self, dest_dist):
-        calc_fuel = lambda d, p: round((d / 4) + 2 + p)
+        calc_fuel = lambda d, p: round((d / 4) + p + 2)
         penalties = {
             "MK-I": 2,
             "MK-II": 3,
@@ -69,6 +82,9 @@ class Ship ():
         }
         penalty = penalties[self.kind]
         return calc_fuel(dest_dist, penalty)
+
+    def calculate_dist_from_ship(self, loc):
+        return round(math.sqrt(math.pow((loc.x - self.x),2) + math.pow((loc.y - self.y),2)))
 
 @dataclass
 class Cargo ():
