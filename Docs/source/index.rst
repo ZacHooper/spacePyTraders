@@ -16,11 +16,13 @@ Api
 .. autoclass:: SpacePyTraders.client.Api
    :members:
    :special-members: __init__
+   :noindex:
 
 Client
 ########    
 .. autoclass:: SpacePyTraders.client.Client
     :members:
+    :noindex:
 
 Account
 #######    
