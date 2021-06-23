@@ -22,7 +22,7 @@ copyright = '2021, Zac Hooper'
 author = 'Zac Hooper'
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = '0.0.5'
 
 
 # -- General configuration ---------------------------------------------------
