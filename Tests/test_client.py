@@ -316,6 +316,13 @@ def test_structures_get_user_structures(api: Api, mock_endpoints):
     r = api.structures.get_users_structures()
     assert isinstance(r, dict) 
 
+@pytest.mark.structures
+def test_strucutres_deposit_to_a_structure(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{BASE_URL}structures/12345/deposit", json=MOCKS['deposit_to_a_structure'], status=200)
+    r = api.structures.deposit_goods("12345", "54321", "FUEL", "1", user_owned=False)
+    assert mock_endpoints.calls[0].request.params == {"shipId": "54321", "good": "FUEL", "quantity": "1"}
+    assert isinstance(r, dict)
+
 class TestSystems(unittest.TestCase):
     def setUp(self):
         logging.disable()
@@ -356,6 +363,24 @@ def test_system_get_active_flightplans(api: Api, mock_endpoints):
 def test_system_get_system_locations(api: Api, mock_endpoints):
     mock_endpoints.add(responses.GET, f"{BASE_URL}systems/OE/locations", json=MOCKS['system'], status=200)
     r = api.systems.get_system_locations("OE")
+    assert isinstance(r, dict)
+
+@pytest.mark.systems
+def test_system_get_system_docked_ships(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}systems/OE/ships", json=MOCKS['system_docked_ships'], status=200)
+    r = api.systems.get_system_docked_ships("OE")
+    assert isinstance(r, dict)
+
+@pytest.mark.systems
+def test_system_get_a_system(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}systems/OE", json=MOCKS['get_system'], status=200)
+    r = api.systems.get_system("OE")
+    assert isinstance(r, dict)
+
+@pytest.mark.systems
+def test_system_get_available_ships(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}systems/OE/ship-listings", json=MOCKS['system_ship_listings'], status=200)
+    r = api.systems.get_available_ships("OE")
     assert isinstance(r, dict)
 
 class TestLeaderboard(unittest.TestCase):

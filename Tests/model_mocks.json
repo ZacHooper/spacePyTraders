@@ -1203,5 +1203,110 @@
             "terminatedAt": null,
             "timeRemainingInSeconds": 143
         }
+    },
+    "deposit_to_a_structure": {
+        "deposit": {
+            "good": "METALS",
+            "quantity": 10
+        },
+        "ship": {
+            "cargo": [],
+            "class": "MK-I",
+            "id": "ckonchfd50072rjnzsqmdijyq",
+            "location": "OE-W-XV",
+            "manufacturer": "Jackshaw",
+            "maxCargo": 50,
+            "plating": 5,
+            "spaceAvailable": 50,
+            "speed": 1,
+            "type": "JW-MK-I",
+            "weapons": 5,
+            "x": -2,
+            "y": 145
+        },
+        "structure": {
+            "completed": true,
+            "id": "ckonbz97y1650ninzroui51fm",
+            "materials": [
+                {
+                    "good": "MACHINERY",
+                    "quantity": 12000,
+                    "targetQuantity": 15000
+                },
+                {
+                    "good": "CONSTRUCTION_MATERIALS",
+                    "quantity": 20000,
+                    "targetQuantity": 25000
+                },
+                {
+                    "good": "ELECTRONICS",
+                    "quantity": 8000,
+                    "targetQuantity": 10000
+                },
+                {
+                    "good": "METALS",
+                    "quantity": 120010,
+                    "targetQuantity": 150000
+                }
+            ],
+            "name": "Warp Gate",
+            "stability": 0.80005
+        }
+    },
+    "system_docked_ships": {
+        "ships": [
+            {
+                "shipId": "ckoop2ce600491bnzi76xs2eb",
+                "shipType": "JW-MK-I",
+                "username": "testuser0"
+            }
+        ]
+    },
+    "get_system": {
+        "system": {
+            "name": "Omicron Eridani",
+            "symbol": "OE"
+        }
+    },
+    "system_ship_listings": {
+        "shipListings": [
+            {
+                "class": "MK-I",
+                "manufacturer": "Jackshaw",
+                "maxCargo": 50,
+                "plating": 5,
+                "purchaseLocations": [
+                    {
+                        "location": "OE-PM-TR",
+                        "price": 21125,
+                        "system": "OE"
+                    }
+                ],
+                "speed": 1,
+                "type": "JW-MK-I",
+                "weapons": 5
+            },
+            {
+                "class": "MK-II",
+                "manufacturer": "Zetra",
+                "maxCargo": 100,
+                "plating": 5,
+                "purchaseLocations": [
+                    {
+                        "location": "OE-PM-TR",
+                        "price": 72700,
+                        "system": "OE"
+                    },
+                    {
+                        "location": "OE-UC-OB",
+                        "price": 72700,
+                        "system": "OE"
+                    }
+                ],
+                "speed": 2,
+                "type": "ZA-MK-II",
+                "weapons": 5
+            }
+        ]
     }
 }

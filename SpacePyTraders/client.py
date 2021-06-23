@@ -441,8 +441,10 @@ class Ships (Client):
 
         API LINK: https://api.spacetraders.io/#api-ships-ships
         """
-        warnings.warn("get_available_ships is being deprecated and is moving to the Types class. \nTo get your info please now use Api.types.ships()", DeprecationWarning)
-        endpoint = f"game/ships"
+        warnings.warn("""get_available_ships is being deprecated and is moving to the Types class. \n
+                        To get your info please now use Api.types.ships()\n
+                        No longer returns the location of the ships - see system.get_available_ships() for ships available in the system""", DeprecationWarning)
+        endpoint = f"types/ships"
         params = {"class": type}
         warning_log = F"Unable to get available ships. Class Filter: {type}"
         logging.info(f"Getting available ships to purchase. Filter: {type}")
@@ -564,7 +566,7 @@ class Structures (Client):
         return res if res else False
 
     # Deposit Goods
-    def deposit_goods(self, structureId, shipId, good, quantity, raw_res=False, throttle_time=10):
+    def deposit_goods(self, structureId, shipId, good, quantity, user_owned=True, raw_res=False, throttle_time=10):
         """Deposit goods from a ship to a structure. The ship must be at the location the structure has been built.
 
         Args:
@@ -572,15 +574,23 @@ class Structures (Client):
             shipId (str): ID of the ship to take the goods from
             good (str): symbol of the good to deposite. Eg: FUEL
             quantity (str): How many units of the good to deposit
+            user_owned (bool): Determines which endpoint to use: deposit to user structure or any structure
         
         Returns:
             dict : dict containing the updated info of the ship and structure
+
+        Possible Endpoints:
+            - https://api.spacetraders.io/#api-structures-DepositMyGoods
+            - https://api.spacetraders.io/#api-structures-DepositStructure
+
         """
-        endpoint = f"my/structures/{structureId}/deposit"
+        endpoint = f"my/structures/{structureId}/deposit" if user_owned else f"structures/{structureId}/deposit"
         params = {"shipId": shipId, "good": good, "quantity": quantity}
         warning_log = F"Unable to deposit {quantity} units of {good} from ship: {shipId} into structure: {structureId}"
         logging.info(f"Depositing {quantity} units of {good} from ship: {shipId} into structure: {structureId}")
-        res = self.generic_api_call("POST", endpoint, params=params, token=self.token, warning_log=warning_log)
+        res = self.generic_api_call("POST", endpoint, params=params, 
+                                    token=self.token, warning_log=warning_log, 
+                                    raw_res=raw_res, throttle_time=throttle_time)
         return res if res else False
 
     # Get your structure info
@@ -635,7 +645,9 @@ class Structures (Client):
 class Systems (Client):
     # Get system info
     def get_systems(self, raw_res=False, throttle_time=10):
-        """Get info about the systems and their locations.
+        """[ENDPOINT CURRENTLY BROKEN - DEVS FIXING]
+        
+        Get info about the systems and their locations.
 
         Returns:
             dict: dict containing a JSON list of the different systems
@@ -664,7 +676,7 @@ class Systems (Client):
         return res if res else False
 
     # Get System's Locations
-    def get_system_locations(self, symbol, type=None, raw_res=False, throttle_time=10):
+    def get_system_locations(self, symbol, raw_res=False, throttle_time=10):
         """Get locations in the defined system
 
         Args:
@@ -676,10 +688,54 @@ class Systems (Client):
         endpoint = f"systems/{symbol}/locations"
         warning_log = F"Unable to get the locations in the system: {symbol}"
         logging.info(f"Getting the locations in system: {symbol}")
-        params = {"type": type} if type is not None else None
-        res = self.generic_api_call("GET", endpoint, params=params, token=self.token, warning_log=warning_log)
+        res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
         return res if res else False  
-    
+
+    def get_system_docked_ships(self, symbol, raw_res=False, throttle_time=10):
+        """Get docked ships in the defined system
+
+        Args:
+            symbol (str): The symbol for the system eg: OE
+
+        Returns:
+            dict: A dict containing a JSON list of the docked ships in the system
+        """
+        endpoint = f"systems/{symbol}/ships"
+        warning_log = F"Unable to get the docked ships in the system: {symbol}"
+        logging.info(f"Getting the docked ships in system: {symbol}")
+        res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
+        return res if res else False 
+
+    def get_system(self, symbol, raw_res=False, throttle_time=10):
+        """Get info on the definined system
+
+        Args:
+            symbol (str): The symbol for the system eg: OE
+
+        Returns:
+            dict: A dict with info about the system
+        """
+        endpoint = f"systems/{symbol}"
+        warning_log = F"Unable to get the  system: {symbol}"
+        logging.info(f"Getting the system: {symbol}")
+        res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
+        return res if res else False 
+
+    def get_available_ships(self, symbol, raw_res=False, throttle_time=10):
+        """Get the ships listed for sale in the system defined
+
+        Args:
+            symbol (str): The symbol for the system eg: OE
+
+        Returns:
+            dict: A dict containing a list of the available ships for sale
+        """
+        endpoint = f"systems/{symbol}/ship-listings"
+        warning_log = F"Unable to get the listed ships in system: {symbol}"
+        logging.info(f"Getting the ships available for sale: {symbol}")
+        res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
+        return res if res else False 
+
 class Users (Client):
 
     def get_your_info(self, raw_res=False, throttle_time=10):
