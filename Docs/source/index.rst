@@ -1,6 +1,7 @@
 Welcome to SpacePyTraders's documentation!
 ==========================================
 
+#############
 Client Module
 #############
 
@@ -88,6 +89,7 @@ Warp Jumps
 .. autoclass:: SpacePyTraders.client.WarpJump
    :members:
 
+#############
 Models Module
 #############
 
