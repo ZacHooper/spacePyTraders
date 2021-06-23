@@ -13,6 +13,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../..'))
+autodoc_mock_imports = ["ratelimit"]
 
 
 # -- Project information -----------------------------------------------------
@@ -22,7 +23,7 @@ copyright = '2021, Zac Hooper'
 author = 'Zac Hooper'
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.5.2'
+release = '0.0.5'
 
 
 # -- General configuration ---------------------------------------------------
