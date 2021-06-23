@@ -239,7 +239,7 @@ class Loans (Client):
             dict: dict containing a list of loans
         """
         warnings.warn("get_loans_available has now been moved to the Types class. Place now use `types.loans()`. This method will remain until the next update.")
-        endpoint = f"game/loans"
+        endpoint = f"types/loans"
         warning_log = F"Unable to retrieve the loans available"
         logging.info(f"Retrieving the loans currently available")
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
