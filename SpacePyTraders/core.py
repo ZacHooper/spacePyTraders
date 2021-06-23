@@ -32,7 +32,7 @@ def update_market(api, symbol, reason, add_to_db=None):
         DataFrame: A DataFrame with the current location's market outlook
     """
     # Make API Call for marketplace
-    market = Marketplace(**api.marketplace.get_marketplace(symbol)['location'])
+    market = Marketplace(**api.locations.get_marketplace(symbol)['location'])
     # Convert to DF
     market_df = pd.DataFrame([asdict(good) for good in market.marketplace])
     # Add details about the location to each good record
