@@ -58,7 +58,6 @@ def make_request(method, url, headers, params):
     if method not in ["GET", "POST", "PUT", "DELETE"]:
         logging.exception(f'Invalid method provided: {method}')
 
-    # return methods[method]   
 
 class Client ():
     def __init__(self, username, token=None):
