@@ -92,6 +92,25 @@ Warp Jumps
 .. autoclass:: SpacePyTraders.client.WarpJump
    :members:
 
+#############
+Models Module
+#############
+
+Models provides common objects in the Space Trader Universe. Access a ships speed with dot notation rather than convoluted JSON manipulation. 
+
+test
+
+.. code-block:: python
+
+   from models import Ship 
+   ...
+   ship = Ship(api.ships.get_ship('12345'))
+   print(ship.manufacturer)
+   >>> Jackshaw
+
+.. automodule:: SpacePyTraders.models
+   :members:
+
 User
 ##########
 .. autoclass:: SpacePyTraders.models.User
