@@ -1189,5 +1189,19 @@
                 "type": "MINE"
             }
         ]
+    },
+    "warp_jump":{
+        "flightPlan": {
+            "arrivesAt": "2021-05-13T20:54:59.167Z",
+            "createdAt": "2021-05-13T20:52:35.198Z",
+            "departure": "OE-W-XV",
+            "destination": "XV-W-OE",
+            "distance": 0,
+            "fuelConsumed": 0,
+            "id": "ckondbksd00307xnzhy5yboxj",
+            "shipId": "ckonchfd50072rjnzsqmdijyq",
+            "terminatedAt": null,
+            "timeRemainingInSeconds": 143
+        }
     }
 }

@@ -4,7 +4,6 @@ import responses
 import logging
 from SpacePyTraders.client import *
 import pytest
-from collections import namedtuple
 
 TOKEN = "e8c9ac0d-e1ec-45e9-b808-d622a7717f46"
 USERNAME = "JimHawkins"
@@ -82,7 +81,6 @@ class TestClientClassMethods(unittest.TestCase):
 
 # Ships Endpoints
 # ----------------------
-
 @pytest.mark.ships
 def test_ships_init():
     """ Test that the class initiates properly """
@@ -431,4 +429,20 @@ def test_types_structures(api: Api, mock_endpoints):
 def test_types_ships(api: Api, mock_endpoints):
     mock_endpoints.add(responses.GET, f"{BASE_URL}types/ships", json=MOCKS['get_available_ships'], status=200)
     r = api.types.ships()
+    assert isinstance(r, dict)
+
+# Warp Jump Endpoints
+# ----------------
+
+@pytest.mark.warpjump
+def test_warp_jump_init():
+    assert isinstance(WarpJump("JimHawkins", "12345"), WarpJump)
+    assert WarpJump("JimHawkins", "12345").username == "JimHawkins", "Did not set the username attribute correctly"
+    assert WarpJump("JimHawkins", "12345").token == "12345", "Did not set the token attribute correctly"
+
+@pytest.mark.warpjump
+def test_warp_jump_attempt_jump(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{BASE_URL}my/warp-jumps", json=MOCKS['warp_jump'], status=200)
+    r = api.warpjump.attempt_jump("12345")
+    assert mock_endpoints.calls[0].request.params == {"shipId": "12345"}
     assert isinstance(r, dict)

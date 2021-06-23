@@ -765,6 +765,25 @@ class Types (Client):
                                     raw_res=raw_res, throttle_time=throttle_time)
         return res if res else False 
 
+class WarpJump (Client):
+    def attempt_jump(self, shipId, raw_res=False, throttle_time=10):
+        """Attempts sending a ship through a warp jump
+
+        Args:
+            raw_res (bool, optional): Returns the actual request response. Defaults to False.
+            throttle_time (int, optional): Change how long to wait if throttled. Defaults to 10.
+
+        Returns:
+            dict: A dict containing a list of all the goods in the game
+        """
+        endpoint = f"my/warp-jumps"
+        warning_log = F"Ship was unable to travel through warp jump"
+        params = {"shipId": shipId}
+        logging.info(f"Attempting travel through warp jump")
+        res = self.generic_api_call("POST", endpoint, token=self.token, warning_log=warning_log, params=params,
+                                    raw_res=raw_res, throttle_time=throttle_time)
+        return res if res else False 
+
 class Api ():
     def __init__(self, username, token=None):
         self.username = username
@@ -783,6 +802,7 @@ class Api ():
         self.systems = Systems(username, token)
         self.users = Users(username, token)
         self.types = Types(username, token)
+        self.warpjump = WarpJump(username, token)
 
     def generate_token(self):
         """Trys to create a new user and return their token
@@ -811,6 +831,7 @@ class Api ():
                 self.users.token = self.token
                 self.types.token = self.token
                 self.account = self.token
+                self.warpjump = self.token
             else:
                 logging.exception(f"Code: {res.json()['error']['code']}, Message: {res.json()['error']['message']}")
                 return None
