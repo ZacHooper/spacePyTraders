@@ -594,16 +594,23 @@ class Structures (Client):
         return res if res else False
 
     # Get your structure info
-    def get_structure(self, structureId, raw_res=False, throttle_time=10):
-        """Get the info about a structure
+    def get_structure(self, structureId, user_owned=True, raw_res=False, throttle_time=10):
+        """Get the info about a structure. 
+
+        the `user_owned` argument will determine whether the `my` endpoint is used or note.
+        Possible Endpoints:
+            - https://api.spacetraders.io/#api-structures-GetStructure
+            - https://api.spacetraders.io/#api-structures-GetMyStructure
 
         Args:
             structureId (str): ID of the structure to deposit the goods into
+            user_owned (bool): Determines if the queried for structure is user owned or not
 
         Returns:
             dict : dict containing the info of the strucutre
+
         """
-        endpoint = f"my/structures/{structureId}"
+        endpoint = f"my/structures/{structureId}" if user_owned else f"structures/{structureId}"
         warning_log = F"Unable to get the info for structure: {structureId}"
         logging.info(f"Getting info about structure: {structureId}")
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
@@ -869,7 +876,7 @@ class Api ():
         Returns:
             str: Token if user valid else None
         """
-        url = f"https://api.spacetraders.io/users/{self.username}/token"
+        url = f"https://api.spacetraders.io/users/{self.username}/claim"
         try:
             res = make_request("POST", url, None, None)
             if res.ok:

@@ -1308,5 +1308,35 @@
                 "weapons": 5
             }
         ]
+    },
+    "get_a_structure": {
+        "structure": {
+            "completed": true,
+            "id": "ckonbz97y1650ninzroui51fm",
+            "materials": [
+                {
+                    "good": "MACHINERY",
+                    "quantity": 12000,
+                    "targetQuantity": 15000
+                },
+                {
+                    "good": "CONSTRUCTION_MATERIALS",
+                    "quantity": 20000,
+                    "targetQuantity": 25000
+                },
+                {
+                    "good": "ELECTRONICS",
+                    "quantity": 8000,
+                    "targetQuantity": 10000
+                },
+                {
+                    "good": "METALS",
+                    "quantity": 120000,
+                    "targetQuantity": 150000
+                }
+            ],
+            "name": "Warp Gate",
+            "stability": 0.8
+        }
     }
 }

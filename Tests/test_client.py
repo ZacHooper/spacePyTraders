@@ -323,6 +323,13 @@ def test_strucutres_deposit_to_a_structure(api: Api, mock_endpoints):
     assert mock_endpoints.calls[0].request.params == {"shipId": "54321", "good": "FUEL", "quantity": "1"}
     assert isinstance(r, dict)
 
+@pytest.mark.structures
+def test_structures_get_a_structure(api: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{BASE_URL}structures/12345", json=MOCKS['get_a_structure'], status=200)
+    r = api.structures.get_structure("12345", user_owned=False)
+    assert isinstance(r, dict)
+
+
 class TestSystems(unittest.TestCase):
     def setUp(self):
         logging.disable()
