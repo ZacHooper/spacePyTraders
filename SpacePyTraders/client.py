@@ -884,8 +884,44 @@ class Systems (Client):
         logging.info(f"Unable to view systems")
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
         return res if res else False 
+    
+    def list_waypoints(self, system_symbol, raw_res=False, throttle_time=10):
+        """Fetch all of the waypoints for a given system. 
+        System must be charted or a ship must be present to return waypoint details.
 
-        
+        Args:
+            system_symbol (str): symbol of system to get list of waypoints
+            raw_res (bool, optional): Return raw respose insteas of JSON. Defaults to False.
+            throttle_time (int, optional): How long to wait before attempting call again. Defaults to 10.
+
+        Returns:
+            dict: JSON response
+
+            API Link: https://spacetraders.stoplight.io/docs/spacetraders/b3A6NDY2NzYwMTY-list-waypoints
+        """
+        endpoint = f"systems/{system_symbol}/waypoints"
+        warning_log = f"Unable to get list of waypoints in system: {system_symbol}"
+        logging.info(f"Unable to get list of waypoints in system: {system_symbol}")
+        res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
+        return res if res else False
+
+    def view_waypoint(self, system_symbol, waypoint_symbol, raw_res=False, throttle_time=10):
+        """View the details of a waypoint.
+
+        Args:
+            system_symbol (str): Symbol of system waypoint is located in
+            waypoint_symbol (str): Symbol of waypoint to get details for
+            raw_res (bool, optional): Return raw respose insteas of JSON. Defaults to False.
+            throttle_time (int, optional): How long to wait before attempting call again. Defaults to 10.
+
+        Returns:
+            dict: JSON response
+        """
+        endpoint = f"systems/{system_symbol}/waypoints/{waypoint_symbol}"
+        warning_log = f"Unable to get details of waypoint: {waypoint_symbol}"
+        logging.info(f"Unable to get details of waypoint: {waypoint_symbol}")
+        res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
+        return res if res else False
 
 class Users (Client):
     """THIS CLASS IS BEING DEPRECATED
@@ -1686,7 +1722,86 @@ class Extract(Client):
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log,
                                     raw_res=raw_res, throttle_time=throttle_time)
         return res if res else False
-        
+
+@dataclass
+class Shipyard(Client):
+    """Function specific to handling shipyard"""
+    def purchase_ship(self, listing_id, raw_res=False, throttle_time=10):
+        """Purchase a ship
+
+        Args:
+            listing_id (str): The id of the shipyard listing you want to purchase.
+            raw_res (bool, optional): Return raw respose insteas of JSON. Defaults to False.
+            throttle_time (int, optional): How long to wait before attempting call again. Defaults to 10.
+
+        Returns:
+            dict: JSON response
+
+            API Link: https://spacetraders.stoplight.io/docs/spacetraders/b3A6NDUyNDAzMDc-purchase-ship
+        """
+        endpoint = f"my/ships"
+        warning_log = f"Unable to purchase ship with listing id: {listing_id}"
+        params = {'id': listing_id}
+        res = self.generic_api_call("POST", endpoint, token=self.token, warning_log=warning_log,
+                                    raw_res=raw_res, throttle_time=throttle_time, params=params)
+        return res if res else False
+
+    def list_shipyards(self, system_symbol, raw_res=False, throttle_time=10):
+        """Returns a list of all shipyards in a system.
+
+        Args:
+            system_symbol (str): symbol of system to get list of shipyards for
+            raw_res (bool, optional): Return raw respose insteas of JSON. Defaults to False.
+            throttle_time (int, optional): How long to wait before attempting call again. Defaults to 10.
+
+        Returns:
+            dict: JSON response
+
+            API Link: https://spacetraders.stoplight.io/docs/spacetraders/b3A6NDUyNDAzMDY-list-shipyards
+        """
+        endpoint = f"systems/{system_symbol}/shipyards"
+        warning_log = f"Unable to view shipyards in system: {system_symbol}"
+        res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log,
+                                    raw_res=raw_res, throttle_time=throttle_time)
+        return res if res else False
+
+    def shipyard_details(self, system_symbol, waypoint_symbol, raw_res=False, throttle_time=10):
+        """Get details about a shipyard
+
+        Args:
+            system_symbol (str): Symbol of system shipyard is located in
+            waypoint_symbol (str): Symbol of waypoint shipyeard is located in
+            raw_res (bool, optional): Return raw respose insteas of JSON. Defaults to False.
+            throttle_time (int, optional): How long to wait before attempting call again. Defaults to 10.
+
+        Returns:
+            dict: JSON response
+
+            API Link: https://spacetraders.stoplight.io/docs/spacetraders/b3A6NDUyNDAzMDQ-shipyard-details
+        """
+        endpoint = f"systems/{system_symbol}/shipyards/{waypoint_symbol}"
+        warning_log = f"Unable to view shipyard in system: {system_symbol}, waypoint: {waypoint_symbol}"
+        res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log,
+                                    raw_res=raw_res, throttle_time=throttle_time)
+        return res if res else False
+
+    def shipyard_listings(self, system_symbol, waypoint_symbol, raw_res=False, throttle_time=10):
+        """View ships available for purchase in shipyard
+
+        Args:
+            system_symbol (str): system shipyard is located in
+            waypoint_symbol (str): waypoint shipyard is located in
+            raw_res (bool, optional): Return raw respose insteas of JSON. Defaults to False.
+            throttle_time (int, optional): How long to wait before attempting call again. Defaults to 10.
+
+        Returns:
+            dict: JSON response
+        """
+        endpoint = f"systems/{system_symbol}/shipyards/{waypoint_symbol}/ships"
+        warning_log = f"Unable to view ships in shipyard in system: {system_symbol}, waypoint: {waypoint_symbol}"
+        res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log,
+                                    raw_res=raw_res, throttle_time=throttle_time)
+        return res if res else False
 
 
 if __name__ == "__main__":
