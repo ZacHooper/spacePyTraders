@@ -9,6 +9,7 @@ spaceTraders.pyc
 */secrets
 /automation
 run.py
+config.json
 
 # For personal Projects
 zac.py

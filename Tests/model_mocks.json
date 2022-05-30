@@ -716,7 +716,7 @@
             }
         ]
     },
-    "types_goods" : {
+    "types_goods": {
         "goods": [
             {
                 "name": "Fuel",
@@ -783,19 +783,19 @@
             }
         ]
     },
-    "flightplan" : {
+    "flightplan": {
         "flightPlan": {
-          "arrivesAt": "2021-03-28T23:11:50.068Z",
-          "createdAt": "2021-03-28T23:05:05.078Z",
-          "departure": "OE-PM-TR",
-          "destination": "OE-CR",
-          "distance": 46,
-          "fuelConsumed": 13,
-          "fuelRemaining": 67,
-          "id": "ckmtrssae0402zgopsy39y9z7",
-          "shipId": "ckmtrlqpz0109zgopkeqs4m5s",
-          "terminatedAt": null,
-          "timeRemainingInSeconds": 365
+            "arrivesAt": "2021-03-28T23:11:50.068Z",
+            "createdAt": "2021-03-28T23:05:05.078Z",
+            "departure": "OE-PM-TR",
+            "destination": "OE-CR",
+            "distance": 46,
+            "fuelConsumed": 13,
+            "fuelRemaining": 67,
+            "id": "ckmtrssae0402zgopsy39y9z7",
+            "shipId": "ckmtrlqpz0109zgopkeqs4m5s",
+            "terminatedAt": null,
+            "timeRemainingInSeconds": 365
         }
     },
     "submit_flightplan": {
@@ -885,15 +885,15 @@
             "y": -24
         }
     },
-    "jettison_cargo":{
+    "jettison_cargo": {
         "good": "FUEL",
         "quantityRemaining": 17,
         "shipId": "ckomaazzi00236jnz9d4088kf"
     },
-    "scrap_ship":{
+    "scrap_ship": {
         "success": "Ship scrapped for 5282 credits"
     },
-    "transfer_cargo":{
+    "transfer_cargo": {
         "fromShip": {
             "id": "ckn85whu00091r5opkrb5qpzh",
             "cargo": [
@@ -931,7 +931,7 @@
             "weapons": 5
         }
     },
-    "create_structures":{
+    "create_structures": {
         "structure": {
             "active": false,
             "consumes": [
@@ -964,7 +964,7 @@
             "type": "FARM"
         }
     },
-    "deposit_to_user_structure":{
+    "deposit_to_user_structure": {
         "deposit": {
             "good": "DRONES",
             "quantity": 10
@@ -1022,7 +1022,7 @@
             "type": "FARM"
         }
     },
-    "transfer_to_ship_":{
+    "transfer_to_ship_": {
         "ship": {
             "cargo": [
                 {
@@ -1085,7 +1085,7 @@
             "quantity": 10
         }
     },
-    "get_user_structure":{
+    "get_user_structure": {
         "structure": {
             "active": false,
             "consumes": [
@@ -1118,7 +1118,7 @@
             "type": "FARM"
         }
     },
-    "get_user_structures":{
+    "get_user_structures": {
         "structures": [
             {
                 "active": false,
@@ -1189,7 +1189,7 @@
             }
         ]
     },
-    "warp_jump":{
+    "warp_jump": {
         "flightPlan": {
             "arrivesAt": "2021-05-13T20:54:59.167Z",
             "createdAt": "2021-05-13T20:52:35.198Z",
@@ -1336,6 +1336,190 @@
             ],
             "name": "Warp Gate",
             "stability": 0.8
+        }
+    },
+    "agent_details": {
+        "data": {
+            "accountId": "cl0hok34m0003ks0jjql5q8f2",
+            "symbol": "EMBER",
+            "headquarters": "X1-OE-PM",
+            "credits": 0
+        }
+    },
+    "register_new_agent": {
+        "data": {
+            "token": "string",
+            "agent": {
+                "accountId": "cl0hok34m0003ks0jjql5q8f2",
+                "symbol": "EMBER",
+                "headquarters": "X1-OE-PM",
+                "credits": 0
+            },
+            "faction": {
+                "symbol": "COMMERCE_REPUBLIC",
+                "name": "Commerce Repubic",
+                "description": "The Commerce Republic takes capital from top tier worlds and invests it into new systems with high potential for growth.",
+                "headquarters": "X1-OE-PM",
+                "traits": [
+                    "BUREAUCRATIC",
+                    "CAPITALISTIC",
+                    "GUILD",
+                    "ESTABLISHED"
+                ]
+            },
+            "contract": {
+                "id": "cl0hok38t0014ks0jnoy8o5vh",
+                "faction": "COMMERCE_REPUBLIC",
+                "type": "PROCUREMENT",
+                "terms": {
+                    "deadline": "2022-03-11T05:16:59.113Z",
+                    "payment": {
+                        "onAccepted": 20000,
+                        "onFulfilled": 100000
+                    },
+                    "deliver": [
+                        {
+                            "tradeSymbol": "IRON_ORE",
+                            "destination": "X1-OE-PM",
+                            "units": 10000,
+                            "fulfilled": 0
+                        }
+                    ]
+                },
+                "accepted": false,
+                "fulfilled": false,
+                "expiresAt": "2022-03-09T05:16:59.112Z"
+            },
+            "ship": {
+                "symbol": "string",
+                "frame": "string",
+                "reactor": "string",
+                "engine": "string",
+                "fuel": 0,
+                "modules": [
+                    "string"
+                ],
+                "mounts": [
+                    "string"
+                ],
+                "registration": {
+                    "factionSymbol": "string",
+                    "agentSymbol": "string",
+                    "fee": 0,
+                    "role": "string"
+                },
+                "integrity": {
+                    "frame": 0,
+                    "reactor": 0,
+                    "engine": 0
+                },
+                "status": "string",
+                "location": "string",
+                "cargo": [
+                    {
+                        "tradeSymbol": "string",
+                        "units": 0
+                    }
+                ]
+            }
+        }
+    },
+    "trade_imports": {
+        "data": [
+            {
+                "waypointSymbol": "string",
+                "tradeSymbol": "string",
+                "price": 0,
+                "tariff": 0
+            }
+        ],
+        "meta": {
+            "total": 10,
+            "page": 1,
+            "limit": 10
+        }
+    },
+    "trade_exports": {
+        "data": [
+            {
+                "waypointSymbol": "string",
+                "tradeSymbol": "string",
+                "price": 0,
+                "tariff": 0
+            }
+        ],
+        "meta": {
+            "total": 10,
+            "page": 1,
+            "limit": 10
+        }
+    },
+    "trade_exchanges": {
+        "data": [
+            {
+                "waypointSymbol": "string",
+                "tradeSymbol": "string",
+                "price": 0,
+                "tariff": 0
+            }
+        ],
+        "meta": {
+            "total": 10,
+            "page": 1,
+            "limit": 10
+        }
+    },
+    "list_markets": {
+        "data": [
+            "X1-AK3-88760F"
+        ],
+        "meta": {
+            "total": 1,
+            "page": 1,
+            "limit": 20
+        }
+    },
+    "view_market": {
+        "data": {
+            "exports": [
+                {
+                    "waypointSymbol": "X1-OE-PM",
+                    "tradeSymbol": "MICROPROCESSORS",
+                    "price": 834,
+                    "tariff": 0
+                }
+            ],
+            "imports": [
+                {
+                    "waypointSymbol": "X1-OE-PM",
+                    "tradeSymbol": "SILICON",
+                    "price": 144,
+                    "tariff": 0
+                },
+                {
+                    "waypointSymbol": "X1-OE-PM",
+                    "tradeSymbol": "QUARTZ",
+                    "price": 286,
+                    "tariff": 0
+                }
+            ],
+            "exchange": []
+        }
+    },
+    "purchase_cargo": {
+        "data": {
+            "waypointSymbol": "X1-OE-PM",
+            "tradeSymbol": "MICROPROCESSORS",
+            "credits": -843,
+            "units": 1
+        }
+    },
+    "sell_cargo": {
+        "data": {
+            "waypointSymbol": "X1-OE-PM",
+            "tradeSymbol": "MICROPROCESSORS",
+            "credits": -843,
+            "units": 1
         }
     }
 }

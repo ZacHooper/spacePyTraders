@@ -1,3 +1,4 @@
+from asyncio.format_helpers import extract_stack
 import requests
 import logging
 import time
@@ -58,9 +59,9 @@ def make_request(method, url, headers, params):
     if method not in ["GET", "POST", "PUT", "DELETE"]:
         logging.exception(f'Invalid method provided: {method}')
 
-
+@dataclass
 class Client ():
-    def __init__(self, username, token=None, v2=False):
+    def __init__(self, username=None, token=None, v2=False):
         """The Client class handles all user interaction with the Space Traders API. 
         The class is initiated with the username and token of the user. 
         If the user does not provide a token the 'create_user' method will attempt to fire and create a user with the username provided. 
@@ -1034,24 +1035,36 @@ class WarpJump (Client):
         return res if res else False 
 
 class Api ():
-    def __init__(self, username, token=None):
-        self.username = username
+    def __init__(self, username=None, token=None, v2=False):
         self.token = token
-        self.account = Account(username, token)
-        self.flightplans = FlightPlans(username, token)
-        self.game = Game(username, token)
-        self.leaderboard = Leaderboard(username, token)
-        self.loans = Loans(username, token)
-        self.locations = Locations(username, token)
-        self.marketplace = Marketplace(username, token)
-        self.purchaseOrders = PurchaseOrders(username, token)
-        self.sellOrders = SellOrders(username, token)
-        self.ships = Ships(username, token)
-        self.structures = Structures(username, token)
-        self.systems = Systems(username, token)
-        self.users = Users(username, token)
-        self.types = Types(username, token)
-        self.warpjump = WarpJump(username, token)
+        self.v2 = v2
+        if v2:
+            self.ships = Ships(token=token, v2=True)
+            self.systems = Systems(token=token, v2=True)
+            self.agent = Agent(token=token, v2=True)
+            self.markets = Markets(token=token, v2=True)
+            self.trade = Trade(token=token, v2=True)
+            self.navigation = Navigation(token=token, v2=True)
+            self.contracts = Contracts(token=token, v2=True)
+            self.extract = Extract(token=token, v2=True)
+            self.shipyard = Shipyard(token=token, v2=True)
+        else:
+            self.username = username
+            self.account = Account(username, token)
+            self.flightplans = FlightPlans(username, token)
+            self.game = Game(username, token)
+            self.leaderboard = Leaderboard(username, token)
+            self.loans = Loans(username, token)
+            self.locations = Locations(username, token)
+            self.marketplace = Marketplace(username, token)
+            self.purchaseOrders = PurchaseOrders(username, token)
+            self.sellOrders = SellOrders(username, token)
+            self.ships = Ships(username, token)
+            self.structures = Structures(username, token)
+            self.systems = Systems(username, token)
+            self.users = Users(username, token)
+            self.types = Types(username, token)
+            self.warpjump = WarpJump(username, token)
 
     def generate_token(self):
         """Trys to create a new user and return their token
@@ -1099,7 +1112,6 @@ class Agent(Client):
     """
     Get or create your agent details
     """
-    # 
     def get_my_agent_details(self, raw_res=False, throttle_time=10):
         """Get your agent details
 
@@ -1150,7 +1162,7 @@ class Agent(Client):
                                     raw_res=raw_res, throttle_time=throttle_time, params=params)
         return res if res else False
 
-@dataclass
+
 class Markets(Client):
     """Endpoints related to interacting with markets in the system
 
@@ -1177,7 +1189,7 @@ class Markets(Client):
         endpoint = f"my/ships/{ship_symbol}/deploy"
         params = {'tradeSymbol': trade_symbol}
         warning_log = f"Unable to deploy communicatino relay. Ship: {ship_symbol}"
-        res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log,
+        res = self.generic_api_call("POST", endpoint, token=self.token, warning_log=warning_log,
                                     raw_res=raw_res, throttle_time=throttle_time, params=params)
         return res if res else False
 
@@ -1196,7 +1208,7 @@ class Markets(Client):
         """
         endpoint = f"trade/{trade_symbol}/imports"
         warning_log = f"Unable to view trade import for trade: {trade_symbol}"
-        res = self.generic_api_call("POST", endpoint, token=self.token, warning_log=warning_log,
+        res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log,
                                     raw_res=raw_res, throttle_time=throttle_time)
         return res if res else False
 
@@ -1285,7 +1297,7 @@ class Markets(Client):
                                     raw_res=raw_res, throttle_time=throttle_time)
         return res if res else False
 
-@dataclass
+
 class Trade(Client):
     "Buy and Sell cargo"
     def purchase_cargo(self, ship_symbol, trade_symbol, units, raw_res=False, throttle_time=10):
@@ -1348,7 +1360,7 @@ class Trade(Client):
 
             API Link: https://spacetraders.stoplight.io/docs/spacetraders/b3A6NDQ2NjQ0MzA-sell-cargo
         """
-        endpoint = f"my/ships/{ship_symbol}/purchase"
+        endpoint = f"my/ships/{ship_symbol}/sell"
         params = {
             'tradeSymbol': trade_symbol,
             'units': units
@@ -1358,7 +1370,7 @@ class Trade(Client):
                                     raw_res=raw_res, throttle_time=throttle_time, params=params)
         return res if res else False
 
-@dataclass
+
 class Navigation(Client):
 
     def dock_ship(self, ship_symbol, raw_res=False, throttle_time=10):
@@ -1534,7 +1546,7 @@ class Navigation(Client):
                                     raw_res=raw_res, throttle_time=throttle_time)
         return res if res else False
 
-@dataclass
+
 class Contracts(Client):
     """Endpoints to handle contracts"""
     def deliver_contract(self, ship_symbol, contract_id, trade_symbol, units, raw_res=False, throttle_time=10):
@@ -1618,7 +1630,7 @@ class Contracts(Client):
                                     raw_res=raw_res, throttle_time=throttle_time)
         return res if res else False
 
-@dataclass
+
 class Extract(Client):
     """Functions related to extracting resources from a waypoint"""
     def extract_resource(self, ship_symbol, survey = {}, raw_res=False, throttle_time=10):
@@ -1723,7 +1735,6 @@ class Extract(Client):
                                     raw_res=raw_res, throttle_time=throttle_time)
         return res if res else False
 
-@dataclass
 class Shipyard(Client):
     """Function specific to handling shipyard"""
     def purchase_ship(self, listing_id, raw_res=False, throttle_time=10):
@@ -1808,6 +1819,7 @@ if __name__ == "__main__":
     token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWVyIjoiSE1BUyIsImlhdCI6MTY1Mzc4NDEzNSwic3ViIjoiYWdlbnQtdG9rZW4ifQ.ovMpoIza1Xd9f5WfvxtvQTGmHVELXfea9sdm-usgdnFxr_vLxm3YTIFMxZPeptIXd_GVc9rX4m_iEajpu_DZzeO4uDO0w66vY9GNnltdid243v1ePMVacTZg0sVsVLG24SjL5hlNrb-4TUZ8yDJkdg-C4w_1ODbB3YZ1KxrHTt4u4F-zbfuW8JNkAJBa-KBUHhpI3Abl3G699KzNYuj77m5u1XtBtDfHBXHQqTeSlz72jf5nLUSFcN4BGoADCPyZxmUPK4C9NRW_IYUiEqa4i7ETBaoUVl-Ot6bnEJ2ZTciDqj8cdgZHMsMqq68pB_fnw1-hkaECVxkwSK6uK3LmPVD0R8-BtVcxOx0NvDQxKyLoLjKHPxAbOgfk1j_51qJuscPxzosPkimK8wOZGlxuUrXCp6FAwVHzIcDhU-Y0KvLdG-OZpM6nDJZe-2WbjCeFhM8JgDG-Sne2kTY32MfhVYWMeXdNmRuTOJaCCh-dF5WVRs53bGzczsYhYz4tAbbU"
     client = Client("HMAS", token=token, v2=True)
     ship = Ships("", token, v2=True)
+    extract = Shipyard("", token, v2=True)
     print(ship.get_user_ships())
     # username = "JimHawkins"
     # token = "0930cc36-7dc7-4cb1-8823-d8e72594d91e"
