@@ -1521,5 +1521,10 @@
             "credits": -843,
             "units": 1
         }
+    },
+    "dock_ship": {
+        "data": {
+            "status": "DOCKED"
+        }
     }
 }

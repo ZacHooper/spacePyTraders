@@ -589,3 +589,19 @@ def test_trade_sell_cargo(api_v2: Api, mock_endpoints):
     r = api_v2.trade.sell_cargo("HMAS-1", "IRON_ORE", 5)
     assert mock_endpoints.calls[0].request.params == {"tradeSymbol": "IRON_ORE", "units": '5'}
     assert isinstance(r, dict)
+
+#
+# Navigation
+#
+
+@pytest.mark.v2
+def test_navigation_init(api_v2):
+    Navigation(token="12345", v2=True).token == "12345", "Did not set the token attribute correctly"
+    assert isinstance(Navigation(token="12345", v2=True), Navigation)
+    assert isinstance(api_v2.navigation, Navigation)
+
+@pytest.mark.v2
+def test_navigation_dock_ship(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{V2_BASE_URL}my/ships/HMAS-1/dock", json=MOCKS['dock_ship'], status=200)
+    r = api_v2.navigation.dock_ship("HMAS-1")
+    assert isinstance(r, dict)
