@@ -641,5 +641,40 @@ def test_navigation_navigate_ship(api_v2: Api, mock_endpoints):
 @pytest.mark.v2
 def test_navigation_navigate_status(api_v2: Api, mock_endpoints):
     mock_endpoints.add(responses.GET, f"{V2_BASE_URL}my/ships/HMAS-1/navigate", json=MOCKS['navigate_status'], status=200)
-    r = api_v2.navigation.navigate_ship("HMAS-1")
+    r = api_v2.navigation.navigation_status("HMAS-1")
+    assert isinstance(r, dict)
+
+#
+# Contract
+#
+
+@pytest.mark.v2
+def test_contracts_init(api_v2):
+    Contracts(token="12345", v2=True).token == "12345", "Did not set the token attribute correctly"
+    assert isinstance(Contracts(token="12345", v2=True), Contracts)
+    assert isinstance(api_v2.contracts, Contracts)
+
+@pytest.mark.v2
+def test_contracts_deliver_contract(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{V2_BASE_URL}my/ships/HMAS-1/deliver", json=MOCKS['deliver_on_contract'], status=200)
+    r = api_v2.contracts.deliver_contract("HMAS-1", "XYZ", "IRON_ORE", 5)
+    assert mock_endpoints.calls[0].request.params == {"contractId": "XYZ", "tradeSymbol": "IRON_ORE", "units": "5"}
+    assert isinstance(r, dict)
+
+@pytest.mark.v2
+def test_contracts_list_contracts(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{V2_BASE_URL}my/contracts", json=MOCKS['deliver_on_contract'], status=200)
+    r = api_v2.contracts.list_contracts()
+    assert isinstance(r, dict)
+
+@pytest.mark.v2
+def test_contracts_contract_details(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{V2_BASE_URL}my/contracts/XYZ", json=MOCKS['contract_details'], status=200)
+    r = api_v2.contracts.contract_details("XYZ")
+    assert isinstance(r, dict)
+
+@pytest.mark.v2
+def test_contracts_contract_details(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{V2_BASE_URL}my/contracts/XYZ/accept", json=MOCKS['accept_contract'], status=200)
+    r = api_v2.contracts.accept_contract("XYZ")
     assert isinstance(r, dict)
