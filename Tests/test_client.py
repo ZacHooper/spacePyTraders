@@ -717,6 +717,42 @@ def test_extract_survey_cooldown(api_v2: Api, mock_endpoints):
 # System V2 Test
 #
 
+@pytest.mark.v2
+def test_systems_init(api_v2):
+    Systems(token="12345", v2=True).token == "12345", "Did not set the token attribute correctly"
+    assert isinstance(Systems(token="12345", v2=True), Systems)
+    assert isinstance(api_v2.systems, Systems)
+
+@pytest.mark.v2
+def test_systems_chart_waypoint(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{V2_BASE_URL}my/ships/HMAS-1/chart", json=MOCKS['chart_waypoint'], status=200)
+    r = api_v2.systems.chart_waypoint("HMAS-1")
+    assert isinstance(r, dict)
+
+@pytest.mark.v2
+def test_systems_list_systems(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{V2_BASE_URL}systems", json=MOCKS['list_systems'], status=200)
+    r = api_v2.systems.list_systems()
+    assert isinstance(r, dict)
+
+@pytest.mark.v2
+def test_systems_view_system(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{V2_BASE_URL}systems/X1-OE", json=MOCKS['view_system'], status=200)
+    r = api_v2.systems.get_system("X1-OE")
+    assert isinstance(r, dict)
+
+@pytest.mark.v2
+def test_systems_list_waypoints(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{V2_BASE_URL}systems/X1-OE/waypoints", json=MOCKS['list_waypoints'], status=200)
+    r = api_v2.systems.list_waypoints("X1-OE")
+    assert isinstance(r, dict)
+
+@pytest.mark.v2
+def test_systems_view_waypoint(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{V2_BASE_URL}systems/X1-OE/waypoints/X1-OE-PM", json=MOCKS['view_waypoints'], status=200)
+    r = api_v2.systems.view_waypoint("X1-OE", "X1-OE-PM")
+    assert isinstance(r, dict)
+
 #
 # Shipyards
 #

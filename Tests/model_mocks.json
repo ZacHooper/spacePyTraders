@@ -1763,5 +1763,211 @@
                 "expiration": "2022-03-12T02:11:35.618Z"
             }
         }
+    },
+    "chart_waypoint": {
+        "data": {
+            "submitted": [
+                "X1-ZZ",
+                "X1-ZZ-7-EE"
+            ]
+        }
+    },
+    "list_systems": {
+        "data": [
+            {
+                "symbol": "X1-OE",
+                "sector": "X1",
+                "type": "RED_STAR",
+                "x": 0,
+                "y": 0,
+                "waypoints": [
+                    "X1-OE-PM",
+                    "X1-OE-PM01",
+                    "X1-OE-A005",
+                    "X1-OE-25X"
+                ],
+                "factions": [
+                    "COMMERCE_REPUBLIC",
+                    "MINERS_COLLECTIVE",
+                    "SPACERS_GUILD"
+                ],
+                "charted": true,
+                "chartedBy": null
+            }
+        ],
+        "meta": {
+            "total": 0,
+            "page": 0,
+            "limit": 0
+        }
+    },
+    "view_system": {
+        "data": {
+            "symbol": "X1-ZZ",
+            "sector": "X1",
+            "type": "BLUE_STAR",
+            "x": -2,
+            "y": 9,
+            "waypoints": [],
+            "factions": [],
+            "charted": false,
+            "chartedBy": null
+        }
+    },
+    "list_waypoints": {
+        "data": [
+            {
+                "system": "X1-OE",
+                "symbol": "X1-OE-PM",
+                "type": "PLANET",
+                "x": 10,
+                "y": 5,
+                "orbitals": [
+                    "X1-OE-PM01"
+                ],
+                "faction": "COMMERCE_REPUBLIC",
+                "features": [
+                    "MARKETPLACE",
+                    "SHIPYARD"
+                ],
+                "traits": [
+                    "OVERCROWDED",
+                    "HIGH_TECH",
+                    "BUREAUCRATIC",
+                    "TRADING_HUB",
+                    "TEMPERATE"
+                ],
+                "charted": true,
+                "chartedBy": null
+            },
+            {
+                "system": "X1-OE",
+                "symbol": "X1-OE-PM01",
+                "type": "MOON",
+                "x": 10,
+                "y": 5,
+                "orbitals": [],
+                "faction": "COMMERCE_REPUBLIC",
+                "features": [
+                    "MARKETPLACE"
+                ],
+                "traits": [
+                    "WEAK_GRAVITY"
+                ],
+                "charted": true,
+                "chartedBy": null
+            },
+            {
+                "system": "X1-OE",
+                "symbol": "X1-OE-A005",
+                "type": "ASTEROID_FIELD",
+                "x": -1,
+                "y": -29,
+                "orbitals": [],
+                "faction": "MINERS_COLLECTIVE",
+                "features": [],
+                "traits": [
+                    "COMMON_METAL_DEPOSITS"
+                ],
+                "charted": true,
+                "chartedBy": null
+            },
+            {
+                "system": "X1-OE",
+                "symbol": "X1-OE-25X",
+                "type": "JUMP_GATE",
+                "x": -38,
+                "y": 47,
+                "orbitals": [],
+                "faction": "SPACERS_GUILD",
+                "features": [],
+                "traits": [],
+                "charted": true,
+                "chartedBy": null
+            }
+        ],
+        "meta": {
+            "total": 4,
+            "page": 1,
+            "limit": 20
+        }
+    },
+    "view_waypoints": {
+        "data": [
+            {
+                "system": "X1-OE",
+                "symbol": "X1-OE-PM",
+                "type": "PLANET",
+                "x": 10,
+                "y": 5,
+                "orbitals": [
+                    "X1-OE-PM01"
+                ],
+                "faction": "COMMERCE_REPUBLIC",
+                "features": [
+                    "MARKETPLACE",
+                    "SHIPYARD"
+                ],
+                "traits": [
+                    "OVERCROWDED",
+                    "HIGH_TECH",
+                    "BUREAUCRATIC",
+                    "TRADING_HUB",
+                    "TEMPERATE"
+                ],
+                "charted": true,
+                "chartedBy": null
+            },
+            {
+                "system": "X1-OE",
+                "symbol": "X1-OE-PM01",
+                "type": "MOON",
+                "x": 10,
+                "y": 5,
+                "orbitals": [],
+                "faction": "COMMERCE_REPUBLIC",
+                "features": [
+                    "MARKETPLACE"
+                ],
+                "traits": [
+                    "WEAK_GRAVITY"
+                ],
+                "charted": true,
+                "chartedBy": null
+            },
+            {
+                "system": "X1-OE",
+                "symbol": "X1-OE-A005",
+                "type": "ASTEROID_FIELD",
+                "x": -1,
+                "y": -29,
+                "orbitals": [],
+                "faction": "MINERS_COLLECTIVE",
+                "features": [],
+                "traits": [
+                    "COMMON_METAL_DEPOSITS"
+                ],
+                "charted": true,
+                "chartedBy": null
+            },
+            {
+                "system": "X1-OE",
+                "symbol": "X1-OE-25X",
+                "type": "JUMP_GATE",
+                "x": -38,
+                "y": 47,
+                "orbitals": [],
+                "faction": "SPACERS_GUILD",
+                "features": [],
+                "traits": [],
+                "charted": true,
+                "chartedBy": null
+            }
+        ],
+        "meta": {
+            "total": 4,
+            "page": 1,
+            "limit": 20
+        }
     }
 }
