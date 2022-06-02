@@ -1526,5 +1526,59 @@
         "data": {
             "status": "DOCKED"
         }
+    },
+    "orbit_ship": {
+        "data": {
+            "status": "ORBIT"
+        }
+    },
+    "jump_ship": {
+        "data": {
+            "jump": {
+                "shipSymbol": "1D7FDA-1",
+                "destination": "00E0B1"
+            },
+            "cooldown": {
+                "duration": 719,
+                "expiration": "2022-03-12T00:52:56.735Z"
+            }
+        }
+    },
+    "jump_cooldown": {
+        "data": {
+            "cooldown": {
+                "duration": 119,
+                "expiration": "2022-03-12T00:41:29.285Z"
+            }
+        }
+    },
+    "refuel_ship": {
+        "data": {
+            "credits": -1920,
+            "fuel": 800
+        }
+    },
+    "navigate_ship": {
+        "data": {
+            "fuelCost": 38,
+            "navigation": {
+                "shipSymbol": "BA03F2-1",
+                "departure": "X1-OE-PM",
+                "destination": "X1-OE-A005",
+                "durationRemaining": 2279,
+                "arrivedAt": null
+            }
+        }
+    },
+    "navigate_status": {
+        "data": {
+            "navigation": {
+                "shipSymbol": "BA03F2-1",
+                "departure": "X1-OE-PM",
+                "destination": "X1-OE-A005",
+                "durationRemaining": 2279,
+                "arrivedAt": null
+            }
+        }
     }
 }

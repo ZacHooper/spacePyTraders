@@ -605,3 +605,41 @@ def test_navigation_dock_ship(api_v2: Api, mock_endpoints):
     mock_endpoints.add(responses.POST, f"{V2_BASE_URL}my/ships/HMAS-1/dock", json=MOCKS['dock_ship'], status=200)
     r = api_v2.navigation.dock_ship("HMAS-1")
     assert isinstance(r, dict)
+
+@pytest.mark.v2
+def test_navigation_orbit_ship(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{V2_BASE_URL}my/ships/HMAS-1/orbit", json=MOCKS['orbit_ship'], status=200)
+    r = api_v2.navigation.orbit_ship("HMAS-1")
+    assert isinstance(r, dict)
+
+@pytest.mark.v2
+def test_navigation_jump_ship(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{V2_BASE_URL}my/ships/HMAS-1/jump", json=MOCKS['jump_ship'], status=200)
+    r = api_v2.navigation.jump_ship("HMAS-1", "X1-OE-PM")
+    assert mock_endpoints.calls[0].request.params == {"destination": "X1-OE-PM"}
+    assert isinstance(r, dict)
+
+@pytest.mark.v2
+def test_navigation_jump_cooldown(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{V2_BASE_URL}my/ships/HMAS-1/jump", json=MOCKS['jump_cooldown'], status=200)
+    r = api_v2.navigation.jump_cooldown("HMAS-1")
+    assert isinstance(r, dict)
+
+@pytest.mark.v2
+def test_navigation_refuel_ship(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{V2_BASE_URL}my/ships/HMAS-1/refuel", json=MOCKS['refuel_ship'], status=200)
+    r = api_v2.navigation.refuel_ship("HMAS-1")
+    assert isinstance(r, dict)
+
+@pytest.mark.v2
+def test_navigation_navigate_ship(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{V2_BASE_URL}my/ships/HMAS-1/navigate", json=MOCKS['navigate_ship'], status=200)
+    r = api_v2.navigation.navigate_ship("HMAS-1", "X1-OE-PM")
+    assert mock_endpoints.calls[0].request.params == {"destination": "X1-OE-PM"}
+    assert isinstance(r, dict)
+
+@pytest.mark.v2
+def test_navigation_navigate_status(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{V2_BASE_URL}my/ships/HMAS-1/navigate", json=MOCKS['navigate_status'], status=200)
+    r = api_v2.navigation.navigate_ship("HMAS-1")
+    assert isinstance(r, dict)
