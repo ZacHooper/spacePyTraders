@@ -678,3 +678,49 @@ def test_contracts_contract_details(api_v2: Api, mock_endpoints):
     mock_endpoints.add(responses.POST, f"{V2_BASE_URL}my/contracts/XYZ/accept", json=MOCKS['accept_contract'], status=200)
     r = api_v2.contracts.accept_contract("XYZ")
     assert isinstance(r, dict)
+
+#
+# Extract
+#
+
+@pytest.mark.v2
+def test_extract_init(api_v2):
+    Extract(token="12345", v2=True).token == "12345", "Did not set the token attribute correctly"
+    assert isinstance(Extract(token="12345", v2=True), Extract)
+    assert isinstance(api_v2.extract, Extract)
+
+@pytest.mark.v2
+def test_extract_extract_resources(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{V2_BASE_URL}my/ships/HMAS-1/extract", json=MOCKS['extract_resources'], status=200)
+    r = api_v2.extract.extract_resource("HMAS-1")
+    assert isinstance(r, dict)
+
+@pytest.mark.v2
+def test_extract_extract_cooldown(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{V2_BASE_URL}my/ships/HMAS-1/extract", json=MOCKS['extract_cooldown'], status=200)
+    r = api_v2.extract.extraction_cooldown("HMAS-1")
+    assert isinstance(r, dict)
+
+@pytest.mark.v2
+def test_extract_survey_waypoint(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{V2_BASE_URL}my/ships/HMAS-1/survey", json=MOCKS['survey_waypoint'], status=200)
+    r = api_v2.extract.survey_waypoint("HMAS-1")
+    assert isinstance(r, dict)
+
+@pytest.mark.v2
+def test_extract_survey_cooldown(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{V2_BASE_URL}my/ships/HMAS-1/survey", json=MOCKS['survey_cooldown'], status=200)
+    r = api_v2.extract.survey_cooldown("HMAS-1")
+    assert isinstance(r, dict)
+
+#
+# System V2 Test
+#
+
+#
+# Shipyards
+#
+
+#
+# Ships V2 Test
+#
