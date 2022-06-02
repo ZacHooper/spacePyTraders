@@ -1521,5 +1521,530 @@
             "credits": -843,
             "units": 1
         }
+    },
+    "dock_ship": {
+        "data": {
+            "status": "DOCKED"
+        }
+    },
+    "orbit_ship": {
+        "data": {
+            "status": "ORBIT"
+        }
+    },
+    "jump_ship": {
+        "data": {
+            "jump": {
+                "shipSymbol": "1D7FDA-1",
+                "destination": "00E0B1"
+            },
+            "cooldown": {
+                "duration": 719,
+                "expiration": "2022-03-12T00:52:56.735Z"
+            }
+        }
+    },
+    "jump_cooldown": {
+        "data": {
+            "cooldown": {
+                "duration": 119,
+                "expiration": "2022-03-12T00:41:29.285Z"
+            }
+        }
+    },
+    "refuel_ship": {
+        "data": {
+            "credits": -1920,
+            "fuel": 800
+        }
+    },
+    "navigate_ship": {
+        "data": {
+            "fuelCost": 38,
+            "navigation": {
+                "shipSymbol": "BA03F2-1",
+                "departure": "X1-OE-PM",
+                "destination": "X1-OE-A005",
+                "durationRemaining": 2279,
+                "arrivedAt": null
+            }
+        }
+    },
+    "navigate_status": {
+        "data": {
+            "navigation": {
+                "shipSymbol": "BA03F2-1",
+                "departure": "X1-OE-PM",
+                "destination": "X1-OE-A005",
+                "durationRemaining": 2279,
+                "arrivedAt": null
+            }
+        }
+    },
+    "deliver_on_contract": {
+        "data": {
+            "data": {
+                "tradeSymbol": "IRON_ORE",
+                "destination": "X1-OE-PM",
+                "units": 10000,
+                "fulfilled": 500
+            }
+        }
+    },
+    "list_contracts": {
+        "data": [
+            {
+                "id": "cl0hok38t0014ks0jnoy8o5vh",
+                "faction": "COMMERCE_REPUBLIC",
+                "type": "PROCUREMENT",
+                "terms": {
+                    "deadline": "2022-03-11T05:16:59.113Z",
+                    "payment": {
+                        "onAccepted": 20000,
+                        "onFulfilled": 100000
+                    },
+                    "deliver": [
+                        {
+                            "tradeSymbol": "IRON_ORE",
+                            "destination": "X1-OE-PM",
+                            "units": 10000,
+                            "fulfilled": 0
+                        }
+                    ]
+                },
+                "accepted": false,
+                "fulfilled": false,
+                "expiresAt": "2022-03-09T05:16:59.112Z"
+            }
+        ],
+        "meta": {
+            "total": 10,
+            "page": 1,
+            "limit": 10
+        }
+    },
+    "contract_details": {
+        "data": {
+            "id": "cl0hok38t0014ks0jnoy8o5vh",
+            "faction": "COMMERCE_REPUBLIC",
+            "type": "PROCUREMENT",
+            "terms": {
+                "deadline": "2022-03-11T05:16:59.113Z",
+                "payment": {
+                    "onAccepted": 20000,
+                    "onFulfilled": 100000
+                },
+                "deliver": [
+                    {
+                        "tradeSymbol": "IRON_ORE",
+                        "destination": "X1-OE-PM",
+                        "units": 10000,
+                        "fulfilled": 0
+                    }
+                ]
+            },
+            "accepted": false,
+            "fulfilled": false,
+            "expiresAt": "2022-03-09T05:16:59.112Z"
+        }
+    },
+    "accept_contract": {
+        "data": {
+            "id": "cl0hok38t0014ks0jnoy8o5vh",
+            "faction": "COMMERCE_REPUBLIC",
+            "type": "PROCUREMENT",
+            "terms": {
+                "deadline": "2022-03-11T05:16:59.113Z",
+                "payment": {
+                    "onAccepted": 20000,
+                    "onFulfilled": 100000
+                },
+                "deliver": [
+                    {
+                        "tradeSymbol": "IRON_ORE",
+                        "destination": "X1-OE-PM",
+                        "units": 10000,
+                        "fulfilled": 0
+                    }
+                ]
+            },
+            "accepted": false,
+            "fulfilled": false,
+            "expiresAt": "2022-03-09T05:16:59.112Z"
+        }
+    },
+    "extract_resources": {
+        "data": {
+            "extraction": {
+                "shipSymbol": "4B902A-1",
+                "yield": {
+                    "tradeSymbol": "SILICON",
+                    "units": 16
+                }
+            },
+            "cooldown": {
+                "duration": 119,
+                "expiration": "2022-03-12T00:41:29.371Z"
+            }
+        }
+    },
+    "extract_cooldown": {
+        "data": {
+            "cooldown": {
+                "duration": 119,
+                "expiration": "2022-03-12T00:41:29.285Z"
+            }
+        }
+    },
+    "survey_waypoint": {
+        "data": {
+            "cooldown": {
+                "duration": 899,
+                "expiration": "2022-03-12T02:11:35.618Z"
+            },
+            "surveys": [
+                {
+                    "signature": "X1-OE-397C82",
+                    "deposits": [
+                        "SILICON"
+                    ],
+                    "expiration": "2022-03-12T02:00:19.622Z"
+                },
+                {
+                    "signature": "X1-OE-4413F6",
+                    "deposits": [
+                        "ALUMINUM_ORE",
+                        "ALUMINUM_ORE",
+                        "COPPER_ORE",
+                        "IRON_ORE"
+                    ],
+                    "expiration": "2022-03-12T02:20:08.625Z"
+                },
+                {
+                    "signature": "X1-OE-E6480F",
+                    "deposits": [
+                        "ALUMINUM_ORE",
+                        "IRON_ORE",
+                        "QUARTZ",
+                        "SILICON"
+                    ],
+                    "expiration": "2022-03-12T02:18:00.626Z"
+                },
+                {
+                    "signature": "X1-OE-660BE9",
+                    "deposits": [
+                        "ALUMINUM_ORE"
+                    ],
+                    "expiration": "2022-03-12T02:20:45.626Z"
+                },
+                {
+                    "signature": "X1-OE-D64798",
+                    "deposits": [
+                        "COPPER_ORE",
+                        "QUARTZ",
+                        "SILICON"
+                    ],
+                    "expiration": "2022-03-12T02:07:33.626Z"
+                },
+                {
+                    "signature": "X1-OE-F799F3",
+                    "deposits": [
+                        "IRON_ORE"
+                    ],
+                    "expiration": "2022-03-12T02:23:16.627Z"
+                }
+            ]
+        }
+    },
+    "survey_cooldown": {
+        "data": {
+            "cooldown": {
+                "duration": 899,
+                "expiration": "2022-03-12T02:11:35.618Z"
+            }
+        }
+    },
+    "chart_waypoint": {
+        "data": {
+            "submitted": [
+                "X1-ZZ",
+                "X1-ZZ-7-EE"
+            ]
+        }
+    },
+    "list_systems": {
+        "data": [
+            {
+                "symbol": "X1-OE",
+                "sector": "X1",
+                "type": "RED_STAR",
+                "x": 0,
+                "y": 0,
+                "waypoints": [
+                    "X1-OE-PM",
+                    "X1-OE-PM01",
+                    "X1-OE-A005",
+                    "X1-OE-25X"
+                ],
+                "factions": [
+                    "COMMERCE_REPUBLIC",
+                    "MINERS_COLLECTIVE",
+                    "SPACERS_GUILD"
+                ],
+                "charted": true,
+                "chartedBy": null
+            }
+        ],
+        "meta": {
+            "total": 0,
+            "page": 0,
+            "limit": 0
+        }
+    },
+    "view_system": {
+        "data": {
+            "symbol": "X1-ZZ",
+            "sector": "X1",
+            "type": "BLUE_STAR",
+            "x": -2,
+            "y": 9,
+            "waypoints": [],
+            "factions": [],
+            "charted": false,
+            "chartedBy": null
+        }
+    },
+    "list_waypoints": {
+        "data": [
+            {
+                "system": "X1-OE",
+                "symbol": "X1-OE-PM",
+                "type": "PLANET",
+                "x": 10,
+                "y": 5,
+                "orbitals": [
+                    "X1-OE-PM01"
+                ],
+                "faction": "COMMERCE_REPUBLIC",
+                "features": [
+                    "MARKETPLACE",
+                    "SHIPYARD"
+                ],
+                "traits": [
+                    "OVERCROWDED",
+                    "HIGH_TECH",
+                    "BUREAUCRATIC",
+                    "TRADING_HUB",
+                    "TEMPERATE"
+                ],
+                "charted": true,
+                "chartedBy": null
+            },
+            {
+                "system": "X1-OE",
+                "symbol": "X1-OE-PM01",
+                "type": "MOON",
+                "x": 10,
+                "y": 5,
+                "orbitals": [],
+                "faction": "COMMERCE_REPUBLIC",
+                "features": [
+                    "MARKETPLACE"
+                ],
+                "traits": [
+                    "WEAK_GRAVITY"
+                ],
+                "charted": true,
+                "chartedBy": null
+            },
+            {
+                "system": "X1-OE",
+                "symbol": "X1-OE-A005",
+                "type": "ASTEROID_FIELD",
+                "x": -1,
+                "y": -29,
+                "orbitals": [],
+                "faction": "MINERS_COLLECTIVE",
+                "features": [],
+                "traits": [
+                    "COMMON_METAL_DEPOSITS"
+                ],
+                "charted": true,
+                "chartedBy": null
+            },
+            {
+                "system": "X1-OE",
+                "symbol": "X1-OE-25X",
+                "type": "JUMP_GATE",
+                "x": -38,
+                "y": 47,
+                "orbitals": [],
+                "faction": "SPACERS_GUILD",
+                "features": [],
+                "traits": [],
+                "charted": true,
+                "chartedBy": null
+            }
+        ],
+        "meta": {
+            "total": 4,
+            "page": 1,
+            "limit": 20
+        }
+    },
+    "view_waypoints": {
+        "data": [
+            {
+                "system": "X1-OE",
+                "symbol": "X1-OE-PM",
+                "type": "PLANET",
+                "x": 10,
+                "y": 5,
+                "orbitals": [
+                    "X1-OE-PM01"
+                ],
+                "faction": "COMMERCE_REPUBLIC",
+                "features": [
+                    "MARKETPLACE",
+                    "SHIPYARD"
+                ],
+                "traits": [
+                    "OVERCROWDED",
+                    "HIGH_TECH",
+                    "BUREAUCRATIC",
+                    "TRADING_HUB",
+                    "TEMPERATE"
+                ],
+                "charted": true,
+                "chartedBy": null
+            },
+            {
+                "system": "X1-OE",
+                "symbol": "X1-OE-PM01",
+                "type": "MOON",
+                "x": 10,
+                "y": 5,
+                "orbitals": [],
+                "faction": "COMMERCE_REPUBLIC",
+                "features": [
+                    "MARKETPLACE"
+                ],
+                "traits": [
+                    "WEAK_GRAVITY"
+                ],
+                "charted": true,
+                "chartedBy": null
+            },
+            {
+                "system": "X1-OE",
+                "symbol": "X1-OE-A005",
+                "type": "ASTEROID_FIELD",
+                "x": -1,
+                "y": -29,
+                "orbitals": [],
+                "faction": "MINERS_COLLECTIVE",
+                "features": [],
+                "traits": [
+                    "COMMON_METAL_DEPOSITS"
+                ],
+                "charted": true,
+                "chartedBy": null
+            },
+            {
+                "system": "X1-OE",
+                "symbol": "X1-OE-25X",
+                "type": "JUMP_GATE",
+                "x": -38,
+                "y": 47,
+                "orbitals": [],
+                "faction": "SPACERS_GUILD",
+                "features": [],
+                "traits": [],
+                "charted": true,
+                "chartedBy": null
+            }
+        ],
+        "meta": {
+            "total": 4,
+            "page": 1,
+            "limit": 20
+        }
+    },
+    "purchase_ship": {
+        "data": {
+            "ship": {
+                "symbol": "55B261-1",
+                "crew": null,
+                "officers": null,
+                "fuel": 100,
+                "frame": "FRAME_DRONE",
+                "reactor": "REACTOR_SOLAR_I",
+                "engine": "ENGINE_SOLAR_PROPULSION",
+                "modules": [
+                    "MODULE_CARGO_HOLD"
+                ],
+                "mounts": [
+                    "MOUNT_MINING_LASER_I"
+                ],
+                "registration": {
+                    "factionSymbol": "COMMERCE_REPUBLIC",
+                    "agentSymbol": "55B261",
+                    "fee": 100,
+                    "role": "EXCAVATOR"
+                },
+                "integrity": {
+                    "frame": 1,
+                    "reactor": 1,
+                    "engine": 1
+                },
+                "status": "DOCKED",
+                "location": "X1-OE-PM",
+                "cargo": []
+            },
+            "credits": 0
+        }
+    },
+    "list_shipyards": {
+        "data": [
+            {
+                "symbol": "X1-OE-PM",
+                "faction": "COMMERCE_REPUBLIC"
+            }
+        ],
+        "meta": {
+            "total": 10,
+            "page": 1,
+            "limit": 10
+        }
+    },
+    "shipyard_details": {
+        "data": {
+            "symbol": "X1-OE-PM",
+            "faction": "COMMERCE_REPUBLIC"
+        }
+    },
+    "shipyard_listings": {
+        "data": [
+            {
+                "id": "cl0nahta90000aq0jonm1nprl",
+                "waypoint": "X1-OE-PM",
+                "price": 58191,
+                "role": "EXCAVATOR",
+                "frame": "FRAME_DRONE",
+                "reactor": "REACTOR_SOLAR_I",
+                "engine": "ENGINE_SOLAR_PROPULSION",
+                "modules": [
+                    "MODULE_CARGO_HOLD"
+                ],
+                "mounts": [
+                    "MOUNT_MINING_LASER_I"
+                ]
+            }
+        ],
+        "meta": {
+            "total": 10,
+            "page": 1,
+            "limit": 10
+        }
     }
 }
