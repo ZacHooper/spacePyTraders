@@ -757,6 +757,36 @@ def test_systems_view_waypoint(api_v2: Api, mock_endpoints):
 # Shipyards
 #
 
+@pytest.mark.v2
+def test_shipyard_init(api_v2):
+    Shipyard(token="12345", v2=True).token == "12345", "Did not set the token attribute correctly"
+    assert isinstance(Shipyard(token="12345", v2=True), Shipyard)
+    assert isinstance(api_v2.shipyard, Shipyard)
+
+@pytest.mark.v2
+def test_shipyard_purchase_ship(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.POST, f"{V2_BASE_URL}my/ships", json=MOCKS['purchase_ship'], status=200)
+    r = api_v2.shipyard.purchase_ship("XYZ")
+    assert isinstance(r, dict)
+
+@pytest.mark.v2
+def test_shipyard_list_shipyards(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{V2_BASE_URL}systems/X1-OE/shipyards", json=MOCKS['list_shipyards'], status=200)
+    r = api_v2.shipyard.list_shipyards("X1-OE")
+    assert isinstance(r, dict)
+
+@pytest.mark.v2
+def test_shipyard_shipyard_details(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{V2_BASE_URL}systems/X1-OE/shipyards/X1-OE-PM", json=MOCKS['shipyard_details'], status=200)
+    r = api_v2.shipyard.shipyard_details("X1-OE", "X1-OE-PM")
+    assert isinstance(r, dict)
+
+@pytest.mark.v2
+def test_shipyard_shipyard_lsitings(api_v2: Api, mock_endpoints):
+    mock_endpoints.add(responses.GET, f"{V2_BASE_URL}systems/X1-OE/shipyards/X1-OE-PM/ships", json=MOCKS['shipyard_listings'], status=200)
+    r = api_v2.shipyard.shipyard_listings("X1-OE", "X1-OE-PM")
+    assert isinstance(r, dict)
+
 #
 # Ships V2 Test
 #
