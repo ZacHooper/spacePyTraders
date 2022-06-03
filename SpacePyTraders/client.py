@@ -49,11 +49,11 @@ def make_request(method, url, headers, params):
     if method == "GET":
         return requests.get(url, headers=headers, params=params)
     elif method == "POST":
-        return requests.post(url, headers=headers, params=params)
+        return requests.post(url, headers=headers, data=params)
     elif method == "PUT": 
-        return requests.put(url, headers=headers, params=params)
+        return requests.put(url, headers=headers, data=params)
     elif method == "DELETE":
-        return requests.delete(url, headers=headers, params=params)
+        return requests.delete(url, headers=headers, data=params)
 
     # If an Invalid method provided throw exception
     if method not in ["GET", "POST", "PUT", "DELETE"]:
