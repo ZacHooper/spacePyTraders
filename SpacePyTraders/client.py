@@ -5,6 +5,7 @@ import time
 from dataclasses import dataclass, field
 import warnings
 from ratelimit import limits, sleep_and_retry
+import json
 
 
 
@@ -45,6 +46,8 @@ def make_request(method, url, headers, params):
     Exceptions:
         Exception: Invalid method - must be GET, POST, PUT or DELETE
     """
+    # Convert params into proper JSON data
+    params = None if params is None else json.dumps(params)
     # Define the different HTTP methods
     if method == "GET":
         return requests.get(url, headers=headers, params=params)
@@ -91,7 +94,10 @@ class Client ():
         Returns:
             Any: depends on the return from the API but likely JSON
         """
-        headers = {'Authorization': 'Bearer ' + token}
+        headers = {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        }
         # Make the request to the Space Traders API
         for i in range(10):
             try:
