@@ -517,7 +517,7 @@ class Systems (Client):
 
 
 class Api ():
-    def __init__(self, username=None, token=None):
+    def __init__(self, token=None):
         self.token = token
         self.agent = Agent(token=token)
         self.contracts = Contracts(token=token)
