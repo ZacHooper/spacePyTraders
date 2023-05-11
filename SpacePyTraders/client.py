@@ -52,11 +52,11 @@ def make_request(method, url, headers, params):
     if method == "GET":
         return requests.get(url, headers=headers, params=params)
     elif method == "POST":
-        return requests.post(url, headers=headers, data=params)
+        return requests.post(url, headers=headers, data=json.dumps(params))
     elif method == "PUT": 
-        return requests.put(url, headers=headers, data=params)
+        return requests.put(url, headers=headers, data=json.dumps(params))
     elif method == "DELETE":
-        return requests.delete(url, headers=headers, data=params)
+        return requests.delete(url, headers=headers, data=json.dumps(params))
 
     # If an Invalid method provided throw exception
     if method not in ["GET", "POST", "PUT", "DELETE"]:
@@ -146,18 +146,18 @@ class Client ():
 
 
 class Ships (Client):
-    def buy_ship(self, location, type, raw_res=False, throttle_time=10):
+    def buy_ship(self, waypoint_symbol, ship_type, raw_res=False, throttle_time=10):
         """Buys a ship of the type provided and at the location provided. 
         Certain ships can only be bought from specific locations. Use get_available_ships to see full list.
 
         Args:
-            location (str): symbol of the location the ship to buy is
-            type (str): type of ship you want to buy e.g. GR-MK-III
+            - waypoint_symbol (str): symbol of the waypoint the ship to buy is
+            - ship_type (str): type of ship you want to buy e.g. SHIP_MINING_DRONE
         """
         endpoint = f"my/ships"
-        params = {"location": location, "type": type}
-        warning_log = F"Unable to buy ship type: {type}, at location: {location}."
-        logging.debug(f"Buying ship of type: {type} at location: {location}")
+        params = {"waypointSymbol": waypoint_symbol, "shipType": ship_type}
+        warning_log = F"Unable to buy ship type: {ship_type}, at location: {waypoint_symbol}."
+        logging.debug(f"Buying ship of type: {ship_type} at location: {waypoint_symbol}")
         res = self.generic_api_call("POST", endpoint, params=params, token=self.token, warning_log=warning_log)
         return res if res else False
 
@@ -423,7 +423,7 @@ class Systems (Client):
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
         return res if res else False 
 
-    def get_available_ships(self, symbol, raw_res=False, throttle_time=10):
+    def get_available_ships(self, system_symbol:str, waypoint_symbol: str, raw_res=False, throttle_time=10):
         """Get the ships listed for sale in the system defined
 
         Args:
@@ -432,9 +432,9 @@ class Systems (Client):
         Returns:
             dict: A dict containing a list of the available ships for sale
         """
-        endpoint = f"systems/{symbol}/ship-listings"
-        warning_log = F"Unable to get the listed ships in system: {symbol}"
-        logging.info(f"Getting the ships available for sale: {symbol}")
+        endpoint = f"systems/{system_symbol}/waypoints/{waypoint_symbol}/shipyard"
+        warning_log = F"Unable to get the listed ships at waypoint: {waypoint_symbol}"
+        logging.info(f"Getting the ships available for sale in: {waypoint_symbol}")
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
         return res if res else False 
 
@@ -477,7 +477,7 @@ class Systems (Client):
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
         return res if res else False 
     
-    def list_waypoints(self, system_symbol, raw_res=False, throttle_time=10):
+    def list_waypoints(self, system_symbol: str, raw_res=False, throttle_time=10):
         """Fetch all of the waypoints for a given system. 
         System must be charted or a ship must be present to return waypoint details.
 
@@ -493,7 +493,7 @@ class Systems (Client):
         """
         endpoint = f"systems/{system_symbol}/waypoints"
         warning_log = f"Unable to get list of waypoints in system: {system_symbol}"
-        logging.info(f"Unable to get list of waypoints in system: {system_symbol}")
+        logging.info(f"Getting list of waypoints in sytem: {system_symbol}")
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
         return res if res else False
 
@@ -511,7 +511,7 @@ class Systems (Client):
         """
         endpoint = f"systems/{system_symbol}/waypoints/{waypoint_symbol}"
         warning_log = f"Unable to get details of waypoint: {waypoint_symbol}"
-        logging.info(f"Unable to get details of waypoint: {waypoint_symbol}")
+        logging.info(f"Viewing waypoint: {waypoint_symbol}")
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
         return res if res else False
 
@@ -580,7 +580,7 @@ class Agent(Client):
     """
     Get or create your agent details
     """
-    def get_my_agent_details(self, raw_res=False, throttle_time=10):
+    def get_my_agent(self, raw_res=False, throttle_time=10):
         """Get your agent details
 
         https://spacetraders.stoplight.io/docs/spacetraders/b3A6NDQ2NjQ0MTk-my-agent-details
