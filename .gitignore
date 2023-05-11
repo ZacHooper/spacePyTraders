@@ -1,4 +1,5 @@
 # Required locally
+local_testing.py
 /venv
 /__pycache__
 */__pycache__
