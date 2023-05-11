@@ -1,4 +1,6 @@
 # Required locally
+local_testing.py
+temp.json
 /venv
 /__pycache__
 */__pycache__
