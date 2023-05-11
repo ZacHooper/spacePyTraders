@@ -10,7 +10,7 @@ import json
 
 
 URL = "https://api.spacetraders.io/"
-V2_URL = "https://v2-0-0.alpha.spacetraders.io/"
+V2_URL = "https://api.spacetraders.io/v2/"
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(thread)d - %(message)s', level=logging.INFO)
 
 # Custom Exceptions
@@ -47,7 +47,7 @@ def make_request(method, url, headers, params):
         Exception: Invalid method - must be GET, POST, PUT or DELETE
     """
     # Convert params into proper JSON data
-    params = None if params is None else json.dumps(params)
+    # params = None if params is None else json.dumps(params)
     # Define the different HTTP methods
     if method == "GET":
         return requests.get(url, headers=headers, params=params)
@@ -64,7 +64,7 @@ def make_request(method, url, headers, params):
 
 @dataclass
 class Client ():
-    def __init__(self, username=None, token=None, v2=True):
+    def __init__(self, username=None, token=None):
         """The Client class handles all user interaction with the Space Traders API. 
         The class is initiated with the username and token of the user. 
         If the user does not provide a token the 'create_user' method will attempt to fire and create a user with the username provided. 
@@ -77,7 +77,7 @@ class Client ():
         """
         self.username = username
         self.token = token
-        self.url = V2_URL if v2 else URL
+        self.url = V2_URL
 
     def generic_api_call(self, method, endpoint, params=None, token=None, warning_log=None, raw_res=False, throttle_time=10):
         """Function to make consolidate parameters to make an API call to the Space Traders API. 
@@ -529,7 +529,7 @@ class Api ():
         self.systems = Systems(token=token)
         self.trade = Trade(token=token)
 
-    def register_new_agent(self, symbol, faction, args, kwargs):
+    def register_new_agent(self, symbol, faction, *args, **kwargs):
         """Registers a new agent in the Space Traders world
 
         Args:
@@ -550,9 +550,11 @@ class Api ():
             'symbol': symbol,
             'faction': faction
         }
-        res = self.generic_api_call("POST", endpoint, token="", warning_log=warning_log, params=params, **kwargs)
+        res = make_request("POST", V2_URL + endpoint, headers={}, params=params)
+        print(res.text)
         if res.ok:
-            self.token = res.json()['token']
+            data = res.json().get("data")
+            self.token = data.get("token")
             self.ships.token = self.token
             self.systems.token = self.token
             self.agent.token = self.token
@@ -562,6 +564,9 @@ class Api ():
             self.contracts.token = self.token
             self.extract.token = self.token
             self.shipyard.token = self.token
+        else:
+            logging.warning(warning_log)
+            logging.warning(res.text)
         return res if res else False
 
 #
