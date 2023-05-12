@@ -344,6 +344,179 @@ class Ships (Client):
         logging.info(f"Unable to obtain scan cooldown for ship: {shipSymbol}")
         res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log)
         return res if res else False
+    
+    def dock_ship(self, ship_symbol, raw_res=False, throttle_time=10):
+        """Transition your ship from orbit to docked. Consecutive calls to this endpoint will succeed.
+
+        {
+            "data": {
+                "status": "DOCKED"
+            }
+        }
+
+        Args:
+            ship_symbol (str): Symbol of the ship to dock
+            raw_res (bool, optional): Return raw respose insteas of JSON. Defaults to False.
+            throttle_time (int, optional): How long to wait before attempting call again. Defaults to 10.
+
+        Returns:
+            dict: JSON response
+        
+        API Link: https://spacetraders.stoplight.io/docs/spacetraders/b3A6NDQ2NjQ0MjI-dock-ship
+        """
+        endpoint = f"my/ships/{ship_symbol}/dock"
+        warning_log = f"Unable to dock ship: {ship_symbol}"
+        res = self.generic_api_call("POST", endpoint, token=self.token, warning_log=warning_log,
+                                    raw_res=raw_res, throttle_time=throttle_time)
+        return res if res else False
+
+    def orbit_ship(self, ship_symbol, raw_res=False, throttle_time=10):
+        """Transition your ship from docked into orbit. 
+        Ships are placed into orbit by default when arriving at a destination. 
+        Consecutive calls to this endpoint will continue to return a 200 response status.
+
+        {
+            "data": {
+                "status": "ORBIT"
+            }
+        }
+
+        Args:
+            ship_symbol (str): Symbol of the ship to dock
+            raw_res (bool, optional): Return raw respose insteas of JSON. Defaults to False.
+            throttle_time (int, optional): How long to wait before attempting call again. Defaults to 10.
+
+        Returns:
+            dict: JSON response
+        
+        API Link: https://spacetraders.stoplight.io/docs/spacetraders/b3A6NDQ2NjQ0MjI-dock-ship
+        """
+        endpoint = f"my/ships/{ship_symbol}/orbit"
+        warning_log = f"Unable to orbit ship: {ship_symbol}"
+        res = self.generic_api_call("POST", endpoint, token=self.token, warning_log=warning_log,
+                                    raw_res=raw_res, throttle_time=throttle_time)
+        return res if res else False
+    
+    def jump_ship(self, ship_symbol, destination, raw_res=False, throttle_time=10):
+        """Navigate a ship between systems
+
+        Args:
+            ship_symbol (str): Symbol of ship to make a jump
+            destination (str): System to jump to
+            raw_res (bool, optional): Return raw respose insteas of JSON. Defaults to False.
+            throttle_time (int, optional): How long to wait before attempting call again. Defaults to 10.
+
+        Returns:
+            dict: JSON response
+
+        API Link: https://spacetraders.stoplight.io/docs/spacetraders/b3A6NDQ2NjQ0MjY-jump-ship
+        """
+        endpoint = f"my/ships/{ship_symbol}/jump"
+        params = {'destination': destination}
+        warning_log = f"Unable to jump ship: {ship_symbol} to System: {destination}"
+        res = self.generic_api_call("POST", endpoint, token=self.token, warning_log=warning_log,
+                                    raw_res=raw_res, throttle_time=throttle_time, params=params)
+        return res if res else False
+
+    def jump_cooldown(self, ship_symbol, raw_res=False, throttle_time=10):
+        """See how long your ship has on cooldown
+
+        Args:
+            ship_symbol (str): Symbol of the ship to check it's cooldown for
+            raw_res (bool, optional): Return raw respose insteas of JSON. Defaults to False.
+            throttle_time (int, optional): How long to wait before attempting call again. Defaults to 10.
+
+        Returns:
+            dict: JSON response
+
+            API Link: https://spacetraders.stoplight.io/docs/spacetraders/b3A6NDUyMzY2MDg-jump-cooldown
+        """
+        endpoint = f"my/ships/{ship_symbol}/jump"
+        warning_log = f"Unable to jump ship: {ship_symbol}"
+        res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log,
+                                    raw_res=raw_res, throttle_time=throttle_time)
+        return res if res else False
+    
+    def refuel_ship(self, ship_symbol, raw_res=False, throttle_time=10):
+        """Fully refuel a ship
+
+        Response example:
+        {
+            "data": {
+                "credits": -1920,
+                "fuel": 800
+            }
+        }
+
+        Args:
+            ship_symbol (str): Symbol of ship to refuel
+            raw_res (bool, optional): Return raw respose insteas of JSON. Defaults to False.
+            throttle_time (int, optional): How long to wait before attempting call again. Defaults to 10.
+
+        Returns:
+            dict: JSON response
+
+            API Link: https://spacetraders.stoplight.io/docs/spacetraders/b3A6NDQ2NjQ0Mjg-refuel-ship
+        """
+        endpoint = f"my/ships/{ship_symbol}/refuel"
+        warning_log = f"Unable to refuel ship: {ship_symbol}"
+        res = self.generic_api_call("POST", endpoint, token=self.token, warning_log=warning_log,
+                                    raw_res=raw_res, throttle_time=throttle_time)
+        return res if res else False
+
+    def navigate_ship(self, ship_symbol, waypoint_symbol, raw_res=False, throttle_time=10):
+        """Fly a ship from one place to another.
+
+        Example response:
+        {
+            "data": {
+                "fuelCost": 38,
+                "navigation": {
+                "shipSymbol": "BA03F2-1",
+                "departure": "X1-OE-PM",
+                "destination": "X1-OE-A005",
+                "durationRemaining": 2279,
+                "arrivedAt": null
+                }
+            }
+        }
+
+        Args:
+            ship_symbol (str): Symbol of ship to fly
+            waypoint_symbol (str): Symbol of destination to fly to
+            raw_res (bool, optional): Return raw respose insteas of JSON. Defaults to False.
+            throttle_time (int, optional): How long to wait before attempting call again. Defaults to 10.
+
+        Returns:
+            dict: JSON response
+
+            API Link: https://spacetraders.stoplight.io/docs/spacetraders/b3A6NDQ5MzQ3MzU-navigate-ship
+        """
+        endpoint = f"my/ships/{ship_symbol}/navigate"
+        params = {'waypointSymbol': waypoint_symbol}
+        warning_log = f"Unable to navigate ship: {ship_symbol} to destination: {waypoint_symbol}"
+        res = self.generic_api_call("POST", endpoint, token=self.token, warning_log=warning_log,
+                                    raw_res=raw_res, throttle_time=throttle_time, params=params)
+        return res if res else False
+
+    def navigation_status(self, ship_symbol, raw_res=False, throttle_time=10):
+        """Checks to see the status of a ships navigation path
+
+        Args:
+            ship_symbol (str): Symbol of ship to check navigation status for
+            raw_res (bool, optional): Return raw respose insteas of JSON. Defaults to False.
+            throttle_time (int, optional): How long to wait before attempting call again. Defaults to 10.
+
+        Returns:
+            dict: JSON response
+        
+            API Link: https://spacetraders.stoplight.io/docs/spacetraders/b3A6NDQ5MzQ3MzY-navigation-status
+        """
+        endpoint = f"my/ships/{ship_symbol}/navigate"
+        warning_log = f"Unable to get navigation status for ship: {ship_symbol}"
+        res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log,
+                                    raw_res=raw_res, throttle_time=throttle_time)
+        return res if res else False
 class Systems (Client):
     # Get system info
     def get_systems(self, raw_res=False, throttle_time=10):
@@ -846,178 +1019,7 @@ class Trade(Client):
 
 class Navigation(Client):
 
-    def dock_ship(self, ship_symbol, raw_res=False, throttle_time=10):
-        """Transition your ship from orbit to docked. Consecutive calls to this endpoint will succeed.
-
-        {
-            "data": {
-                "status": "DOCKED"
-            }
-        }
-
-        Args:
-            ship_symbol (str): Symbol of the ship to dock
-            raw_res (bool, optional): Return raw respose insteas of JSON. Defaults to False.
-            throttle_time (int, optional): How long to wait before attempting call again. Defaults to 10.
-
-        Returns:
-            dict: JSON response
-        
-        API Link: https://spacetraders.stoplight.io/docs/spacetraders/b3A6NDQ2NjQ0MjI-dock-ship
-        """
-        endpoint = f"my/ships/{ship_symbol}/dock"
-        warning_log = f"Unable to dock ship: {ship_symbol}"
-        res = self.generic_api_call("POST", endpoint, token=self.token, warning_log=warning_log,
-                                    raw_res=raw_res, throttle_time=throttle_time)
-        return res if res else False
-
-    def orbit_ship(self, ship_symbol, raw_res=False, throttle_time=10):
-        """Transition your ship from docked into orbit. 
-        Ships are placed into orbit by default when arriving at a destination. 
-        Consecutive calls to this endpoint will continue to return a 200 response status.
-
-        {
-            "data": {
-                "status": "ORBIT"
-            }
-        }
-
-        Args:
-            ship_symbol (str): Symbol of the ship to dock
-            raw_res (bool, optional): Return raw respose insteas of JSON. Defaults to False.
-            throttle_time (int, optional): How long to wait before attempting call again. Defaults to 10.
-
-        Returns:
-            dict: JSON response
-        
-        API Link: https://spacetraders.stoplight.io/docs/spacetraders/b3A6NDQ2NjQ0MjI-dock-ship
-        """
-        endpoint = f"my/ships/{ship_symbol}/orbit"
-        warning_log = f"Unable to orbit ship: {ship_symbol}"
-        res = self.generic_api_call("POST", endpoint, token=self.token, warning_log=warning_log,
-                                    raw_res=raw_res, throttle_time=throttle_time)
-        return res if res else False
     
-    def jump_ship(self, ship_symbol, destination, raw_res=False, throttle_time=10):
-        """Navigate a ship between systems
-
-        Args:
-            ship_symbol (str): Symbol of ship to make a jump
-            destination (str): System to jump to
-            raw_res (bool, optional): Return raw respose insteas of JSON. Defaults to False.
-            throttle_time (int, optional): How long to wait before attempting call again. Defaults to 10.
-
-        Returns:
-            dict: JSON response
-
-        API Link: https://spacetraders.stoplight.io/docs/spacetraders/b3A6NDQ2NjQ0MjY-jump-ship
-        """
-        endpoint = f"my/ships/{ship_symbol}/jump"
-        params = {'destination': destination}
-        warning_log = f"Unable to jump ship: {ship_symbol} to System: {destination}"
-        res = self.generic_api_call("POST", endpoint, token=self.token, warning_log=warning_log,
-                                    raw_res=raw_res, throttle_time=throttle_time, params=params)
-        return res if res else False
-
-    def jump_cooldown(self, ship_symbol, raw_res=False, throttle_time=10):
-        """See how long your ship has on cooldown
-
-        Args:
-            ship_symbol (str): Symbol of the ship to check it's cooldown for
-            raw_res (bool, optional): Return raw respose insteas of JSON. Defaults to False.
-            throttle_time (int, optional): How long to wait before attempting call again. Defaults to 10.
-
-        Returns:
-            dict: JSON response
-
-            API Link: https://spacetraders.stoplight.io/docs/spacetraders/b3A6NDUyMzY2MDg-jump-cooldown
-        """
-        endpoint = f"my/ships/{ship_symbol}/jump"
-        warning_log = f"Unable to jump ship: {ship_symbol}"
-        res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log,
-                                    raw_res=raw_res, throttle_time=throttle_time)
-        return res if res else False
-    
-    def refuel_ship(self, ship_symbol, raw_res=False, throttle_time=10):
-        """Fully refuel a ship
-
-        Response example:
-        {
-            "data": {
-                "credits": -1920,
-                "fuel": 800
-            }
-        }
-
-        Args:
-            ship_symbol (str): Symbol of ship to refuel
-            raw_res (bool, optional): Return raw respose insteas of JSON. Defaults to False.
-            throttle_time (int, optional): How long to wait before attempting call again. Defaults to 10.
-
-        Returns:
-            dict: JSON response
-
-            API Link: https://spacetraders.stoplight.io/docs/spacetraders/b3A6NDQ2NjQ0Mjg-refuel-ship
-        """
-        endpoint = f"my/ships/{ship_symbol}/refuel"
-        warning_log = f"Unable to refuel ship: {ship_symbol}"
-        res = self.generic_api_call("POST", endpoint, token=self.token, warning_log=warning_log,
-                                    raw_res=raw_res, throttle_time=throttle_time)
-        return res if res else False
-
-    def navigate_ship(self, ship_symbol, destination, raw_res=False, throttle_time=10):
-        """Fly a ship from one place to another.
-
-        Example response:
-        {
-            "data": {
-                "fuelCost": 38,
-                "navigation": {
-                "shipSymbol": "BA03F2-1",
-                "departure": "X1-OE-PM",
-                "destination": "X1-OE-A005",
-                "durationRemaining": 2279,
-                "arrivedAt": null
-                }
-            }
-        }
-
-        Args:
-            ship_symbol (str): Symbol of ship to fly
-            destination (str): Symbol of destination to fly to
-            raw_res (bool, optional): Return raw respose insteas of JSON. Defaults to False.
-            throttle_time (int, optional): How long to wait before attempting call again. Defaults to 10.
-
-        Returns:
-            dict: JSON response
-
-            API Link: https://spacetraders.stoplight.io/docs/spacetraders/b3A6NDQ5MzQ3MzU-navigate-ship
-        """
-        endpoint = f"my/ships/{ship_symbol}/navigate"
-        params = {'destination': destination}
-        warning_log = f"Unable to navigate ship: {ship_symbol} to destination: {destination}"
-        res = self.generic_api_call("POST", endpoint, token=self.token, warning_log=warning_log,
-                                    raw_res=raw_res, throttle_time=throttle_time, params=params)
-        return res if res else False
-
-    def navigation_status(self, ship_symbol, raw_res=False, throttle_time=10):
-        """Checks to see the status of a ships navigation path
-
-        Args:
-            ship_symbol (str): Symbol of ship to check navigation status for
-            raw_res (bool, optional): Return raw respose insteas of JSON. Defaults to False.
-            throttle_time (int, optional): How long to wait before attempting call again. Defaults to 10.
-
-        Returns:
-            dict: JSON response
-        
-            API Link: https://spacetraders.stoplight.io/docs/spacetraders/b3A6NDQ5MzQ3MzY-navigation-status
-        """
-        endpoint = f"my/ships/{ship_symbol}/navigate"
-        warning_log = f"Unable to get navigation status for ship: {ship_symbol}"
-        res = self.generic_api_call("GET", endpoint, token=self.token, warning_log=warning_log,
-                                    raw_res=raw_res, throttle_time=throttle_time)
-        return res if res else False
 
 
 class Contracts(Client):
