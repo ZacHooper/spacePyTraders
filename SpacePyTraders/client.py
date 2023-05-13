@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 import warnings
 from ratelimit import limits, sleep_and_retry
 import json
-
+from SpacePyTraders.exceptions import *
 
 URL = "https://api.spacetraders.io/"
 V2_URL = "https://api.spacetraders.io/v2/"
@@ -68,6 +68,26 @@ def make_request(method, url, headers, params):
         logging.exception(f"Invalid method provided: {method}")
 
 
+def which_exception(error: dict) -> Exception:
+    """Checks the error returned by the Space Traders API and returns the appropriate exception
+
+    Args:
+        error (dict): The error returned by the Space Traders API
+
+    Returns:
+        Exception: The appropriate exception
+    """
+    match error["code"]:
+        case 4109:
+            return RegisterAgentExistsError(error)
+        case 429:
+            return ThrottleException(data=error)
+        case 5000:
+            return ServerException(data=error)
+        case _:
+            return Exception(error)
+
+
 @dataclass
 class Client:
     def __init__(self, username=None, token=None):
@@ -127,20 +147,14 @@ class Client:
                         + str(error)
                     )
 
-                    # If throttling error
-                    if code == 42901:
-                        raise ThrottleException(error)
-
-                    # Retry if server error
-                    if code == 500 or code == 409:
-                        raise ServerException(error)
+                    raise which_exception(error["error"])
 
                     # Unknown handling for error
                     logging.warning(warning_log)
                     logging.exception(
                         f"Something broke the script. Code: {code} Error Message: {message} "
                     )
-                    return False
+                    return error
                 # If successful return r
                 if raw_res:
                     return r
@@ -156,9 +170,6 @@ class Client:
                 logging.info(se.message)
                 time.sleep(throttle_time)
                 continue
-
-            except Exception as e:
-                return e
 
         # If failed to make call after 10 tries fail it
         raise (TooManyTriesException)
@@ -936,6 +947,7 @@ class Agent(Client):
             throttle_time=throttle_time,
             params=params,
         )
+
         return res if res else False
 
 
