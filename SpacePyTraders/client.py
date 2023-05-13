@@ -15,25 +15,6 @@ logging.basicConfig(
 )
 
 
-# Custom Exceptions
-# ------------------------------------------
-@dataclass
-class ThrottleException(Exception):
-    data: field(default_factory=dict)
-    message: str = "Throttle limit was reached. Pausing to wait for throttle"
-
-
-@dataclass
-class ServerException(Exception):
-    data: field(default_factory=dict)
-    message: str = "Server Error. Pausing before trying again"
-
-
-@dataclass
-class TooManyTriesException(Exception):
-    message: str = "Has failed too many times to make API call. "
-
-
 @sleep_and_retry
 @limits(calls=2, period=1.2)
 def make_request(method, url, headers, params):
@@ -66,26 +47,6 @@ def make_request(method, url, headers, params):
     # If an Invalid method provided throw exception
     if method not in ["GET", "POST", "PUT", "DELETE"]:
         logging.exception(f"Invalid method provided: {method}")
-
-
-def which_exception(error: dict) -> Exception:
-    """Checks the error returned by the Space Traders API and returns the appropriate exception
-
-    Args:
-        error (dict): The error returned by the Space Traders API
-
-    Returns:
-        Exception: The appropriate exception
-    """
-    match error["code"]:
-        case 4109:
-            return RegisterAgentExistsError(error)
-        case 429:
-            return ThrottleException(data=error)
-        case 5000:
-            return ServerException(data=error)
-        case _:
-            return Exception(error)
 
 
 @dataclass
@@ -1284,7 +1245,7 @@ class Contracts(Client):
         )
         return res if res else False
 
-    def contract_details(self, contract_id, raw_res=False, throttle_time=10):
+    def get_contract(self, contract_id, raw_res=False, throttle_time=10):
         """Get the details of a contract by ID.
 
         Args:
@@ -1322,6 +1283,31 @@ class Contracts(Client):
         """
         endpoint = f"my/contracts/{contract_id}/accept"
         warning_log = f"Unable to accept contract: {contract_id}"
+        res = self.generic_api_call(
+            "POST",
+            endpoint,
+            token=self.token,
+            warning_log=warning_log,
+            raw_res=raw_res,
+            throttle_time=throttle_time,
+        )
+        return res if res else False
+
+    def fulfill_contract(self, contract_id, raw_res=False, throttle_time=10):
+        """Fulfill a contract.
+
+        Args:
+            contract_id (str): ID of contract to fulfill
+            raw_res (bool, optional): Return raw respose insteas of JSON. Defaults to False.
+            throttle_time (int, optional): How long to wait before attempting call again. Defaults to 10.
+
+        Returns:
+            dict: JSON response
+
+            API Link: https://spacetraders.stoplight.io/docs/spacetraders/d4ff41c101af0-fulfill-contract
+        """
+        endpoint = f"my/contracts/{contract_id}/fulfill"
+        warning_log = f"Unable to fulfill contract: {contract_id}"
         res = self.generic_api_call(
             "POST",
             endpoint,

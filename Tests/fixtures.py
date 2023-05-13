@@ -4,6 +4,8 @@ import responses
 import json
 from typing import Generator
 
+BASE_URL = "https://api.spacetraders.io/v2/"
+
 
 @pytest.fixture
 def api() -> Api:

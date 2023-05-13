@@ -1680,12 +1680,10 @@
     },
     "deliver_on_contract": {
         "data": {
-            "data": {
-                "tradeSymbol": "IRON_ORE",
-                "destination": "X1-OE-PM",
-                "units": 10000,
-                "fulfilled": 500
-            }
+            "tradeSymbol": "IRON_ORE",
+            "destination": "X1-OE-PM",
+            "units": 10000,
+            "fulfilled": 500
         }
     },
     "list_contracts": {
@@ -1720,7 +1718,7 @@
             "limit": 10
         }
     },
-    "contract_details": {
+    "get_contract": {
         "data": {
             "id": "cl0hok38t0014ks0jnoy8o5vh",
             "faction": "COMMERCE_REPUBLIC",
@@ -1768,6 +1766,38 @@
             "accepted": false,
             "fulfilled": false,
             "expiresAt": "2022-03-09T05:16:59.112Z"
+        }
+    },
+    "fulfill_contract": {
+        "data": [
+            {
+                "id": "clhj3pa7x52g4s60dnuzuphuf",
+                "factionSymbol": "QUANTUM",
+                "type": "PROCUREMENT",
+                "terms": {
+                    "deadline": "2023-05-18T12:23:41.564Z",
+                    "payment": {
+                        "onAccepted": 151840,
+                        "onFulfilled": 607360
+                    },
+                    "deliver": [
+                        {
+                            "tradeSymbol": "ALUMINUM_ORE",
+                            "destinationSymbol": "X1-SN36-26080C",
+                            "unitsRequired": 14600,
+                            "unitsFulfilled": 229
+                        }
+                    ]
+                },
+                "accepted": true,
+                "fulfilled": false,
+                "expiration": "2023-05-14T12:23:41.564Z"
+            }
+        ],
+        "meta": {
+            "total": 1,
+            "page": 1,
+            "limit": 10
         }
     },
     "extract_resources": {
