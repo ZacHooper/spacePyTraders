@@ -30,22 +30,6 @@ def test_api_v2(api_v2):
     assert isinstance(api_v2, Api)
 
 #
-# Agent Class Related Tests
-#
-
-@pytest.mark.v2
-def test_agent_init(api_v2):
-    assert isinstance(Agent(token="12345"), Agent)
-    assert isinstance(api_v2.agent, Agent)
-    assert Agent(token="12345").token == "12345", "Did not set the token attribute correctly"
-
-@pytest.mark.v2
-def test_agent_get_agent_details(api_v2: Api, mock_endpoints):
-    mock_endpoints.add(responses.GET, f"{V2_BASE_URL}my/agent", json=MOCKS['agent_details'], status=200)
-    r = api_v2.agent.get_my_agent_details()
-    assert isinstance(r, dict)
-
-#
 # Markets related tests
 #
 
