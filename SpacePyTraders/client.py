@@ -7,6 +7,7 @@ import warnings
 from ratelimit import limits, sleep_and_retry
 import json
 from SpacePyTraders.exceptions import *
+from typing import Union
 
 URL = "https://api.spacetraders.io/"
 V2_URL = "https://api.spacetraders.io/v2/"
@@ -16,15 +17,17 @@ logging.basicConfig(
 
 
 @sleep_and_retry
-@limits(calls=2, period=1.2)
-def make_request(method, url, headers, params):
+@limits(calls=2, period=1)
+def make_request(
+    method: str, url: str, headers: dict, params: Union[dict, None] = None
+) -> requests.Response:
     """Checks which method to use and then makes the actual request to Space Traders API
 
     Args:
         method (str): The HTTP method to use
         url (str): The URL of the request
         headers (dict): the request headers holding the Auth
-        params (dict): parameters of the request
+        params (dict, optional): Any params required for the request. Defaults to None.
 
     Returns:
         Request: Returns the request
@@ -33,20 +36,23 @@ def make_request(method, url, headers, params):
         Exception: Invalid method - must be GET, POST, PUT or DELETE
     """
     # Convert params into proper JSON data
-    params = None if params is None else json.dumps(params)
+    params_json = None if params is None else json.dumps(params)
     # Define the different HTTP methods
     if method == "GET":
-        return requests.get(url, headers=headers, params=params)
+        return requests.get(url, headers=headers, params=params_json)
     elif method == "POST":
-        return requests.post(url, headers=headers, data=params)
+        return requests.post(url, headers=headers, data=params_json)
     elif method == "PUT":
-        return requests.put(url, headers=headers, data=params)
+        return requests.put(url, headers=headers, data=params_json)
     elif method == "DELETE":
-        return requests.delete(url, headers=headers, data=params)
+        return requests.delete(url, headers=headers, data=params_json)
 
     # If an Invalid method provided throw exception
     if method not in ["GET", "POST", "PUT", "DELETE"]:
         logging.exception(f"Invalid method provided: {method}")
+        raise Exception(f"Invalid method provided: {method}")
+
+    raise Exception("Invalid method provided")
 
 
 @dataclass
@@ -68,14 +74,14 @@ class Client:
 
     def generic_api_call(
         self,
-        method,
-        endpoint,
-        params=None,
-        token=None,
-        warning_log=None,
-        raw_res=False,
-        throttle_time=10,
-    ):
+        method: str,
+        endpoint: str,
+        params: dict = None,
+        token: str = None,
+        warning_log: str = None,
+        raw_res: bool = False,
+        throttle_time: int = 10,
+    ) -> Union[dict, requests.Response]:
         """Function to make consolidate parameters to make an API call to the Space Traders API.
         Handles any throttling or error returned by the Space Traders API.
 
@@ -515,8 +521,12 @@ class Ships(Client):
         return res if res else False
 
     def navigate_ship(
-        self, ship_symbol, waypoint_symbol, raw_res=False, throttle_time=10
-    ):
+        self,
+        ship_symbol: str,
+        waypoint_symbol: str,
+        raw_res: bool = False,
+        throttle_time: int = 10,
+    ) -> dict:
         """Fly a ship from one place to another.
 
         Example response:
@@ -558,7 +568,7 @@ class Ships(Client):
             throttle_time=throttle_time,
             params=params,
         )
-        return res if res else False
+        return res
 
     def navigation_status(self, ship_symbol, raw_res=False, throttle_time=10):
         """Checks to see the status of a ships navigation path
