@@ -1493,14 +1493,4 @@ class Shipyard(Client):
 
 
 if __name__ == "__main__":
-    token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWVyIjoiSE1BUyIsImlhdCI6MTY1Mzc4NDEzNSwic3ViIjoiYWdlbnQtdG9rZW4ifQ.ovMpoIza1Xd9f5WfvxtvQTGmHVELXfea9sdm-usgdnFxr_vLxm3YTIFMxZPeptIXd_GVc9rX4m_iEajpu_DZzeO4uDO0w66vY9GNnltdid243v1ePMVacTZg0sVsVLG24SjL5hlNrb-4TUZ8yDJkdg-C4w_1ODbB3YZ1KxrHTt4u4F-zbfuW8JNkAJBa-KBUHhpI3Abl3G699KzNYuj77m5u1XtBtDfHBXHQqTeSlz72jf5nLUSFcN4BGoADCPyZxmUPK4C9NRW_IYUiEqa4i7ETBaoUVl-Ot6bnEJ2ZTciDqj8cdgZHMsMqq68pB_fnw1-hkaECVxkwSK6uK3LmPVD0R8-BtVcxOx0NvDQxKyLoLjKHPxAbOgfk1j_51qJuscPxzosPkimK8wOZGlxuUrXCp6FAwVHzIcDhU-Y0KvLdG-OZpM6nDJZe-2WbjCeFhM8JgDG-Sne2kTY32MfhVYWMeXdNmRuTOJaCCh-dF5WVRs53bGzczsYhYz4tAbbU"
-    client = Client("HMAS", token=token, v2=True)
-    ship = Ships("", token, v2=True)
-    extract = Shipyard("", token, v2=True)
-    print(ship.get_user_ships())
-    # username = "JimHawkins"
-    # token = "0930cc36-7dc7-4cb1-8823-d8e72594d91e"
-
-    # api = Api(username, token)
-
-    # print(api.loans.get_loans_available())
+    pass

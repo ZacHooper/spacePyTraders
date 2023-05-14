@@ -166,7 +166,9 @@ def test_trade_sell_cargo(api_v2: Api, mock_endpoints):
 
 @pytest.mark.v2
 def test_extract_init(api_v2):
-    Extract(token="12345").token == "12345", "Did not set the token attribute correctly"
+    assert (
+        Extract(token="12345").token == "12345"
+    ), "Did not set the token attribute correctly"
     assert isinstance(Extract(token="12345"), Extract)
     assert isinstance(api_v2.extract, Extract)
 
@@ -231,9 +233,9 @@ def test_extract_survey_cooldown(api_v2: Api, mock_endpoints):
 
 @pytest.mark.v2
 def test_shipyard_init(api_v2):
-    Shipyard(
-        token="12345"
-    ).token == "12345", "Did not set the token attribute correctly"
+    assert (
+        Shipyard(token="12345").token == "12345"
+    ), "Did not set the token attribute correctly"
     assert isinstance(Shipyard(token="12345"), Shipyard)
     assert isinstance(api_v2.shipyard, Shipyard)
 

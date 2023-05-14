@@ -1,4 +1,5 @@
 # Required locally
+/.vscode
 local_testing.py
 temp.json
 /venv
