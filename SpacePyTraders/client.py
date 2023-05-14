@@ -159,7 +159,7 @@ class Ships(Client):
         return res if res else False
 
     # Get Ship
-    def get_ship(self, shipId, raw_res=False, throttle_time=10):
+    def get_ship(self, shipId, raw_res=False, throttle_time=10) -> dict:
         """Get info on the ship
 
         Args:
@@ -1118,7 +1118,7 @@ class Trade(Client):
             API Link: https://spacetraders.stoplight.io/docs/spacetraders/b3A6NDQ2NjQ0Mjc-purchase-cargo
         """
         endpoint = f"my/ships/{ship_symbol}/purchase"
-        params = {"tradeSymbol": trade_symbol, "units": units}
+        params = {"symbol": trade_symbol, "units": units}
         warning_log = f"Unable to get purchase {units} units of good: {trade_symbol} onto ship: {ship_symbol}"
         res = self.generic_api_call(
             "POST",
