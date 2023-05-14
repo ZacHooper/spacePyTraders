@@ -92,6 +92,14 @@ class ContractFulfilledError(Exception):
         super().__init__(self.message)
 
 
+class MarketNotFoundError(Exception):
+    """Is raised when the API returns the error code 4603"""
+
+    def __init__(self, message):
+        self.message = message
+        super().__init__(self.message)
+
+
 def which_exception(error: dict) -> Exception:
     """Checks the error returned by the Space Traders API and returns the appropriate exception
 
@@ -122,6 +130,8 @@ def which_exception(error: dict) -> Exception:
             return ShipDeliverTermsError(error)
         case 4510:
             return ShipDeliverInvalidLocationError(error)
+        case 4603:
+            return MarketNotFoundError(error)
         case 5000:
             return ServerException(error)
         case _:
