@@ -16,8 +16,8 @@ logging.basicConfig(
 )
 
 
+# @limits(calls=2, period=1, )
 @sleep_and_retry
-@limits(calls=2, period=1)
 def make_request(
     method: str, url: str, headers: dict, params: Union[dict, None] = None
 ) -> requests.Response:
@@ -39,25 +39,25 @@ def make_request(
     params_json = None if params is None else json.dumps(params)
     # Define the different HTTP methods
     if method == "GET":
-        return requests.get(url, headers=headers, params=params_json)
+        r = requests.get(url, headers=headers, params=params_json)
     elif method == "POST":
-        return requests.post(url, headers=headers, data=params_json)
+        r = requests.post(url, headers=headers, data=params_json)
     elif method == "PUT":
-        return requests.put(url, headers=headers, data=params_json)
+        r = requests.put(url, headers=headers, data=params_json)
     elif method == "DELETE":
-        return requests.delete(url, headers=headers, data=params_json)
-
-    # If an Invalid method provided throw exception
-    if method not in ["GET", "POST", "PUT", "DELETE"]:
-        logging.exception(f"Invalid method provided: {method}")
+        r = requests.delete(url, headers=headers, data=params_json)
+    else:
         raise Exception(f"Invalid method provided: {method}")
 
-    raise Exception("Invalid method provided")
+    if r is None:
+        raise Exception("No response returned")
+
+    return r
 
 
 @dataclass
 class Client:
-    def __init__(self, username=None, token=None):
+    def __init__(self, token: Union[str, None] = None):
         """The Client class handles all user interaction with the Space Traders API.
         The class is initiated with the username and token of the user.
         If the user does not provide a token the 'create_user' method will attempt to fire and create a user with the username provided.
@@ -68,20 +68,18 @@ class Client:
             token (str): The personal auth token for the user. If None will invoke the 'create_user' method
             v2 (bool): Determine if you want to use the new V2 API or V1
         """
-        self.username = username
-        self.token = token
-        self.url = V2_URL
+        self.token: str = token if token else ""
+        self.url: str = V2_URL
 
     def generic_api_call(
         self,
         method: str,
         endpoint: str,
-        params: dict = None,
-        token: str = None,
-        warning_log: str = None,
-        raw_res: bool = False,
+        params: Union[dict, None] = None,
+        token: str = "",
+        warning_log: str = "",
         throttle_time: int = 10,
-    ) -> Union[dict, requests.Response]:
+    ) -> dict:
         """Function to make consolidate parameters to make an API call to the Space Traders API.
         Handles any throttling or error returned by the Space Traders API.
 
@@ -90,7 +88,6 @@ class Client:
             endpoint (str): The API endpoint
             params (dict, optional): Any params required for the endpoint. Defaults to None.
             token (str, optional): The token of the user. Defaults to None.
-            raw_res (bool, default = False): Returns the request response's JSON by default. Can be set to True to return the request response.
             throttle_time (int, default = 10): Sets how long the wait time before attempting call again. Default is 10 seconds
 
         Returns:
@@ -116,17 +113,8 @@ class Client:
 
                     raise which_exception(error["error"])
 
-                    # Unknown handling for error
-                    logging.warning(warning_log)
-                    logging.exception(
-                        f"Something broke the script. Code: {code} Error Message: {message} "
-                    )
-                    return error
                 # If successful return r
-                if raw_res:
-                    return r
-                else:
-                    return r.json()
+                return r.json()
 
             except ThrottleException as te:
                 logging.info(te.message)
@@ -165,11 +153,11 @@ class Ships(Client):
         return res if res else False
 
     # Get Ship
-    def get_ship(self, shipId, raw_res=False, throttle_time=10) -> dict:
+    def get_ship(self, ship_id: str, throttle_time: int = 10) -> dict:
         """Get info on the ship
 
         Args:
-            shipId (str): The shipId of the ship you want to get info on
+            ship_id (str): The shipId of the ship you want to get info on
 
         Returns:
             dict: A dict containing the info about the ship
@@ -210,13 +198,13 @@ class Ships(Client):
         API LINK: https://api.spacetraders.io/#api-ships-GetShip
         V2 API: https://spacetraders.stoplight.io/docs/spacetraders/b3A6NDQ2NjQ0MzE-view-ship
         """
-        endpoint = f"my/ships/{shipId}"
-        warning_log = f"Unable to get info fo ship: {shipId}"
-        logging.info(f"Getting info on ship: {shipId}")
+        endpoint = f"my/ships/{ship_id}"
+        warning_log = f"Unable to get info fo ship: {ship_id}"
+        logging.info(f"Getting info on ship: {ship_id}")
         res = self.generic_api_call(
             "GET", endpoint, token=self.token, warning_log=warning_log
         )
-        return res if res else False
+        return res
 
     # Get Users ships
     def get_user_ships(self, raw_res=False, throttle_time=10):
